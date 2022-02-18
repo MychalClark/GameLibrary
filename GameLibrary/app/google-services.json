@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "788117404362",
+    "project_id": "game-library-cc91d",
+    "storage_bucket": "game-library-cc91d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:788117404362:android:9065a15690cba49df25233",
+        "android_client_info": {
+          "package_name": "edu.ranken.mychal_clark.gamelibrary"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "788117404362-fektg1nl07j9ico0t3lvpu71g9uds1t2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAtUgooiVWLoNNKk62smuGM2fjDonXvLaQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "788117404362-fektg1nl07j9ico0t3lvpu71g9uds1t2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
