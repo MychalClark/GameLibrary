@@ -1,21 +1,21 @@
 package edu.ranken.mychal_clark.gamelibrary;
 
+import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.os.Bundle;
-import android.widget.ListView;
-
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
-import edu.ranken.mychal_clark.gamelibrary.data.Game;
+import edu.ranken.mychal_clark.gamelibrary.data.Consoles;
 import edu.ranken.mychal_clark.gamelibrary.ui.GameListAdapter;
 import edu.ranken.mychal_clark.gamelibrary.ui.GameListModel;
-import edu.ranken.mychal_clark.gamelibrary.ui.GameViewHolder;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -23,10 +23,16 @@ public class MainActivity extends AppCompatActivity {
 
 //views
     private RecyclerView recyclerView;
+    private Spinner consoleSpinner;
+    private Spinner listSpinner;
 
     //states
-    private GameListAdapter adapter;
+    private GameListAdapter gamesAdapter;
     private GameListModel model;
+
+    private ArrayAdapter<String> consolesAdapter;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,14 +41,15 @@ public class MainActivity extends AppCompatActivity {
 
         //find views
         recyclerView = findViewById(R.id.gameList);
+        consoleSpinner = findViewById(R.id.consoleSpinner);
+        consoleSpinner = findViewById(R.id.listSpinner);
 
         //create adapter
-        adapter = new GameListAdapter(this, null);
-
+        gamesAdapter = new GameListAdapter(this, null);
 
         // setup recycler view
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(adapter);
+        recyclerView.setAdapter(gamesAdapter);
 
 
        // Test if works
@@ -54,7 +61,34 @@ public class MainActivity extends AppCompatActivity {
 //bind Model
         model = new ViewModelProvider(this).get(GameListModel.class);
         model.getGames().observe(this, (games) -> {
-            adapter.setItems(games);
+            gamesAdapter.setItems(games);
+        });
+
+        model.getConsoles().observe(this, (consoles)-> {
+            if(consoles !=null) {
+                ArrayList<String> consoleNames = new ArrayList<>(consoles.size());
+                consoleNames.add(getString(R.string.allConsoles));
+                for (Consoles console : consoles){
+                    consoleNames.add(console.name);
+                }
+                consolesAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, consoles);
+                consoleSpinner.setAdapter(consolesAdapter);
+            }
+
+            });
+
+        //Register Listeners
+        consoleSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String consoleName = (String) parent.getItemAtPosition(position)
+                    model.filterGamesByConsole(consoleName);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+//do Nothing my guy
+            }
         });
 
 

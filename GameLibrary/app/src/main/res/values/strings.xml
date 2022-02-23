@@ -1,4 +1,17 @@
 <resources>
     <string name="app_name">GameLibrary</string>
+    <string name="allConsoles">All Consoles</string>
 
+    <string-array name="consoleFilters">
+        <item>All Consoles</item>
+        <item>Ps4</item>
+        <item>Windows</item>
+    </string-array>
+
+    <string-array name="listFilters">
+        <item>All Games</item>
+        <item>Library</item>
+        <item>WishList</item>
+        <item>Library and Wishlist</item>
+    </string-array>
 </resources>
