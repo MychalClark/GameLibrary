@@ -2,6 +2,7 @@ package edu.ranken.mychal_clark.gamelibrary.ui;
 
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -10,36 +11,41 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import edu.ranken.mychal_clark.gamelibrary.data.Consoles;
 import edu.ranken.mychal_clark.gamelibrary.data.Game;
+import edu.ranken.mychal_clark.gamelibrary.data.GameChoiceValue;
+import edu.ranken.mychal_clark.gamelibrary.data.GameList;
+import edu.ranken.mychal_clark.gamelibrary.data.GameSummary;
 
 public class GameListModel extends ViewModel {
 
     //make live data
-    private static final String LOG_TAG = "MovieListViewModel";
+    private static final String LOG_TAG = "GameListViewModel";
 
-    private FirebaseFirestore db;
+    private final FirebaseFirestore db;
 
     private ListenerRegistration gamesRegistration;
-    private ListenerRegistration gamesLibraryRegistration;
-    private ListenerRegistration consoleRegistration;
+    private ListenerRegistration libraryRegistration;
+    private ListenerRegistration wishlistRegistration;
+    private ListenerRegistration consolesRegistration;
 
     private final String username = "GrinGrown394";
-    private String filterByConsole = null;
+    private String filterConsoleId = null;
+    private GameList filterList = GameList.ALL_GAMES;
 
     //Live Data
-    private final MutableLiveData<List<Game>> games;
+    private final MutableLiveData<List<GameSummary>> games;
+    private final MutableLiveData<List<GameChoiceValue>> choices;
+
+    private final MutableLiveData<List<Consoles>> consoles;
     private final MutableLiveData<String> snackbarMessage;
     private final MutableLiveData<String> errorMessage;
-    private final MutableLiveData<List<Consoles>> consoles;
-
-
-
-
 
 
     public GameListModel() {
@@ -49,33 +55,42 @@ public class GameListModel extends ViewModel {
         games = new MutableLiveData<>(null);
         errorMessage = new MutableLiveData<>(null);
         snackbarMessage = new MutableLiveData<>(null);
+        choices = new MutableLiveData<>(null);
 
+        //figures out if games is changing
         queryGames();
 
-        gamesLibraryRegistration = db.collection("games")
-            .whereEqualTo("user", username)
+//observe consoles collection
+        libraryRegistration =
+            db.collection("userLibrary").whereEqualTo("username", username).addSnapshotListener((QuerySnapshot querySnapshot, FirebaseFirestoreException error) -> {
+                if (error != null){
+                    Log.e(LOG_TAG, "Error getting votes.", error);
+                    snackbarMessage.postValue("Error getting votes.");
+                }else if (querySnapshot != null){
+                    Log.i(LOG_TAG, "Votes update.");
 
-            .addSnapshotListener(( query, error) -> {
-                if (error != null) {
-                    // show error...
-                } else {
+                    List<GameChoiceValue> newChoices = new ArrayList<>();
+                    for(QueryDocumentSnapshot document : querySnapshot)
+                    {String gameId = document.getString("gameId");
+                    String username = document.getString("Username");}
+                };
 
-
-                }
             });
 
-//observe genres collection
-        consoleRegistration =
-            db.collection("consoles").addSnapshotListener((QuerySnapshot querySnapshot, FirebaseFirestoreException error)->{
 
-                if(error != null){
-                    Log.e(LOG_TAG, "Error getting consoles.", error);
+        consolesRegistration =
+            db.collection("consoles")
+                .orderBy("name")
+                .addSnapshotListener((@NonNull QuerySnapshot querySnapshot, FirebaseFirestoreException error) -> {
 
-                }else{
-                    List<Consoles> newConsoles = querySnapshot.toObjects(Consoles.class);
-                    consoles.postValue(newConsoles);
-                }
-            });
+                    if (error != null) {
+                        Log.e(LOG_TAG, "Error getting consoles.", error);
+
+                    } else {
+                        List<Consoles> newConsoles = querySnapshot.toObjects(Consoles.class);
+                        consoles.postValue(newConsoles);
+                    }
+                });
     }
 
     @Override
@@ -83,84 +98,165 @@ public class GameListModel extends ViewModel {
         if (gamesRegistration != null) {
             gamesRegistration.remove();
         }
-        if (gamesLibraryRegistration != null) {
-            gamesLibraryRegistration.remove();
+        if (libraryRegistration != null) {
+            libraryRegistration.remove();
+        }
+        if (wishlistRegistration != null) {
+            wishlistRegistration.remove();
+        }
+        if (consolesRegistration != null) {
+            consolesRegistration.remove();
         }
         super.onCleared();
     }
 
     //return data
-    public LiveData<List<Game>> getGames() { return games; }
+    public LiveData<List<GameSummary>> getGames() {
+        return games;
+    }
+
+    public LiveData<List<GameChoiceValue>> getChoices() {
+        return choices;
+    }
 
     public LiveData<String> getErrorMessage() {
         return errorMessage;
     }
+
     public LiveData<String> getSnackbarMessage() {
         return snackbarMessage;
     }
-    public LiveData<List<Consoles>> getConsoles() { return consoles; }
+
+    public LiveData<List<Consoles>> getConsoles() {
+        return consoles;
+    }
+
+    public String getFilterConsoleId(){return filterConsoleId;}
+
+    public void filterGamesByList(GameList list) {
+        this.filterList = list;
+        queryGames();
+    }
 
     public void clearSnackbar() {
         snackbarMessage.postValue(null);
     }
 
-    public void filterGamesByConsole(String consoleId){
+    public void filterGamesByConsole(String consoleId) {
         this.filterConsoleId = consoleId;
         queryGames();
     }
 
-    private void queryGames(){
+    private void queryGames() {
 
-        if (gamesRegistration !=null){
+        if (gamesRegistration != null) {
             gamesRegistration.remove();
+            Log.i(LOG_TAG, "Games removed");
         }
 
-        Query query = db.collection("games");
-        if(filterConsoleId != null){
-            query = query.whereEqualTo("consoles." + filterConsoleId, true);
+        //New method. Sort By: name and release year.
+
+
+        Query query = null;
+        switch (filterList) {
+            default:
+                throw new IllegalStateException("Unsupported Option");
+            case ALL_GAMES:
+                query = db.collection("games");
+                break;
+            case WISHLIST:
+                query = db.collection("userWishlist")
+                    .whereEqualTo("username", username);
+                break;
+            case LIBRARY:
+                query = db.collection("userLibrary")
+                    .whereEqualTo("username", username);
+                break;
+            case LIBRARY_WISHLIST:
+                db.collection("userLibrary")
+                    .whereEqualTo("username", username)
+                    .whereEqualTo("libraryValue", 1)
+                    .whereEqualTo("wishlistValue", 1);
+                break;
+        }
+        
+        
+        if (filterConsoleId != null) {
+            if (filterList == GameList.ALL_GAMES) {
+                query = query.whereEqualTo("consoles." + filterConsoleId, true);
+            } else {
+                query = query.whereEqualTo("games.consoles." + filterConsoleId, true);
+            }
         }
         //get game collection
         gamesRegistration =
-                query.addSnapshotListener(( QuerySnapshot querySnapshot, FirebaseFirestoreException error) -> {
-                    if (error != null) {
-                        // show error...
-                        Log.e(LOG_TAG, "Error getting games.", error);
-                        errorMessage.postValue(error.getMessage());
-                        snackbarMessage.postValue("Error getting games.");
-                    } else {
-                        List<Game> newGames =
-                            querySnapshot != null ? querySnapshot.toObjects(Game.class) : null;
+            query.addSnapshotListener((QuerySnapshot querySnapshot, FirebaseFirestoreException error) -> {
+                if (error != null) {
+                    // show error...
+                    Log.e(LOG_TAG, "Error getting games.", error);
+                    errorMessage.postValue(error.getMessage());
+                    snackbarMessage.postValue("Error getting games.");
 
-                        games.postValue(newGames);
-                        errorMessage.postValue(null);
-                        snackbarMessage.postValue("Games Updated.");
-                        // show games...
+                }
+                else if(querySnapshot != null){
+
+                    Log.i(LOG_TAG, "Games update.");
+
+                    ArrayList<GameSummary> newGameSummary = new ArrayList<>();
+                    switch (filterList) {
+                        default:
+                            throw new IllegalStateException("Unsupported Option");
+                        case ALL_GAMES:
+                            List<Game> newGames = querySnapshot.toObjects(Game.class);
+                            for (Game game : newGames) {
+                                newGameSummary.add(new GameSummary(game));
+                            }
+                            break;
+                        case LIBRARY:
+                        case WISHLIST:
+                        case LIBRARY_WISHLIST:
+                            break;
                     }
-                });
+                    games.postValue(newGameSummary);
+
+                    errorMessage.postValue(null);
+                    snackbarMessage.postValue("Games Updated.");
+                }
+
+            });
 
     }
 
 
+    //Change List
+//    private void changelist(Game game, int value) {
+//        HashMap<String, Object> changeLocation = new HashMap<>();
+//        changeLocation.put("movieId", game.id);
+//        changeLocation.put("username", username);
+//        changeLocation.put("value", value);
+//
+//        // summary
+//        changeLocation.put("game", new GameSummary(game));
+//
+//        db.collection("movieVote")
+//            .document(username + ";" + game.id)
+//            .set(changeLocation)
+//            .addOnCompleteListener((Task<Void> task) -> {
+//                if (!task.isSuccessful()) {
+//                    Log.e(LOG_TAG, "Failed to save vote.", task.getException());
+//                    snackbarMessage.postValue("Failed to save vote.");
+//                } else {
+//                    Log.i(LOG_TAG, "Vote saved.");
+//                    snackbarMessage.postValue("Vote saved.");
+//                }
+//            });
+//    }
 
+//    public void wishList(Game game) {
+//        changelist(game, 1);
+//    }
 
-
-
-    private void chooseList(String gameId){
-
-        db.collection("gameLibrary").document(username+ ";" + gameId)
-        .addSnapshotListener(( query, error) -> {
-            if (error != null) {
-                Log.e(LOG_TAG, "Error getting library.", error);
-                errorMessage.postValue(error.getMessage());
-                snackbarMessage.postValue("Error getting library.");
-                // show error...
-            }
-            else {
-
-
-            }
-        });
-
-
-    }
+//    public void library(Game game) {
+//        changelist(game, -1);
+//    }
 }
