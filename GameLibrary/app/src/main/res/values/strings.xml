@@ -1,5 +1,8 @@
 <resources>
     <string name="app_name">GameLibrary</string>
+    <string name="gameDetails">Game Details</string>
+
+
     <string name="allConsoles">All Consoles</string>
 
     <string name="nameMissing">NAME MISSING</string>
@@ -10,7 +13,7 @@
     <string name="myLibrary">My Library</string>
     <string name="myLibraryWishlist">My Library and Wishlist</string>
 
-<!--    <string-array name="consoleFilters">-->
+    <!--    <string-array name="consoleFilters">-->
 <!--        &lt;!&ndash;        <item>All Consoles</item>&ndash;&gt;-->
 <!--        &lt;!&ndash;        <item>Ps4</item>&ndash;&gt;-->
 <!--        &lt;!&ndash;        <item>Windows</item>&ndash;&gt;-->

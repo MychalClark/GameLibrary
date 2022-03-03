@@ -1,6 +1,7 @@
 package edu.ranken.mychal_clark.gamelibrary.ui;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import edu.ranken.mychal_clark.gamelibrary.GameDetailsActivity;
 import edu.ranken.mychal_clark.gamelibrary.R;
 import edu.ranken.mychal_clark.gamelibrary.data.GameChoiceValue;
 import edu.ranken.mychal_clark.gamelibrary.data.GameSummary;
@@ -97,8 +99,22 @@ public class GameListAdapter extends RecyclerView.Adapter<GameViewHolder> {
         });
 
         vh.buttonWishlist.setOnClickListener((view) -> {
-            Log.i(LOG_TAG, "Wishlist pressed");
+
             GameSummary game = games.get(vh.getAdapterPosition());
+            Log.i(LOG_TAG, "Wishlist pressed");
+
+
+        });
+
+        vh.itemView.setOnClickListener((view) -> {
+            GameSummary game = games.get(vh.getAdapterPosition());
+            Log.i(LOG_TAG, "clicked on this game:" + game.id);
+
+            // This to change screen to detail page.
+            Intent intent = new Intent(context, GameDetailsActivity.class);
+            intent.putExtra(GameDetailsActivity.EXTRA_GAME_ID, game.id);
+            context.startActivity(intent);
+
         });
 
         return vh;
