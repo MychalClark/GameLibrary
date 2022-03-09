@@ -9,7 +9,7 @@ public class WishList
     @DocumentId
     public String id;
     public String gameId;
-    public String username;
+    public String userId;
 
     public GameSummary game;
 
@@ -18,6 +18,6 @@ public class WishList
     @NonNull
     @Override
     public String toString() {
-        return "WishList {id=" + id + ", value=" + username + "}";
+        return "WishList {id=" + id + ", value=" + userId + "}";
     }
 }

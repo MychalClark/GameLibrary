@@ -8,7 +8,7 @@ public class Library {
     @DocumentId
     public String id;
     public String gameId;
-    public String username;
+    public String userId;
 
     public GameSummary game;
 
@@ -17,6 +17,6 @@ public class Library {
     @NonNull
     @Override
     public String toString() {
-        return "Library {id=" + id + ", username=" + username + "}";
+        return "Library {id=" + id + ", userId=" + userId + "}";
     }
 }

@@ -43,6 +43,7 @@ public class GameListAdapter extends RecyclerView.Adapter<GameViewHolder> {
         this.picasso = Picasso.get();
         this.model = model;
     }
+
 //Notify when data changes, add background data to view.
 
     @SuppressLint("NotifyDataSetChanged")

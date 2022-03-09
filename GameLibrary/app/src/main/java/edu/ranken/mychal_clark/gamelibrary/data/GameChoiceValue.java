@@ -17,11 +17,11 @@ public class GameChoiceValue {
 
     public GameChoiceValue(@NonNull Library library){
         this.gameId = library.gameId;
-        this.libraryUsername = library.username;
+        this.libraryUsername = library.userId;
     }
     public GameChoiceValue(@NonNull WishList wishlist){
         this.gameId = wishlist.gameId;
-        this.wishlistUsername = wishlist.username;
+        this.wishlistUsername = wishlist.userId;
     }
     @NonNull
     @Override

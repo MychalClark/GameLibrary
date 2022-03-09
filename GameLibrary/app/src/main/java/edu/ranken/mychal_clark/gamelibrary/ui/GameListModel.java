@@ -7,6 +7,8 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.ListenerRegistration;
@@ -35,7 +37,7 @@ public class GameListModel extends ViewModel {
     private ListenerRegistration wishlistRegistration;
     private ListenerRegistration consolesRegistration;
 
-    private final String username = "GrinGrown394";
+    private String userId = null;
     private String filterConsoleId = null;
     private GameList filterList = GameList.ALL_GAMES;
 
@@ -57,23 +59,34 @@ public class GameListModel extends ViewModel {
         snackbarMessage = new MutableLiveData<>(null);
         choices = new MutableLiveData<>(null);
 
+
+        //get current user
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            userId = user.getUid();
+            Log.i(LOG_TAG, "This is the users Id  " + userId);
+        } else {
+            userId = null;
+        }
         //figures out if games is changing
         queryGames();
 
 //observe consoles collection
         libraryRegistration =
-            db.collection("userLibrary").whereEqualTo("username", username).addSnapshotListener((QuerySnapshot querySnapshot, FirebaseFirestoreException error) -> {
-                if (error != null){
+            db.collection("userLibrary").whereEqualTo("userId", userId).addSnapshotListener((QuerySnapshot querySnapshot, FirebaseFirestoreException error) -> {
+                if (error != null) {
                     Log.e(LOG_TAG, "Error getting votes.", error);
                     snackbarMessage.postValue("Error getting votes.");
-                }else if (querySnapshot != null){
+                } else if (querySnapshot != null) {
                     Log.i(LOG_TAG, "Votes update.");
 
                     List<GameChoiceValue> newChoices = new ArrayList<>();
-                    for(QueryDocumentSnapshot document : querySnapshot)
-                    {String gameId = document.getString("gameId");
-                    String username = document.getString("Username");}
-                };
+                    for (QueryDocumentSnapshot document : querySnapshot) {
+                        String gameId = document.getString("gameId");
+                        String username = document.getString("Username");
+                    }
+                }
+                ;
 
             });
 
@@ -131,7 +144,9 @@ public class GameListModel extends ViewModel {
         return consoles;
     }
 
-    public String getFilterConsoleId(){return filterConsoleId;}
+    public String getFilterConsoleId() {
+        return filterConsoleId;
+    }
 
     public void filterGamesByList(GameList list) {
         this.filterList = list;
@@ -166,21 +181,21 @@ public class GameListModel extends ViewModel {
                 break;
             case WISHLIST:
                 query = db.collection("userWishlist")
-                    .whereEqualTo("username", username);
+                    .whereEqualTo("userId", userId);
                 break;
             case LIBRARY:
                 query = db.collection("userLibrary")
-                    .whereEqualTo("username", username);
+                    .whereEqualTo("userId", userId);
                 break;
             case LIBRARY_WISHLIST:
                 db.collection("userLibrary")
-                    .whereEqualTo("username", username)
+                    .whereEqualTo("userId", userId)
                     .whereEqualTo("libraryValue", 1)
                     .whereEqualTo("wishlistValue", 1);
                 break;
         }
-        
-        
+
+
         if (filterConsoleId != null) {
             if (filterList == GameList.ALL_GAMES) {
                 query = query.whereEqualTo("consoles." + filterConsoleId, true);
@@ -197,8 +212,7 @@ public class GameListModel extends ViewModel {
                     errorMessage.postValue(error.getMessage());
                     snackbarMessage.postValue("Error getting games.");
 
-                }
-                else if(querySnapshot != null){
+                } else if (querySnapshot != null) {
 
                     Log.i(LOG_TAG, "Games update.");
 
@@ -227,36 +241,4 @@ public class GameListModel extends ViewModel {
 
     }
 
-
-    //Change List
-//    private void changelist(Game game, int value) {
-//        HashMap<String, Object> changeLocation = new HashMap<>();
-//        changeLocation.put("movieId", game.id);
-//        changeLocation.put("username", username);
-//        changeLocation.put("value", value);
-//
-//        // summary
-//        changeLocation.put("game", new GameSummary(game));
-//
-//        db.collection("movieVote")
-//            .document(username + ";" + game.id)
-//            .set(changeLocation)
-//            .addOnCompleteListener((Task<Void> task) -> {
-//                if (!task.isSuccessful()) {
-//                    Log.e(LOG_TAG, "Failed to save vote.", task.getException());
-//                    snackbarMessage.postValue("Failed to save vote.");
-//                } else {
-//                    Log.i(LOG_TAG, "Vote saved.");
-//                    snackbarMessage.postValue("Vote saved.");
-//                }
-//            });
-//    }
-
-//    public void wishList(Game game) {
-//        changelist(game, 1);
-//    }
-
-//    public void library(Game game) {
-//        changelist(game, -1);
-//    }
 }

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -39,6 +40,7 @@ public class GameDetailsActivity extends AppCompatActivity {
     private TextView gameGenreText;
     private ImageView[] gameScreenshots;
     private ImageView[] consoleIcons;
+    private ImageButton composeReviewButton;
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
@@ -57,7 +59,7 @@ public class GameDetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_details);
 
-
+        Log.i(LOG_TAG, "extra" + EXTRA_GAME_ID);
         //set views
         gameTitle = findViewById(R.id.gameDetailTitle);
         gameDescription = findViewById(R.id.gameDetailDescription);
@@ -66,7 +68,7 @@ public class GameDetailsActivity extends AppCompatActivity {
         gameControllerText = findViewById(R.id.gameDetailController);
         gameMultiplayerText = findViewById(R.id.gameDetailMultiplayer);
         gameGenreText = findViewById(R.id.gameDetailGenre);
-        gameScreenshots= new ImageView[]{
+        gameScreenshots = new ImageView[]{
             findViewById(R.id.gameDetailImage1),
             findViewById(R.id.gameDetailImage2),
             findViewById(R.id.gameDetailImage3)
@@ -74,13 +76,16 @@ public class GameDetailsActivity extends AppCompatActivity {
         consoleIcons = new ImageView[]{
             findViewById(R.id.gameDetailConsole1),
             findViewById(R.id.gameDetailConsole2),
-           findViewById(R.id.gameDetailConsole3),
+            findViewById(R.id.gameDetailConsole3),
             findViewById(R.id.gameDetailConsole4)
         };
+
+        composeReviewButton = findViewById(R.id.composeReviewButton);
 
         // get intent
         Intent intent = getIntent();
         gameId = intent.getStringExtra(EXTRA_GAME_ID);
+
 
         // get picasso
         picasso = Picasso.get();
@@ -89,28 +94,57 @@ public class GameDetailsActivity extends AppCompatActivity {
 
         model = new ViewModelProvider(this).get(GameDetailsViewModel.class);
         model.fetchGame(gameId);
-        model.getGame().observe(this,(game)->{
+        model.getGame().observe(this, (game) -> {
 
-            if(game == null){
-                Log.i(LOG_TAG, "no game");}
-            else{
+
+            if (game == null) {
+                Log.i(LOG_TAG, "no game" + gameId);
+            } else {
+
+                Log.i(LOG_TAG, "have game" + gameId);
+
                 //picassoo
-                picasso
-                    .load(game.gameImage)
-                    .noPlaceholder()
-                    //.placeholder(R.drawable.ic_downloading)
-                    .error(R.drawable.no_image)
-                    .resize(200, 300)
-                    .centerCrop()
-                    .into(gameMainImage);
+                if(game.gameImage != null) {
+                    gameMainImage.setImageResource(R.drawable.no_image);
+                    picasso
+                        .load(game.gameImage)
+                        .noPlaceholder()
+                        //.placeholder(R.drawable.ic_downloading)
+                        .error(R.drawable.no_image)
+                        .resize(200, 300)
+                        .centerCrop()
+                        .into(gameMainImage);
+                }else{
+                    gameMainImage.setImageResource(R.drawable.no_image);
+                }
 
                 //game description stuff.
-                gameTitle.setText(game.name);
-                gameDescription.setText(game.description);
-                gameControllerText.setText("Controller Support: " + game.controllerSupport);
-                gameMultiplayerText.setText("Multiplayer Support: " + game.multiplayerSupport);
 
-                if(game.tags != null) {
+                if (game.name == null) {
+                    gameTitle.setText("No Game");
+                } else {
+                    gameTitle.setText(game.name);
+                }
+
+                if (game.description == null) {
+                    gameDescription.setText("No Description");
+                } else {
+                    gameDescription.setText(game.description);
+                }
+
+                if (game.controllerSupport == null) {
+                    gameControllerText.setText("Controller Support: Unknown ");
+                } else {
+                    gameControllerText.setText("Controller Support: " + game.controllerSupport);
+                }
+
+                if (game.multiplayerSupport == null) {
+                    gameMultiplayerText.setText("Multiplayer Support: Unknown");
+                } else {
+                    gameMultiplayerText.setText("Multiplayer Support: " + game.multiplayerSupport);
+                }
+
+                if (game.tags != null) {
                     StringBuilder sb = new StringBuilder();
                     for (int i = 0; i < game.tags.size(); i++) {
                         sb.append(game.tags.get(i));
@@ -118,7 +152,7 @@ public class GameDetailsActivity extends AppCompatActivity {
                     gameTags.setText("Tags: " + sb);
                 }
 
-                if(game.genre != null){
+                if (game.genre != null) {
                     StringBuilder sb = new StringBuilder();
                     for (int i = 0; i < game.genre.size(); i++) {
 
@@ -126,6 +160,8 @@ public class GameDetailsActivity extends AppCompatActivity {
                     }
                     gameGenreText.setText("Genre: " + sb);
                 }
+                else{gameGenreText.setText("Genre: Unknown");}
+
 
 
                 //Icon Setter
@@ -178,19 +214,39 @@ public class GameDetailsActivity extends AppCompatActivity {
                     }
                 }
 
-                for (int i = 0; i < game.images.size(); i++) {
-                    picasso
-                        .load(game.images.get(i))
-                        .noPlaceholder()
-                        //.placeholder(R.drawable.ic_downloading)
-                        .error(R.drawable.no_image)
-                        .resize(200, 300)
-                        .centerInside()
-                        .into(gameScreenshots[i]);
+                if(game.images == null || game.images.size() <= 0){gameScreenshots[1].setImageResource(R.drawable.no_image);gameScreenshots[2].setImageResource(R.drawable.no_image);gameScreenshots[3].setImageResource(R.drawable.no_image);}
+                else {
+                    for (int i = 0; i < game.images.size(); i++) {
+                        gameScreenshots[i].setImageResource(R.drawable.no_image);
+                        if (game.images.get(i).isEmpty()) {
+                        } else {
+                            picasso
+                                .load(game.images.get(i))
+                                .noPlaceholder()
+                                //.placeholder(R.drawable.ic_downloading)
+                                .error(R.drawable.no_image)
+                                .resize(200, 300)
+                                .centerInside()
+                                .into(gameScreenshots[i]);
+                        }
+                    }
                 }
+
+
             }
 
 
         });
+
+        // register listeners
+        composeReviewButton.setOnClickListener((view) -> {
+            Intent intentTwo = new Intent(this, ComposeReviewActivity.class);
+            intentTwo.putExtra(ComposeReviewActivity.EXTRA_GAME_ID, gameId);
+            startActivity(intentTwo);
+        });
     }
+
+
+
+
 }

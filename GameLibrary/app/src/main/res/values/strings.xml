@@ -12,17 +12,22 @@
     <string name="myWishlist">My Wishlist</string>
     <string name="myLibrary">My Library</string>
     <string name="myLibraryWishlist">My Library and Wishlist</string>
+    <string name="loginBtn">LOGIN</string>
+    <string name="actionSignOut">actionSignOut</string>
+    <string name="actionGetProfile">actionGetProfile</string>
+    <string name="myProfile">My Profile</string>
+    <string name="createReview">Create Review</string>
 
     <!--    <string-array name="consoleFilters">-->
-<!--        &lt;!&ndash;        <item>All Consoles</item>&ndash;&gt;-->
-<!--        &lt;!&ndash;        <item>Ps4</item>&ndash;&gt;-->
-<!--        &lt;!&ndash;        <item>Windows</item>&ndash;&gt;-->
-<!--    </string-array>-->
+    <!--        &lt;!&ndash;        <item>All Consoles</item>&ndash;&gt;-->
+    <!--        &lt;!&ndash;        <item>Ps4</item>&ndash;&gt;-->
+    <!--        &lt;!&ndash;        <item>Windows</item>&ndash;&gt;-->
+    <!--    </string-array>-->
 
-<!--    <string-array name="listFilters">-->
-<!--        <item>All Games</item>-->
-<!--        <item>Library</item>-->
-<!--        <item>WishList</item>-->
-<!--        <item>Library and Wishlist</item>-->
-<!--    </string-array>-->
+    <!--    <string-array name="listFilters">-->
+    <!--        <item>All Games</item>-->
+    <!--        <item>Library</item>-->
+    <!--        <item>WishList</item>-->
+    <!--        <item>Library and Wishlist</item>-->
+    <!--    </string-array>-->
 </resources>
