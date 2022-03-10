@@ -33,6 +33,7 @@ public class ComposeReviewActivity extends AppCompatActivity {
 
 
 
+
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int itemId = item.getItemId();
@@ -54,6 +55,7 @@ public class ComposeReviewActivity extends AppCompatActivity {
         gameTitle = findViewById(R.id.reviewGameTitle);
         reviewBtn = findViewById(R.id.reviewBtn);
 
+
         Intent intent = getIntent();
         gameId = intent.getStringExtra(GameDetailsActivity.EXTRA_GAME_ID);
 
@@ -66,7 +68,7 @@ public class ComposeReviewActivity extends AppCompatActivity {
             });
 
 
-        reviewBtn.setOnClickListener((view) -> { model.publishReview(gameId, reviewText.toString());
+        reviewBtn.setOnClickListener((view) -> { model.publishReview(gameId, reviewText.getText().toString());
 hideKeyboard(this,reviewText);
         });
 

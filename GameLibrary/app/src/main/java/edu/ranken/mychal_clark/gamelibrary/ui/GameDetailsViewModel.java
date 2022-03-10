@@ -7,9 +7,14 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.ListenerRegistration;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.List;
 
 import edu.ranken.mychal_clark.gamelibrary.data.Game;
+import edu.ranken.mychal_clark.gamelibrary.data.Review;
 
 public class GameDetailsViewModel extends ViewModel {
     private static final String LOG_TAG = GameDetailsViewModel.class.getSimpleName();
@@ -17,12 +22,14 @@ public class GameDetailsViewModel extends ViewModel {
     // firebase
     private final FirebaseFirestore db;
     private ListenerRegistration gameRegistration;
+    private ListenerRegistration reviewRegistration;
     private String gameId;
 
     // live data
     private final MutableLiveData<Game> game;
     private final MutableLiveData<String> gameError;
     private final MutableLiveData<String> snackbarMessage;
+    private final MutableLiveData<List<Review>> reviews;
 
     public GameDetailsViewModel() {
         db = FirebaseFirestore.getInstance();
@@ -31,6 +38,8 @@ public class GameDetailsViewModel extends ViewModel {
         game = new MutableLiveData<>(null);
         gameError = new MutableLiveData<>(null);
         snackbarMessage = new MutableLiveData<>(null);
+        reviews = new MutableLiveData<>(null);
+
     }
 
     @Override
@@ -57,6 +66,8 @@ public class GameDetailsViewModel extends ViewModel {
         return snackbarMessage;
     }
 
+    public LiveData<List<Review>> getReviews(){return reviews;}
+
     //clears the snackbar
     public void clearSnackbar() {
         snackbarMessage.postValue(null);
@@ -69,6 +80,26 @@ public class GameDetailsViewModel extends ViewModel {
         if (gameRegistration != null) {
             gameRegistration.remove();
         }
+
+        //get reviews
+        reviewRegistration =
+            db.collection("reviews")
+                .whereEqualTo("gameId", gameId)
+                .addSnapshotListener((QuerySnapshot querySnapshot, FirebaseFirestoreException error) -> {
+                if (error != null) {
+                    // show error...
+                    Log.e(LOG_TAG, "Error getting reviews.", error);
+                    snackbarMessage.postValue("Error getting Reviews.");
+                } else {
+                    List<Review> newReviews =
+                        querySnapshot != null ? querySnapshot.toObjects(Review.class) : null;
+
+                    reviews.postValue(newReviews);
+
+                    snackbarMessage.postValue("Reviews Updated.");
+                    // show games...
+                }
+            });
 
         if (gameId == null) {
             this.game.postValue(null);
@@ -97,4 +128,7 @@ public class GameDetailsViewModel extends ViewModel {
         }
 
     }
+
+
+
 }

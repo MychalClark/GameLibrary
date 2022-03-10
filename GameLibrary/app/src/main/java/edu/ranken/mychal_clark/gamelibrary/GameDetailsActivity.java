@@ -12,6 +12,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Picasso;
 
@@ -19,6 +21,7 @@ import java.util.Map;
 import java.util.Objects;
 
 import edu.ranken.mychal_clark.gamelibrary.ui.GameDetailsViewModel;
+import edu.ranken.mychal_clark.gamelibrary.ui.ReviewListAdapter;
 
 public class GameDetailsActivity extends AppCompatActivity {
 
@@ -29,6 +32,8 @@ public class GameDetailsActivity extends AppCompatActivity {
     private String gameId;
     private GameDetailsViewModel model;
     private Picasso picasso;
+    private RecyclerView recyclerView;
+    private ReviewListAdapter reviewsAdapter;
 
     //Create Views
     private TextView gameTitle;
@@ -61,6 +66,15 @@ public class GameDetailsActivity extends AppCompatActivity {
 
         Log.i(LOG_TAG, "extra" + EXTRA_GAME_ID);
         //set views
+        recyclerView = findViewById(R.id.reviewList);
+        //create adapter
+        reviewsAdapter = new ReviewListAdapter(this, null);
+
+        // setup recycler view
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(reviewsAdapter);
+
+
         gameTitle = findViewById(R.id.gameDetailTitle);
         gameDescription = findViewById(R.id.gameDetailDescription);
         gameTags = findViewById(R.id.gameDetailTags);
@@ -91,8 +105,10 @@ public class GameDetailsActivity extends AppCompatActivity {
         picasso = Picasso.get();
 
         // bind model
-
         model = new ViewModelProvider(this).get(GameDetailsViewModel.class);
+
+        model.getReviews().observe(this,(reviews) -> {reviewsAdapter.setItems(reviews);});
+
         model.fetchGame(gameId);
         model.getGame().observe(this, (game) -> {
 
