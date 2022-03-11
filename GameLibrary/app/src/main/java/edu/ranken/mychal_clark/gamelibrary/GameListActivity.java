@@ -94,9 +94,6 @@ public class GameListActivity extends AppCompatActivity {
             gamesAdapter.setGames(games);
         });
 
-        model.getChoices().observe(this, (choices) -> {
-            gamesAdapter.setChoice(choices);
-        });
 
 
         model.getConsoles().observe(this, (consoles) -> {

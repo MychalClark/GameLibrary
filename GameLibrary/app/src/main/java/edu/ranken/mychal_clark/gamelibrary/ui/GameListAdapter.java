@@ -20,8 +20,8 @@ import java.util.Objects;
 
 import edu.ranken.mychal_clark.gamelibrary.GameDetailsActivity;
 import edu.ranken.mychal_clark.gamelibrary.R;
-import edu.ranken.mychal_clark.gamelibrary.data.GameChoiceValue;
 import edu.ranken.mychal_clark.gamelibrary.data.GameSummary;
+import edu.ranken.mychal_clark.gamelibrary.data.Library;
 
 public class GameListAdapter extends RecyclerView.Adapter<GameViewHolder> {
 
@@ -33,7 +33,9 @@ public class GameListAdapter extends RecyclerView.Adapter<GameViewHolder> {
     private final GameListModel model;
 
     private List<GameSummary> games;
-    private List<GameChoiceValue> choices;
+    private List<Library> library;
+
+
 
 
     public GameListAdapter(AppCompatActivity context, GameListModel model) {
@@ -53,10 +55,11 @@ public class GameListAdapter extends RecyclerView.Adapter<GameViewHolder> {
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    public void setChoice(List<GameChoiceValue> choices) {
-        this.choices = choices;
+    public void setLibrary(List<Library> library) {
+        this.library = library;
         notifyDataSetChanged();
     }
+
 
 
 //    public void setItems(List<Game> items) {
@@ -97,12 +100,14 @@ public class GameListAdapter extends RecyclerView.Adapter<GameViewHolder> {
         vh.buttonBook.setOnClickListener((view) -> {
             Log.i(LOG_TAG, "Library pressed");
             GameSummary game = games.get(vh.getAdapterPosition());
+            model.libraryChange(game);
         });
 
         vh.buttonWishlist.setOnClickListener((view) -> {
-
-            GameSummary game = games.get(vh.getAdapterPosition());
             Log.i(LOG_TAG, "Wishlist pressed");
+            GameSummary game = games.get(vh.getAdapterPosition());
+            model.wishlistChange(game);
+
 
 
         });
@@ -112,6 +117,8 @@ public class GameListAdapter extends RecyclerView.Adapter<GameViewHolder> {
             Log.i(LOG_TAG, "clicked on this game:" + game.id);
 
             // This to change screen to detail page.
+
+
             Intent intent = new Intent(context, GameDetailsActivity.class);
             intent.putExtra(GameDetailsActivity.EXTRA_GAME_ID, game.id);
             context.startActivity(intent);
@@ -205,17 +212,16 @@ public class GameListAdapter extends RecyclerView.Adapter<GameViewHolder> {
 //        vh.buttonWishlist.setVisibility(choices == null ? View.GONE : View.VISIBLE);
         vh.buttonBook.setImageResource(R.drawable.bookoutline);
         vh.buttonWishlist.setImageResource(R.drawable.wishlistoutline);
-        //votevalue gotta find it
 
-        if (choices != null) {
 
-            for (GameChoiceValue library : choices) {
-                if (Objects.equals(game.id, library.libraryUsername)) {
 
-                }
 
-            }
-        }
+
+//        if (Objects.equals(game.id, )) {
+//            vh.buttonBook.setImageResource(R.drawable.book);
+//        }
+
+
     }
 
 

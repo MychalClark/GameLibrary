@@ -7,21 +7,24 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import edu.ranken.mychal_clark.gamelibrary.data.Consoles;
 import edu.ranken.mychal_clark.gamelibrary.data.Game;
-import edu.ranken.mychal_clark.gamelibrary.data.GameChoiceValue;
 import edu.ranken.mychal_clark.gamelibrary.data.GameList;
 import edu.ranken.mychal_clark.gamelibrary.data.GameSummary;
 
@@ -43,7 +46,6 @@ public class GameListModel extends ViewModel {
 
     //Live Data
     private final MutableLiveData<List<GameSummary>> games;
-    private final MutableLiveData<List<GameChoiceValue>> choices;
 
     private final MutableLiveData<List<Consoles>> consoles;
     private final MutableLiveData<String> snackbarMessage;
@@ -57,7 +59,6 @@ public class GameListModel extends ViewModel {
         games = new MutableLiveData<>(null);
         errorMessage = new MutableLiveData<>(null);
         snackbarMessage = new MutableLiveData<>(null);
-        choices = new MutableLiveData<>(null);
 
 
         //get current user
@@ -75,18 +76,13 @@ public class GameListModel extends ViewModel {
         libraryRegistration =
             db.collection("userLibrary").whereEqualTo("userId", userId).addSnapshotListener((QuerySnapshot querySnapshot, FirebaseFirestoreException error) -> {
                 if (error != null) {
-                    Log.e(LOG_TAG, "Error getting votes.", error);
-                    snackbarMessage.postValue("Error getting votes.");
+                    Log.e(LOG_TAG, "Error getting Library.", error);
+                    snackbarMessage.postValue("Error getting Library.");
                 } else if (querySnapshot != null) {
-                    Log.i(LOG_TAG, "Votes update.");
+                    Log.i(LOG_TAG, "Library Updated.");
 
-                    List<GameChoiceValue> newChoices = new ArrayList<>();
-                    for (QueryDocumentSnapshot document : querySnapshot) {
-                        String gameId = document.getString("gameId");
-                        String username = document.getString("Username");
-                    }
                 }
-                ;
+
 
             });
 
@@ -128,9 +124,6 @@ public class GameListModel extends ViewModel {
         return games;
     }
 
-    public LiveData<List<GameChoiceValue>> getChoices() {
-        return choices;
-    }
 
     public LiveData<String> getErrorMessage() {
         return errorMessage;
@@ -184,8 +177,12 @@ public class GameListModel extends ViewModel {
                     .whereEqualTo("userId", userId);
                 break;
             case LIBRARY:
-                query = db.collection("userLibrary")
-                    .whereEqualTo("userId", userId);
+
+               query = db.collection("userLibrary").whereEqualTo("userId", userId);
+
+
+
+                Log.i(LOG_TAG, "Library Filtered");
                 break;
             case LIBRARY_WISHLIST:
                 db.collection("userLibrary")
@@ -200,7 +197,14 @@ public class GameListModel extends ViewModel {
             if (filterList == GameList.ALL_GAMES) {
                 query = query.whereEqualTo("consoles." + filterConsoleId, true);
             } else {
-                query = query.whereEqualTo("games.consoles." + filterConsoleId, true);
+                if(filterList == GameList.LIBRARY){
+                    query = query.whereEqualTo("consoles." + filterConsoleId, true);
+                } else if(filterList == GameList.WISHLIST){
+                    query = query.whereEqualTo("consoles." + filterConsoleId, true);}
+                else if(filterList == GameList.LIBRARY_WISHLIST){
+                    query = query.whereEqualTo("consoles." + filterConsoleId, true);}
+                else{
+                query = query.whereEqualTo("games.consoles." + filterConsoleId, true);}
             }
         }
         //get game collection
@@ -227,7 +231,18 @@ public class GameListModel extends ViewModel {
                             }
                             break;
                         case LIBRARY:
+                            List<Game> newGamesLibrary = querySnapshot.toObjects(Game.class);
+                            for (Game game : newGamesLibrary) {
+                                game.id = game.id.substring((game.id.indexOf(";")+1));
+                                newGameSummary.add(new GameSummary(game));
+                            }
+                            break;
                         case WISHLIST:
+                            List<Game> newGamesWishlist = querySnapshot.toObjects(Game.class);
+                            for (Game game : newGamesWishlist) {
+                                game.id = game.id.substring((game.id.indexOf(";")+1));
+                                newGameSummary.add(new GameSummary(game));
+                            }
                         case LIBRARY_WISHLIST:
                             break;
                     }
@@ -235,6 +250,80 @@ public class GameListModel extends ViewModel {
 
                     errorMessage.postValue(null);
                     snackbarMessage.postValue("Games Updated.");
+                }
+
+            });
+
+
+    }
+
+    public void wishlistChange(GameSummary game) {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+        DocumentReference docRef = db.collection("userWishlist")
+            .document(user.getUid() + ";" + game.id);
+
+        docRef.get()
+            .addOnCompleteListener((Task<DocumentSnapshot> task) -> {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        docRef.delete();
+                        Log.i(LOG_TAG ,"Deleting document");
+                    } else {
+                        Map<String, Object> newGame = new HashMap<>();
+                        newGame.put("userId", user.getUid());
+                        newGame.put("gameId", game.id);
+                        newGame.put("consoles", game.consoles);
+                        newGame.put("description", game.description);
+                        newGame.put("releaseYear", game.releaseYear);
+                        newGame.put("gameImage", game.gameImage);
+                        newGame.put("name", game.name);
+
+                        Log.i(LOG_TAG, "Creating document");
+
+                        docRef.set(newGame);
+                    }
+
+                }
+
+            });
+
+    }
+
+    public void libraryChange(GameSummary game) {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+        DocumentReference docRef = db.collection("userLibrary")
+            .document(user.getUid() + ";" + game.id);
+
+        docRef.get()
+            .addOnCompleteListener((Task<DocumentSnapshot> task) -> {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        docRef.delete();
+                        Log.i(LOG_TAG ,"Deleting document");
+                    }
+                    else {
+
+                        Map<String, Object> newGame = new HashMap<>();
+                        newGame.put("userId", user.getUid());
+                        newGame.put("gameId", game.id);
+                        newGame.put("consoles", game.consoles);
+                        newGame.put("description", game.description);
+                        newGame.put("releaseYear", game.releaseYear);
+                        newGame.put("gameImage", game.gameImage);
+                        newGame.put("name", game.name);
+
+                        Log.i(LOG_TAG, "Creating document");
+
+                        docRef.set(newGame);
+
+
+
+                    }
+
                 }
 
             });

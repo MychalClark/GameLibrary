@@ -153,6 +153,12 @@
                 android:textAlignment="center"
                 tools:text="2309sdf09375023DKFJ750923570" />
 
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/libraryRecycler"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                 />
+
         </LinearLayout>
     </ScrollView>
 

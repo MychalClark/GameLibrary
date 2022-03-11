@@ -2,21 +2,28 @@ package edu.ranken.mychal_clark.gamelibrary.data;
 
 import androidx.annotation.NonNull;
 
-import com.google.firebase.firestore.DocumentId;
-
 public class Library {
-    @DocumentId
-    public String id;
+
     public String gameId;
     public String userId;
+    public String gameImage;
+    public String name;
 
     public GameSummary game;
 
     public Library(){}
 
+    public Library(String gameId, String userId, String gameImage, String name){
+        this.gameId = gameId;
+        this.userId = userId;
+        this.gameImage = gameImage;
+        this.name = name;
+
+    }
+
     @NonNull
     @Override
     public String toString() {
-        return "Library {id=" + id + ", userId=" + userId + "}";
+        return "Library {id=" + gameId + ", userId=" + userId + "}";
     }
 }

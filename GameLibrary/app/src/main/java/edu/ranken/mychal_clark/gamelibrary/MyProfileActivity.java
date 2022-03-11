@@ -8,12 +8,15 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.squareup.picasso.Picasso;
 
 import edu.ranken.mychal_clark.gamelibrary.ui.MyProfileViewModel;
+import edu.ranken.mychal_clark.gamelibrary.ui.ProfileGameAdapter;
 
 public class MyProfileActivity extends AppCompatActivity {
 
@@ -22,6 +25,8 @@ public class MyProfileActivity extends AppCompatActivity {
     //States
     private MyProfileViewModel model;
     private Picasso picasso;
+    private ProfileGameAdapter profileGameAdapter;
+    private RecyclerView libraryRecycler;
 
     //Create Views
     private TextView emailText;
@@ -30,10 +35,21 @@ public class MyProfileActivity extends AppCompatActivity {
     private ImageView userImage;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_profile);
+
+        libraryRecycler = findViewById(R.id.libraryRecycler);
+        //create adapter
+        profileGameAdapter = new ProfileGameAdapter(this, null);
+
+        // setup recycler view
+        libraryRecycler.setLayoutManager(new LinearLayoutManager(this));
+        libraryRecycler.setAdapter(profileGameAdapter);
+
+
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -44,11 +60,13 @@ public class MyProfileActivity extends AppCompatActivity {
         displayNameText = findViewById(R.id.profileNameText);
         userImage = findViewById(R.id.profileImage);
 
+
         // get picasso
         picasso = Picasso.get();
 
         //bind model
         model = new ViewModelProvider(this).get(MyProfileViewModel.class);
+        model.getLibrary().observe(this,(librarys) -> {profileGameAdapter.setItems(librarys);});
 
 
         emailText.setText(user.getEmail());
