@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "391929358290",
+    "project_id": "my-receipt-mychal-clark",
+    "storage_bucket": "my-receipt-mychal-clark.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:391929358290:android:9e94a3f749fbe7eb354a0b",
+        "android_client_info": {
+          "package_name": "edu.ranken.mychal_clark.checkmyreceipt"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "391929358290-0m5omqhp9idfa9gn2ma12qv9jqr9gp2a.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCEaIigDefJxlI6-bw-pfsCgljprwasdf0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "391929358290-0m5omqhp9idfa9gn2ma12qv9jqr9gp2a.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
