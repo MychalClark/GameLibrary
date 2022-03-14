@@ -3,6 +3,7 @@
     package="edu.ranken.mychal_clark.gamelibrary">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <!-- FIXME: request permission ACCESS_NETWORK_STATE -->
 
     <application
         android:allowBackup="true"

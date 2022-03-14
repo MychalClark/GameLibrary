@@ -80,12 +80,13 @@ public class GameListModel extends ViewModel {
                     snackbarMessage.postValue("Error getting Library.");
                 } else if (querySnapshot != null) {
                     Log.i(LOG_TAG, "Library Updated.");
-
+                    // FIXME: update LiveData with returned library items
                 }
 
 
             });
 
+        // FIXME: observe user's wishlist as well
 
         consolesRegistration =
             db.collection("consoles")
@@ -124,7 +125,7 @@ public class GameListModel extends ViewModel {
         return games;
     }
 
-
+    // FIXME: must be observed and displayed to user
     public LiveData<String> getErrorMessage() {
         return errorMessage;
     }
@@ -162,10 +163,7 @@ public class GameListModel extends ViewModel {
             Log.i(LOG_TAG, "Games removed");
         }
 
-        //New method. Sort By: name and release year.
-
-
-        Query query = null;
+        Query query = null;  // FIXME: don't initialize query variable
         switch (filterList) {
             default:
                 throw new IllegalStateException("Unsupported Option");
@@ -185,6 +183,7 @@ public class GameListModel extends ViewModel {
                 Log.i(LOG_TAG, "Library Filtered");
                 break;
             case LIBRARY_WISHLIST:
+                // FIXME: query not set in this case
                 db.collection("userLibrary")
                     .whereEqualTo("userId", userId)
                     .whereEqualTo("libraryValue", 1)
@@ -192,8 +191,10 @@ public class GameListModel extends ViewModel {
                 break;
         }
 
-
         if (filterConsoleId != null) {
+            // FIXME: can be simplified to the below, as all cases do the same thing
+            // query = query.whereEqualTo("consoles." + filterConsoleId, true);
+
             if (filterList == GameList.ALL_GAMES) {
                 query = query.whereEqualTo("consoles." + filterConsoleId, true);
             } else {
@@ -207,6 +208,10 @@ public class GameListModel extends ViewModel {
                 query = query.whereEqualTo("games.consoles." + filterConsoleId, true);}
             }
         }
+
+        // FIXME: Sort games by: name, releaseYear
+        //        Use orderBy() and add the required indexes in the Firebase Console
+
         //get game collection
         gamesRegistration =
             query.addSnapshotListener((QuerySnapshot querySnapshot, FirebaseFirestoreException error) -> {
@@ -257,6 +262,7 @@ public class GameListModel extends ViewModel {
 
     }
 
+    // FIXME: don't read the document again to determine if should be added or deleted
     public void wishlistChange(GameSummary game) {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -265,6 +271,7 @@ public class GameListModel extends ViewModel {
 
         docRef.get()
             .addOnCompleteListener((Task<DocumentSnapshot> task) -> {
+                // FIXME: display error message, when failed
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
@@ -291,6 +298,7 @@ public class GameListModel extends ViewModel {
 
     }
 
+    // FIXME: don't read the document again to determine if should be added or deleted
     public void libraryChange(GameSummary game) {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -299,6 +307,7 @@ public class GameListModel extends ViewModel {
 
         docRef.get()
             .addOnCompleteListener((Task<DocumentSnapshot> task) -> {
+                // FIXME: display error message, when failed
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {

@@ -27,7 +27,9 @@ public class LoginActivity extends AppCompatActivity {
 
     private ActivityResultLauncher<Intent> signInLauncher;
 
-    private MyProfileViewModel profileViewModel;
+    //FIXME: do not use the view model for another screen here
+    //       create a special LoginViewModel for this screen only
+    //private MyProfileViewModel profileViewModel;
 
 
     @Override
@@ -35,7 +37,11 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        profileViewModel = new ViewModelProvider(this).get(MyProfileViewModel.class);
+        // FIXME: follow standard formatting and indention rules
+        //        this code looks unprofessional, and is difficult to read
+
+        //profileViewModel = new ViewModelProvider(this).get(MyProfileViewModel.class);
+
         //regis views
         loginBtn = findViewById(R.id.loginBtn);
 
@@ -54,7 +60,7 @@ public class LoginActivity extends AppCompatActivity {
 // Choose Authenication providers
             List<AuthUI.IdpConfig> providers = new ArrayList<>();
             providers.add(new AuthUI.IdpConfig.EmailBuilder().build());
-            providers.add(new AuthUI.IdpConfig.GoogleBuilder().build());
+            providers.add(new AuthUI.IdpConfig.GoogleBuilder().build());  // FIXME: Google login method not enabled in Firebase Console
 
             // Create sign-in intent
             Intent signInIntent =
@@ -94,7 +100,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void onLoginSuccess(FirebaseUser user) {
-       profileViewModel.createUser();
+       //profileViewModel.createUser();
         Intent intent = new Intent(this, GameListActivity.class);
         startActivity(intent);
     }

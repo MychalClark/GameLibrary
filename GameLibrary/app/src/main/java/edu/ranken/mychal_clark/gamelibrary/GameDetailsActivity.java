@@ -47,6 +47,7 @@ public class GameDetailsActivity extends AppCompatActivity {
     private ImageView[] consoleIcons;
     private ImageButton composeReviewButton;
 
+    // FIXME: place after onCreate() method
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int itemId = item.getItemId();
@@ -230,8 +231,11 @@ public class GameDetailsActivity extends AppCompatActivity {
                     }
                 }
 
+                // FIXME: this line is way too long, keep lines under 100 characters
                 if(game.images == null || game.images.size() <= 0){gameScreenshots[1].setImageResource(R.drawable.no_image);gameScreenshots[2].setImageResource(R.drawable.no_image);gameScreenshots[3].setImageResource(R.drawable.no_image);}
                 else {
+                    // FIXME: what if there are not exactly 3 images?
+                    //        what if there are 2 or 4 images?
                     for (int i = 0; i < game.images.size(); i++) {
                         gameScreenshots[i].setImageResource(R.drawable.no_image);
                         if (game.images.get(i).isEmpty()) {
