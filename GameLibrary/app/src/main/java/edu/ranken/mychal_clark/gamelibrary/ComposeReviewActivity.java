@@ -33,7 +33,7 @@ public class ComposeReviewActivity extends AppCompatActivity {
 
 
 
-
+    // FIXME: place after onCreate() method
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int itemId = item.getItemId();

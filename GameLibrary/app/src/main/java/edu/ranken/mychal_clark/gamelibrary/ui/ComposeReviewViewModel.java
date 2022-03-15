@@ -24,7 +24,7 @@ public class ComposeReviewViewModel extends ViewModel {
     private final FirebaseFirestore db;
     private ListenerRegistration gameRegistration;
     private String gameId;
-    private String userId;
+    private String userId;  // FIXME: remove unused variable
 
     // live data
     private final MutableLiveData<String> gameName;
@@ -109,9 +109,11 @@ public class ComposeReviewViewModel extends ViewModel {
 
     public void publishReview(String gameId, String reviewText) {
         /* validate reviewText and add review to database */
+        // FIXME: tell the user when the text is empty
         if (reviewText != null) {
             //get current user
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+            // FIXME: tell the user when they are not logged in
             if (user != null) {
                 userId = user.getUid();
                 Log.i(LOG_TAG, "Creating Review");
@@ -124,6 +126,8 @@ public class ComposeReviewViewModel extends ViewModel {
 
                 db.collection("reviews").document(userId + ";" + gameId).set(newReview);
                 /* when published: finished.postValue(true) */
+                // FIXME: activity is finished, before the review is actually published
+                // FIXME: handle errors with publishing the review
                 finished.postValue(true);
             }
         }

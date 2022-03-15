@@ -47,6 +47,7 @@ public class GameDetailsViewModel extends ViewModel {
         if (gameRegistration != null) {
             gameRegistration.remove();
         }
+        // FIXME: remove reviews registration
         super.onCleared();
     }
 
@@ -58,10 +59,12 @@ public class GameDetailsViewModel extends ViewModel {
         return game;
     }
 
+    // FIXME: must be observed and displayed to user
     public LiveData<String> getGameError() {
         return gameError;
     }
 
+    // FIXME: must be observed and displayed to user
     public LiveData<String> getSnackbarMessage() {
         return snackbarMessage;
     }
@@ -80,8 +83,10 @@ public class GameDetailsViewModel extends ViewModel {
         if (gameRegistration != null) {
             gameRegistration.remove();
         }
+        // FIXME: remove reviews registration
 
-        //get reviews
+        // get reviews
+        // FIXME: only query reviews if gameId is not null
         reviewRegistration =
             db.collection("reviews")
                 .whereEqualTo("gameId", gameId)
