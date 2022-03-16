@@ -18,6 +18,8 @@
             android:layout_margin="8dp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="$55555555" />
@@ -29,7 +31,9 @@
             android:layout_margin="8dp"
             android:text="X"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/itemPriceText"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.44"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
@@ -51,6 +55,7 @@
             android:textAlignment="viewStart"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/itemDeleteBtn"
             app:layout_constraintStart_toEndOf="@+id/itemDiscountLabel"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="100%" />
@@ -63,7 +68,9 @@
             android:text="Discount:"
             android:textAlignment="viewStart"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/itemQuantityText"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.694"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
@@ -71,10 +78,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
-            android:text="$55555555"
+            android:text="$1"
             android:textAlignment="viewEnd"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/itemTotalPriceText"
+            app:layout_constraintEnd_toStartOf="@+id/itemXLabel"
             app:layout_constraintTop_toTopOf="parent" />
 
         <Button

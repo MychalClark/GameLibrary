@@ -10,18 +10,28 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
+import com.google.protobuf.StringValue;
+
+import java.text.NumberFormat;
+
+import edu.ranken.mychal_clark.checkmyreceipt.data.Receipt;
 import edu.ranken.mychal_clark.checkmyreceipt.ui.ItemListViewModel;
 import edu.ranken.mychal_clark.checkmyreceipt.ui.ReceiptItemListAdapter;
+import edu.ranken.mychal_clark.checkmyreceipt.ui.TotalsViewModel;
 
 public class ItemListActivity extends AppCompatActivity {
 
     //crete Views
     private ImageButton fabAdd;
+    private ImageButton fabDelete;
     private Button calcBtn;
     private ItemListViewModel model;
     private RecyclerView recyclerView;
     private ReceiptItemListAdapter adapter;
+    private TextView subtotal;
+    private TotalsViewModel totalModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +43,12 @@ public class ItemListActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.itemList);
         fabAdd = findViewById(R.id.fabAdd);
         calcBtn = findViewById(R.id.calcBtn);
+        fabDelete = findViewById(R.id.fabDelete);
+        subtotal = findViewById(R.id.subTotalText);
 
+// bind model
+       model = new ViewModelProvider(this).get(ItemListViewModel.class);
+        totalModel = new ViewModelProvider(this).get(TotalsViewModel.class);
 
         //Create Adapter
         adapter = new ReceiptItemListAdapter(this, null, model);
@@ -42,28 +57,44 @@ public class ItemListActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
 
-        // bind model
-        model = new ViewModelProvider(this).get(ItemListViewModel.class);
+
+
+
 
         model.getReceipt().observe(this,(receipt) -> {
             if (receipt != null){
-                Log.i("ll", "soigoisdjgiodsjgoisoigdoigiosdj");
                 model.getReceiptId(receipt.receiptId);
+                model.updateSubtotal(adapter.itemTotal());
             }
         });
-        model.getReceiptItems().observe(this,(receiptItems) -> {adapter.setItems(receiptItems);});
+        model.getReceiptItems().observe(this,(receiptItems) -> {adapter.setItems(receiptItems);
+           subtotal.setText(NumberFormat.getCurrencyInstance().format(adapter.itemTotal()));
+
+
+           ;});
 
 
         //Set Listeners
         fabAdd.setOnClickListener((view) -> {
             Intent intent = new Intent(this, AddItemActivity.class);
             startActivity(intent);
+            model.updateSubtotal(adapter.itemTotal());
         });
 
+        fabDelete.setOnClickListener((view) -> {
+            model.deleteAllItems();
+            model.updateSubtotal(adapter.itemTotal());
+        });
+
+
         calcBtn.setOnClickListener((view) -> {
-            Intent intent = new Intent(this, AddItemActivity.class);
+            totalModel.setSalesTax(model.getReceipt().getValue().taxPercent);
+            Intent intent = new Intent(this, TotalsActivity.class);
             startActivity(intent);
         });
+
+
     }
+
 
 }

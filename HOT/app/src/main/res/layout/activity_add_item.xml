@@ -60,7 +60,7 @@
                 android:id="@+id/addDiscountLabel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Price ($)" />
+                android:text="Discount (%)" />
 
             <EditText
                 android:id="@+id/addDiscountInput"
@@ -68,6 +68,14 @@
                 android:layout_height="wrap_content"
                 android:ems="10"
                 android:inputType="numberDecimal" />
+
+            <TextView
+                android:id="@+id/addItemError"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Please Fill out all inputs."
+                android:textColor="#F40F0F"
+                android:visibility="gone" />
 
         </LinearLayout>
     </ScrollView>
