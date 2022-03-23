@@ -1,4 +1,4 @@
-package edu.ranken.mychal_clark.gamelibrary.ui;
+package edu.ranken.mychal_clark.gamelibrary.ui.game;
 
 import android.util.Log;
 
@@ -22,7 +22,6 @@ public class GameDetailsViewModel extends ViewModel {
     // firebase
     private final FirebaseFirestore db;
     private ListenerRegistration gameRegistration;
-    private ListenerRegistration reviewRegistration;
     private String gameId;
 
     // live data
@@ -43,11 +42,11 @@ public class GameDetailsViewModel extends ViewModel {
     }
 
     @Override
-    protected void onCleared(){
+    protected void onCleared() {
         if (gameRegistration != null) {
             gameRegistration.remove();
         }
-        // FIXME: remove reviews registration
+        // FIXME: remove reviews registration(fixed)
         super.onCleared();
     }
 
@@ -69,7 +68,9 @@ public class GameDetailsViewModel extends ViewModel {
         return snackbarMessage;
     }
 
-    public LiveData<List<Review>> getReviews(){return reviews;}
+    public LiveData<List<Review>> getReviews() {
+        return reviews;
+    }
 
     //clears the snackbar
     public void clearSnackbar() {
@@ -83,28 +84,30 @@ public class GameDetailsViewModel extends ViewModel {
         if (gameRegistration != null) {
             gameRegistration.remove();
         }
-        // FIXME: remove reviews registration
+        // FIXME: remove reviews registration(fixed)
 
+
+        // FIXME: only query reviews if gameId is not null(fixed)
         // get reviews
-        // FIXME: only query reviews if gameId is not null
-        reviewRegistration =
+        if (gameId != null) {
             db.collection("reviews")
                 .whereEqualTo("gameId", gameId)
                 .addSnapshotListener((QuerySnapshot querySnapshot, FirebaseFirestoreException error) -> {
-                if (error != null) {
-                    // show error...
-                    Log.e(LOG_TAG, "Error getting reviews.", error);
-                    snackbarMessage.postValue("Error getting Reviews.");
-                } else {
-                    List<Review> newReviews =
-                        querySnapshot != null ? querySnapshot.toObjects(Review.class) : null;
+                    if (error != null) {
+                        // show error...
+                        Log.e(LOG_TAG, "Error getting reviews.", error);
+                        snackbarMessage.postValue("Error getting Reviews.");
+                    } else {
+                        List<Review> newReviews =
+                            querySnapshot != null ? querySnapshot.toObjects(Review.class) : null;
 
-                    reviews.postValue(newReviews);
+                        reviews.postValue(newReviews);
 
-                    snackbarMessage.postValue("Reviews Updated.");
-                    // show games...
-                }
-            });
+                        snackbarMessage.postValue("Reviews Updated.");
+                        // show games...
+                    }
+                });
+        }
 
         if (gameId == null) {
             this.game.postValue(null);
@@ -133,7 +136,6 @@ public class GameDetailsViewModel extends ViewModel {
         }
 
     }
-
 
 
 }

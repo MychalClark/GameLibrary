@@ -1,4 +1,4 @@
-package edu.ranken.mychal_clark.gamelibrary.ui;
+package edu.ranken.mychal_clark.gamelibrary.ui.game;
 
 import android.util.Log;
 
@@ -7,11 +7,8 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.ListenerRegistration;
@@ -176,8 +173,7 @@ public class GameListModel extends ViewModel {
                 break;
             case LIBRARY:
 
-               query = db.collection("userLibrary").whereEqualTo("userId", userId);
-
+                query = db.collection("userLibrary").whereEqualTo("userId", userId);
 
 
                 Log.i(LOG_TAG, "Library Filtered");
@@ -198,14 +194,15 @@ public class GameListModel extends ViewModel {
             if (filterList == GameList.ALL_GAMES) {
                 query = query.whereEqualTo("consoles." + filterConsoleId, true);
             } else {
-                if(filterList == GameList.LIBRARY){
+                if (filterList == GameList.LIBRARY) {
                     query = query.whereEqualTo("consoles." + filterConsoleId, true);
-                } else if(filterList == GameList.WISHLIST){
-                    query = query.whereEqualTo("consoles." + filterConsoleId, true);}
-                else if(filterList == GameList.LIBRARY_WISHLIST){
-                    query = query.whereEqualTo("consoles." + filterConsoleId, true);}
-                else{
-                query = query.whereEqualTo("games.consoles." + filterConsoleId, true);}
+                } else if (filterList == GameList.WISHLIST) {
+                    query = query.whereEqualTo("consoles." + filterConsoleId, true);
+                } else if (filterList == GameList.LIBRARY_WISHLIST) {
+                    query = query.whereEqualTo("consoles." + filterConsoleId, true);
+                } else {
+                    query = query.whereEqualTo("games.consoles." + filterConsoleId, true);
+                }
             }
         }
 
@@ -238,14 +235,14 @@ public class GameListModel extends ViewModel {
                         case LIBRARY:
                             List<Game> newGamesLibrary = querySnapshot.toObjects(Game.class);
                             for (Game game : newGamesLibrary) {
-                                game.id = game.id.substring((game.id.indexOf(";")+1));
+                                game.id = game.id.substring((game.id.indexOf(";") + 1));
                                 newGameSummary.add(new GameSummary(game));
                             }
                             break;
                         case WISHLIST:
                             List<Game> newGamesWishlist = querySnapshot.toObjects(Game.class);
                             for (Game game : newGamesWishlist) {
-                                game.id = game.id.substring((game.id.indexOf(";")+1));
+                                game.id = game.id.substring((game.id.indexOf(";") + 1));
                                 newGameSummary.add(new GameSummary(game));
                             }
                         case LIBRARY_WISHLIST:
@@ -263,80 +260,83 @@ public class GameListModel extends ViewModel {
     }
 
     // FIXME: don't read the document again to determine if should be added or deleted
-    public void wishlistChange(GameSummary game) {
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-
-        DocumentReference docRef = db.collection("userWishlist")
-            .document(user.getUid() + ";" + game.id);
-
-        docRef.get()
-            .addOnCompleteListener((Task<DocumentSnapshot> task) -> {
-                // FIXME: display error message, when failed
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-                        docRef.delete();
-                        Log.i(LOG_TAG ,"Deleting document");
-                    } else {
-                        Map<String, Object> newGame = new HashMap<>();
-                        newGame.put("userId", user.getUid());
-                        newGame.put("gameId", game.id);
-                        newGame.put("consoles", game.consoles);
-                        newGame.put("description", game.description);
-                        newGame.put("releaseYear", game.releaseYear);
-                        newGame.put("gameImage", game.gameImage);
-                        newGame.put("name", game.name);
-
-                        Log.i(LOG_TAG, "Creating document");
-
-                        docRef.set(newGame);
-                    }
-
-                }
-
-            });
-
-    }
+//    public void wishlistChange(GameSummary game) {
+//        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+//
+//        DocumentReference docRef = db.collection("userWishlist")
+//            .document(user.getUid() + ";" + game.id);
+//
+//        docRef.get()
+//            .addOnCompleteListener((Task<DocumentSnapshot> task) -> {
+//                // FIXME: display error message, when failed
+//                if (task.isSuccessful()) {
+//                    DocumentSnapshot document = task.getResult();
+//                    if (document.exists()) {
+//                        docRef.delete();
+//                        Log.i(LOG_TAG, "Deleting document");
+//                    } else {
+//                        Map<String, Object> newGame = new HashMap<>();
+//                        newGame.put("userId", user.getUid());
+//                        newGame.put("gameId", game.id);
+//                        newGame.put("consoles", game.consoles);
+//                        newGame.put("description", game.description);
+//                        newGame.put("releaseYear", game.releaseYear);
+//                        newGame.put("gameImage", game.gameImage);
+//                        newGame.put("name", game.name);
+//
+//                        Log.i(LOG_TAG, "Creating document");
+//
+//                        docRef.set(newGame);
+//                    }
+//
+//                }
+//
+//            });
+//
+//    }
 
     // FIXME: don't read the document again to determine if should be added or deleted
-    public void libraryChange(GameSummary game) {
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-        DocumentReference docRef = db.collection("userLibrary")
-            .document(user.getUid() + ";" + game.id);
+    public void addGameToLibrary(GameSummary game) {
 
-        docRef.get()
-            .addOnCompleteListener((Task<DocumentSnapshot> task) -> {
-                // FIXME: display error message, when failed
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-                        docRef.delete();
-                        Log.i(LOG_TAG ,"Deleting document");
-                    }
-                    else {
-
-                        Map<String, Object> newGame = new HashMap<>();
-                        newGame.put("userId", user.getUid());
-                        newGame.put("gameId", game.id);
-                        newGame.put("consoles", game.consoles);
-                        newGame.put("description", game.description);
-                        newGame.put("releaseYear", game.releaseYear);
-                        newGame.put("gameImage", game.gameImage);
-                        newGame.put("name", game.name);
-
-                        Log.i(LOG_TAG, "Creating document");
-
-                        docRef.set(newGame);
+        Map<String, Object> newGame = new HashMap<>();
+        newGame.put("userId", userId);
+        newGame.put("gameId", game.id);
+        newGame.put("consoles", game.consoles);
+        newGame.put("description", game.description);
+        newGame.put("releaseYear", game.releaseYear);
+        newGame.put("gameImage", game.gameImage);
+        newGame.put("name", game.name);
 
 
-
-                    }
-
-                }
-
+        db.collection("userLibrary")
+            .document(userId + ";" + game.id)
+            .set(newGame)
+            .addOnSuccessListener((result) -> {
+                Log.i(LOG_TAG, "Creating document.");
+                snackbarMessage.postValue("Game added to Library.");
+            })
+            .addOnFailureListener((error) -> {
+                Log.e(LOG_TAG, "Document not added.", error);
+                snackbarMessage.postValue("Game not added to Library.");
             });
+
 
     }
 
+    public void removeGameFromLibrary(String gameId) {
+        db.collection("userLibrary")
+            .document(userId + ";" + gameId)
+            .delete()
+            .addOnSuccessListener((result) -> {
+                Log.i(LOG_TAG, "Document deleted.");
+                snackbarMessage.postValue("Game removed from Library.");
+            })
+            .addOnFailureListener((error) -> {
+                Log.e(LOG_TAG, "Document not removed", error);
+                snackbarMessage.postValue("Game not removed from Library.");
+            });
+
+
+    }
 }

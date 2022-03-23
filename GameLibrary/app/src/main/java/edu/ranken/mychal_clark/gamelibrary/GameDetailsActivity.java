@@ -20,8 +20,8 @@ import com.squareup.picasso.Picasso;
 import java.util.Map;
 import java.util.Objects;
 
-import edu.ranken.mychal_clark.gamelibrary.ui.GameDetailsViewModel;
-import edu.ranken.mychal_clark.gamelibrary.ui.ReviewListAdapter;
+import edu.ranken.mychal_clark.gamelibrary.ui.game.GameDetailsViewModel;
+import edu.ranken.mychal_clark.gamelibrary.ui.review.ReviewListAdapter;
 
 public class GameDetailsActivity extends AppCompatActivity {
 
@@ -63,7 +63,7 @@ public class GameDetailsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_game_details);
+        setContentView(R.layout.game_details);
 
         Log.i(LOG_TAG, "extra" + EXTRA_GAME_ID);
         //set views

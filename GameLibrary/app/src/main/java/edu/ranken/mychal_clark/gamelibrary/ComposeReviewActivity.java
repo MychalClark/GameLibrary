@@ -17,7 +17,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import java.util.Objects;
 
-import edu.ranken.mychal_clark.gamelibrary.ui.ComposeReviewViewModel;
+import edu.ranken.mychal_clark.gamelibrary.ui.review.ComposeReviewViewModel;
 
 public class ComposeReviewActivity extends AppCompatActivity {
 
@@ -49,7 +49,7 @@ public class ComposeReviewActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_compose_review);
+        setContentView(R.layout.compose_review);
 
         reviewText = findViewById(R.id.reviewInput);
         gameTitle = findViewById(R.id.reviewGameTitle);

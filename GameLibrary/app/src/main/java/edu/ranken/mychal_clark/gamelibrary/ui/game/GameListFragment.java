@@ -1,4 +1,4 @@
-package edu.ranken.mychal_clark.gamelibrary;
+package edu.ranken.mychal_clark.gamelibrary.ui.game;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -7,7 +7,11 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -17,15 +21,14 @@ import com.google.android.material.snackbar.Snackbar;
 import java.util.ArrayList;
 import java.util.Objects;
 
+import edu.ranken.mychal_clark.gamelibrary.R;
 import edu.ranken.mychal_clark.gamelibrary.data.Consoles;
 import edu.ranken.mychal_clark.gamelibrary.data.GameList;
-import edu.ranken.mychal_clark.gamelibrary.ui.game.GameListAdapter;
-import edu.ranken.mychal_clark.gamelibrary.ui.game.GameListModel;
 import edu.ranken.mychal_clark.gamelibrary.ui.utils.SpinnerOption;
 
-public class GameListActivity extends AppCompatActivity {
+public class GameListFragment extends Fragment {
 
-    private static final String LOG_TAG = "GameListActivity";
+    private static final String LOG_TAG = GameListFragment.class.getSimpleName();
 
 
     //views
@@ -41,36 +44,33 @@ public class GameListActivity extends AppCompatActivity {
     private ArrayAdapter<SpinnerOption<String>> consolesAdapter;
     private ArrayAdapter<SpinnerOption<GameList>> listAdapter;
 
-    //private ArrayAdapter<ConsoleFilter> consolesAdapter;
+
+    public GameListFragment() {
+        super(R.layout.game_list);
+    }
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.game_list);
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 
+        super.onViewCreated(view, savedInstanceState);
+//find Views
+        consoleSpinner = view.findViewById(R.id.consoleSpinner);
+        listSpinner = view.findViewById(R.id.listSpinner);
+        recyclerView = view.findViewById(R.id.gameList);
 
-        //find views
-
-        consoleSpinner = findViewById(R.id.consoleSpinner);
-        listSpinner = findViewById(R.id.listSpinner);
-        recyclerView = findViewById(R.id.gameList);
-
+//get Activity
+        FragmentActivity activity = getActivity();
+        LifecycleOwner lifecycleOwner = getViewLifecycleOwner();
 
         // setup recycler view
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        recyclerView.setLayoutManager(new LinearLayoutManager(activity));
 
         //recycler and adapter attach
         model = new ViewModelProvider(this).get(GameListModel.class);
-        gamesAdapter = new GameListAdapter(this, model);
+        gamesAdapter = new GameListAdapter(activity, model);
         recyclerView.setAdapter(gamesAdapter);
-
-
-        // Test if works
-//        ArrayList<Game> newGame =  new ArrayList<Game>();
-//        newGame.add(new Game("name","something", 2018));
-//        newGame.add(new Game("war","some",2014));
-//adapter.setItems(newGame);
 
 //bind Model
 
@@ -82,16 +82,15 @@ public class GameListActivity extends AppCompatActivity {
             new SpinnerOption<>(getString(R.string.myWishlist), GameList.WISHLIST),
             new SpinnerOption<>(getString(R.string.myLibraryWishlist), GameList.LIBRARY_WISHLIST),
         };
-        listAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, listOptions);
+        listAdapter = new ArrayAdapter<>(activity, android.R.layout.simple_spinner_item, listOptions);
         listSpinner.setAdapter(listAdapter);
 
-        model.getGames().observe(this, (games) -> {
+        model.getGames().observe(lifecycleOwner, (games) -> {
             gamesAdapter.setGames(games);
         });
 
 
-
-        model.getConsoles().observe(this, (consoles) -> {
+        model.getConsoles().observe(lifecycleOwner, (consoles) -> {
             if (consoles != null) {
 
                 int selectedPosition = 0;
@@ -111,7 +110,7 @@ public class GameListActivity extends AppCompatActivity {
                     }
                 }
 
-                consolesAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, consoleNames);
+                consolesAdapter = new ArrayAdapter<>(activity, android.R.layout.simple_spinner_item, consoleNames);
                 consoleSpinner.setAdapter(consolesAdapter);
                 consoleSpinner.setSelection(selectedPosition, false);
             }
@@ -122,7 +121,7 @@ public class GameListActivity extends AppCompatActivity {
 //            errorText.setText(errorMessage);
 //        });
 
-        model.getSnackbarMessage().observe(this, (snackbarMessage) -> {
+        model.getSnackbarMessage().observe(lifecycleOwner, (snackbarMessage) -> {
             if (snackbarMessage != null) {
                 Snackbar.make(recyclerView, snackbarMessage, Snackbar.LENGTH_SHORT).show();
                 model.clearSnackbar();
@@ -130,12 +129,11 @@ public class GameListActivity extends AppCompatActivity {
         });
 
 
-
         //Register Listeners
         consoleSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                SpinnerOption<String> option = (SpinnerOption<String>) parent.getItemAtPosition(position) ;
+                SpinnerOption<String> option = (SpinnerOption<String>) parent.getItemAtPosition(position);
                 model.filterGamesByConsole(option.getValue());
                 Log.i(LOG_TAG, "Filter by Console: " + option.getValue());
             }
@@ -161,45 +159,4 @@ public class GameListActivity extends AppCompatActivity {
         });
 
     }
-// Out of On create
-
-//    @Override public boolean onCreateOptionsMenu(Menu menu){
-//        getMenuInflater().inflate(R.menu.menu_home_list, menu);
-//        return true;
-//    }
-//
-//    @Override
-//    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-//        int itemId = item.getItemId();
-//        if (itemId == android.R.id.home) {
-//            // force up navigation to have the same behavior as temporal navigation
-//            onBackPressed();
-//            return true;
-//        } else if(itemId == R.id.actionSignOut){
-//            onSignOut();
-//            return true;
-//        }
-//        else if(itemId == R.id.actionGetProfile){
-//            onGetProfile();
-//            return true;
-//        }
-//        else {
-//            return super.onOptionsItemSelected(item);
-//        }
-//    }
-//
-//    @Override public void onBackPressed(){
-//        Log.i(LOG_TAG, "back pressed.");
-//    }
-//    public void onSignOut(){
-//        AuthUI.getInstance().signOut(this).addOnCompleteListener((result)->{
-//            Log.i(LOG_TAG, "Signed out.");
-//            finish();
-//        });
-//    }
-//    public void onGetProfile(){
-//        Intent intent = new Intent(this, MyProfileActivity.class);
-//        startActivity(intent);
-//    }
-
-    }
+}

@@ -1,4 +1,4 @@
-package edu.ranken.mychal_clark.gamelibrary.ui;
+package edu.ranken.mychal_clark.gamelibrary.ui.review;
 
 import android.util.Log;
 
@@ -23,8 +23,8 @@ public class ComposeReviewViewModel extends ViewModel {
     // firebase
     private final FirebaseFirestore db;
     private ListenerRegistration gameRegistration;
-    private String gameId;
-    private String userId;  // FIXME: remove unused variable
+    private String userId;
+    // FIXME: remove unused variable (fixed)
 
     // live data
     private final MutableLiveData<String> gameName;
@@ -71,7 +71,7 @@ public class ComposeReviewViewModel extends ViewModel {
 
     //get game
     public void fetchGame(String gameId) {
-        this.gameId = gameId;
+
         Log.i(LOG_TAG, "game id y" + gameId);
 
         if (gameRegistration != null) {
@@ -124,13 +124,15 @@ public class ComposeReviewViewModel extends ViewModel {
                 newReview.put("reviewText", reviewText);
                 newReview.put("gameId", gameId);
 
+                finished.postValue(true);
                 db.collection("reviews").document(userId + ";" + gameId).set(newReview);
-                /* when published: finished.postValue(true) */
-                // FIXME: activity is finished, before the review is actually published
+
+                // FIXME: activity is finished, before the review is actually published. (fixed)
                 // FIXME: handle errors with publishing the review
                 finished.postValue(true);
             }
         }
+
 
 
     }

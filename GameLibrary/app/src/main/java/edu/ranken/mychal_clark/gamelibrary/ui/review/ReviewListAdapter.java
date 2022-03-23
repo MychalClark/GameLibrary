@@ -1,4 +1,4 @@
-package edu.ranken.mychal_clark.gamelibrary.ui;
+package edu.ranken.mychal_clark.gamelibrary.ui.review;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -48,7 +48,7 @@ public class ReviewListAdapter extends RecyclerView.Adapter<ReviewViewHolder>{
     @NonNull
     @Override
     public ReviewViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View itemView = layoutInflater.inflate(R.layout.review_layout, parent, false);
+        View itemView = layoutInflater.inflate(R.layout.review_item, parent, false);
 
         ReviewViewHolder vh = new ReviewViewHolder(itemView);
         vh.displayName = itemView.findViewById(R.id.usernameText);

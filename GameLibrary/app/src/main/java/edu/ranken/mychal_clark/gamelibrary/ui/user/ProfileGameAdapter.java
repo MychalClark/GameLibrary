@@ -1,4 +1,4 @@
-package edu.ranken.mychal_clark.gamelibrary.ui;
+package edu.ranken.mychal_clark.gamelibrary.ui.user;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -50,7 +50,7 @@ public class ProfileGameAdapter extends RecyclerView.Adapter<ProfileGameViewHold
     @NonNull
     @Override
     public ProfileGameViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View itemView = layoutInflater.inflate(R.layout.profile_games_layout, parent, false);
+        View itemView = layoutInflater.inflate(R.layout.profile_game_item, parent, false);
 
         ProfileGameViewHolder vh = new ProfileGameViewHolder(itemView);
         vh.profileGameImage = itemView.findViewById(R.id.profileGameImage);

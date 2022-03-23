@@ -2,6 +2,7 @@ package edu.ranken.mychal_clark.gamelibrary;
 
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -15,8 +16,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.squareup.picasso.Picasso;
 
-import edu.ranken.mychal_clark.gamelibrary.ui.MyProfileViewModel;
-import edu.ranken.mychal_clark.gamelibrary.ui.ProfileGameAdapter;
+import edu.ranken.mychal_clark.gamelibrary.ui.user.MyProfileViewModel;
+import edu.ranken.mychal_clark.gamelibrary.ui.user.ProfileGameAdapter;
 
 public class MyProfileActivity extends AppCompatActivity {
 
@@ -33,13 +34,16 @@ public class MyProfileActivity extends AppCompatActivity {
     private TextView displayNameText;
     private TextView userIdText;
     private ImageView userImage;
+    private Button cameraBtn;
+    private Button galleryBtn;
+    
 
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_my_profile);
+        setContentView(R.layout.my_profile);
 
         libraryRecycler = findViewById(R.id.libraryRecycler);
         //create adapter
@@ -56,9 +60,10 @@ public class MyProfileActivity extends AppCompatActivity {
 
         //find views
         emailText = findViewById(R.id.profileEmailText);
-        userIdText = findViewById(R.id.profileUserIdText);
-        displayNameText = findViewById(R.id.profileNameText);
+        userIdText = findViewById(R.id.ProfileUserIdText);
+        displayNameText = findViewById(R.id.ProfileNameText);
         userImage = findViewById(R.id.profileImage);
+        
 
 
         // get picasso

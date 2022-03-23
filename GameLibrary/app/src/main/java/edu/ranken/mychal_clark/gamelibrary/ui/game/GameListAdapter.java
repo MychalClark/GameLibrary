@@ -1,4 +1,4 @@
-package edu.ranken.mychal_clark.gamelibrary.ui;
+package edu.ranken.mychal_clark.gamelibrary.ui.game;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Picasso;
@@ -27,7 +27,7 @@ public class GameListAdapter extends RecyclerView.Adapter<GameViewHolder> {
 
     private static final String LOG_TAG = "GameListAdapter";
 
-    private final AppCompatActivity context;
+    private final FragmentActivity context;
     private final Picasso picasso;
     private final LayoutInflater layoutInflater;
     private final GameListModel model;
@@ -38,7 +38,7 @@ public class GameListAdapter extends RecyclerView.Adapter<GameViewHolder> {
 
 
 
-    public GameListAdapter(AppCompatActivity context, GameListModel model) {
+    public GameListAdapter(FragmentActivity context, GameListModel model) {
         this.context = context;
         this.layoutInflater = LayoutInflater.from(context);
 
@@ -80,7 +80,7 @@ public class GameListAdapter extends RecyclerView.Adapter<GameViewHolder> {
     @NonNull
     @Override
     public GameViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View itemView = layoutInflater.inflate(R.layout.game_layout, parent, false);
+        View itemView = layoutInflater.inflate(R.layout.game_item, parent, false);
 
         GameViewHolder vh = new GameViewHolder(itemView);
         vh.gameNameText = itemView.findViewById(R.id.gameNameText);
@@ -100,13 +100,16 @@ public class GameListAdapter extends RecyclerView.Adapter<GameViewHolder> {
         vh.buttonBook.setOnClickListener((view) -> {
             Log.i(LOG_TAG, "Library pressed");
             GameSummary game = games.get(vh.getAdapterPosition());
-            model.libraryChange(game);
+            if(vh.inLibrary){
+                model.removeGameFromLibrary(game.id);
+            }else{model.addGameToLibrary(game);}
+
         });
 
         vh.buttonWishlist.setOnClickListener((view) -> {
             Log.i(LOG_TAG, "Wishlist pressed");
             GameSummary game = games.get(vh.getAdapterPosition());
-            model.wishlistChange(game);
+           // model.wishlistChange(game);
 
 
 
@@ -212,6 +215,13 @@ public class GameListAdapter extends RecyclerView.Adapter<GameViewHolder> {
 //        vh.buttonWishlist.setVisibility(choices == null ? View.GONE : View.VISIBLE);
         vh.buttonBook.setImageResource(R.drawable.bookoutline);
         vh.buttonWishlist.setImageResource(R.drawable.wishlistoutline);
+        vh.inLibrary = false;
+        vh.inWishlist = false;
+
+        for (int i = 0; i < games.size(); i++) {
+            
+            
+        }
 
 
 

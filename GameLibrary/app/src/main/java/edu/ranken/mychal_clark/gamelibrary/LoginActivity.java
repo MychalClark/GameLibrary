@@ -7,7 +7,6 @@ import android.widget.Button;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.ViewModelProvider;
 
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract;
@@ -19,7 +18,7 @@ import com.google.firebase.auth.FirebaseUser;
 import java.util.ArrayList;
 import java.util.List;
 
-import edu.ranken.mychal_clark.gamelibrary.ui.MyProfileViewModel;
+import edu.ranken.mychal_clark.gamelibrary.ui.user.LoginViewModel;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -28,40 +27,32 @@ public class LoginActivity extends AppCompatActivity {
     private ActivityResultLauncher<Intent> signInLauncher;
 
     //FIXME: do not use the view model for another screen here
-    //       create a special LoginViewModel for this screen only
-    //private MyProfileViewModel profileViewModel;
+    //       create a special LoginViewModel for this screen only (fixed)
+    private LoginViewModel model;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
-
-        // FIXME: follow standard formatting and indention rules
-        //        this code looks unprofessional, and is difficult to read
-
-        //profileViewModel = new ViewModelProvider(this).get(MyProfileViewModel.class);
-
-        //regis views
+        setContentView(R.layout.login);
+        // FIXME: follow standard formatting and indention rules(fixed i think)
+        //register views
         loginBtn = findViewById(R.id.loginBtn);
+        model = new LoginViewModel();
 
-
-//rgis callback
+        //register callback
         signInLauncher =
             registerForActivityResult(
                 new FirebaseAuthUIActivityResultContract(),
                 (result) -> onSignInResult(result)
             );
 
-
         //register listeners
         loginBtn.setOnClickListener((view) -> {
-            
-// Choose Authenication providers
+            // Choose Authentication providers
             List<AuthUI.IdpConfig> providers = new ArrayList<>();
             providers.add(new AuthUI.IdpConfig.EmailBuilder().build());
-            providers.add(new AuthUI.IdpConfig.GoogleBuilder().build());  // FIXME: Google login method not enabled in Firebase Console
-
+            providers.add(new AuthUI.IdpConfig.GoogleBuilder().build());  // FIXME: Google login method not enabled in Firebase Console(fixed)
             // Create sign-in intent
             Intent signInIntent =
                 AuthUI.getInstance()
@@ -71,18 +62,17 @@ public class LoginActivity extends AppCompatActivity {
 
             // Launch sign-in activity
             signInLauncher.launch(signInIntent);
-            
+
         });
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if(user!= null){
-
-
+        if (user != null) {
 
             onLoginSuccess(user);
-        } else{loginBtn.performClick();}
+        } else {
+            loginBtn.performClick();
+        }
     }
-
 
 
     private void onSignInResult(FirebaseAuthUIAuthenticationResult result) {
@@ -92,7 +82,6 @@ public class LoginActivity extends AppCompatActivity {
             onLoginSuccess(user);
 
 
-
         } else {
             FirebaseUiException error = result.getIdpResponse().getError();
             Log.e("LoginActivity", "sign-in failed", error);
@@ -100,8 +89,9 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void onLoginSuccess(FirebaseUser user) {
-       //profileViewModel.createUser();
-        Intent intent = new Intent(this, GameListActivity.class);
-        startActivity(intent);
+        model.createUser(() -> {
+            Intent intent = new Intent(this, HomeActivity.class);
+            startActivity(intent);
+        });
     }
 }
