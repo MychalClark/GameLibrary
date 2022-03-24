@@ -9,7 +9,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.SetOptions;
 
 import java.util.HashMap;
@@ -17,26 +16,20 @@ import java.util.Map;
 
 public class LoginViewModel extends ViewModel {
 
-
     private static final String LOG_TAG = LoginViewModel.class.getSimpleName();
 
     private final FirebaseFirestore db;
 
-    //
-    private ListenerRegistration LibraryRegistration;
-
-    //
-
     //live data
-    private final MutableLiveData<String> user;
     private final MutableLiveData<String> snackbarMessage;
     private final MutableLiveData<String> errorMessage;
 
 
     public LoginViewModel() {
         db = FirebaseFirestore.getInstance();
+
         //add live data
-        user = new MutableLiveData<>(null);
+
         errorMessage = new MutableLiveData<>(null);
         snackbarMessage = new MutableLiveData<>(null);
 
@@ -57,11 +50,14 @@ public class LoginViewModel extends ViewModel {
             Log.i(LOG_TAG, "Updating user document " + userId);
 
             Map<String, Object> newUser = new HashMap<>();
-            newUser.put("Email", user.getEmail());
-            newUser.put("userId", userId);
+            newUser.put("displayName", user.getDisplayName());
+            if(user.getPhotoUrl() == null) {
+                newUser.put("profilePictureUrl",null);
+            }else{
+                newUser.put("profilePictureUrl", user.getPhotoUrl().toString());
+            }
+
             newUser.put("lastLoggedIn", FieldValue.serverTimestamp());
-
-
 
             db.collection("users")
                 .document(userId)

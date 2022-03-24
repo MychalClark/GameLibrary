@@ -12,9 +12,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.GameLibrary">
         <activity
-            android:name=".UserProfileActivity"
-            android:exported="false" />
-        <activity
             android:name=".HomeActivity"
             android:exported="true"
             android:label="@string/home" />
@@ -46,6 +43,15 @@
             android:name=".GameDetailsActivity"
             android:exported="true"
             android:label="@string/gameDetails"
+            android:parentActivityName=".GameListActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="edu.ranken.mychal_clark.gamelibrary.GameListActivity" />
+        </activity>
+        <activity
+            android:name=".UserProfileActivity"
+            android:exported="true"
+            android:label="@string/userProfile"
             android:parentActivityName=".GameListActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

@@ -47,19 +47,6 @@ public class GameDetailsActivity extends AppCompatActivity {
     private ImageView[] consoleIcons;
     private ImageButton composeReviewButton;
 
-    // FIXME: place after onCreate() method
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        int itemId = item.getItemId();
-        if (itemId == android.R.id.home) {
-            // force up navigation to have the same behavior as temporal navigation
-            onBackPressed();
-            return true;
-        } else {
-            return super.onOptionsItemSelected(item);
-        }
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -108,7 +95,9 @@ public class GameDetailsActivity extends AppCompatActivity {
         // bind model
         model = new ViewModelProvider(this).get(GameDetailsViewModel.class);
 
-        model.getReviews().observe(this,(reviews) -> {reviewsAdapter.setItems(reviews);});
+        model.getReviews().observe(this, (reviews) -> {
+            reviewsAdapter.setItems(reviews);
+        });
 
         model.fetchGame(gameId);
         model.getGame().observe(this, (game) -> {
@@ -121,7 +110,7 @@ public class GameDetailsActivity extends AppCompatActivity {
                 Log.i(LOG_TAG, "have game" + gameId);
 
                 //picassoo
-                if(game.gameImage != null) {
+                if (game.gameImage != null) {
                     gameMainImage.setImageResource(R.drawable.no_image);
                     picasso
                         .load(game.gameImage)
@@ -131,7 +120,7 @@ public class GameDetailsActivity extends AppCompatActivity {
                         .resize(200, 300)
                         .centerCrop()
                         .into(gameMainImage);
-                }else{
+                } else {
                     gameMainImage.setImageResource(R.drawable.no_image);
                 }
 
@@ -176,9 +165,9 @@ public class GameDetailsActivity extends AppCompatActivity {
                         sb.append(game.tags.get(i));
                     }
                     gameGenreText.setText("Genre: " + sb);
+                } else {
+                    gameGenreText.setText("Genre: Unknown");
                 }
-                else{gameGenreText.setText("Genre: Unknown");}
-
 
 
                 //Icon Setter
@@ -231,9 +220,11 @@ public class GameDetailsActivity extends AppCompatActivity {
                     }
                 }
 
-                // FIXME: this line is way too long, keep lines under 100 characters
-                if(game.images == null || game.images.size() <= 0){gameScreenshots[1].setImageResource(R.drawable.no_image);gameScreenshots[2].setImageResource(R.drawable.no_image);gameScreenshots[3].setImageResource(R.drawable.no_image);}
-                else {
+                if (game.images == null || game.images.size() <= 0) {
+                    gameScreenshots[1].setImageResource(R.drawable.no_image);
+                    gameScreenshots[2].setImageResource(R.drawable.no_image);
+                    gameScreenshots[3].setImageResource(R.drawable.no_image);
+                } else {
                     // FIXME: what if there are not exactly 3 images?
                     //        what if there are 2 or 4 images?
                     for (int i = 0; i < game.images.size(); i++) {
@@ -266,7 +257,16 @@ public class GameDetailsActivity extends AppCompatActivity {
         });
     }
 
-
-
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int itemId = item.getItemId();
+        if (itemId == android.R.id.home) {
+            // force up navigation to have the same behavior as temporal navigation
+            onBackPressed();
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
+        }
+    }
 
 }

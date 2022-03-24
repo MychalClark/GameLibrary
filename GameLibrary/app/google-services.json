@@ -14,6 +14,22 @@
       },
       "oauth_client": [
         {
+          "client_id": "788117404362-gg5mgu2phhgo94h6gfu17tmldpcd1big.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "edu.ranken.mychal_clark.gamelibrary",
+            "certificate_hash": "b3445835432b57bb4289378ec1c096bab1b77e67"
+          }
+        },
+        {
+          "client_id": "788117404362-s9upld98hbcsfnitcb8vofau7m9vc67t.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "edu.ranken.mychal_clark.gamelibrary",
+            "certificate_hash": "eec35777f1230adc8dd6c4a088a6ac18c71eaa64"
+          }
+        },
+        {
           "client_id": "788117404362-fektg1nl07j9ico0t3lvpu71g9uds1t2.apps.googleusercontent.com",
           "client_type": 3
         }
