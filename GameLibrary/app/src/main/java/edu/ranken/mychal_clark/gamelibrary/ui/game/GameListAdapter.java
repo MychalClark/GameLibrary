@@ -109,7 +109,9 @@ public class GameListAdapter extends RecyclerView.Adapter<GameViewHolder> {
         vh.buttonWishlist.setOnClickListener((view) -> {
             Log.i(LOG_TAG, "Wishlist pressed");
             GameSummary game = games.get(vh.getAdapterPosition());
-           // model.wishlistChange(game);
+            if(vh.inLibrary){
+                model.removeGameFromWishlist(game.id);
+            }else{model.addGameToWishlist(game);}
 
 
 

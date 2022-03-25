@@ -9,10 +9,13 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Picasso;
 
+import edu.ranken.mychal_clark.gamelibrary.ui.user.ProfileLibraryGameAdapter;
+import edu.ranken.mychal_clark.gamelibrary.ui.user.ProfileWishlistGameAdapter;
 import edu.ranken.mychal_clark.gamelibrary.ui.userProfileViewModel;
 
 public class UserProfileActivity extends AppCompatActivity {
@@ -27,6 +30,9 @@ public class UserProfileActivity extends AppCompatActivity {
     private userProfileViewModel model;
     private Picasso picasso;
     private RecyclerView libraryRecycler;
+    private RecyclerView wishlistRecycler;
+    private ProfileLibraryGameAdapter profileLibraryGameAdapter;
+    private ProfileWishlistGameAdapter profileWishlistGameAdapter;
 
     //create Views
     private TextView displayNameText;
@@ -42,6 +48,19 @@ public class UserProfileActivity extends AppCompatActivity {
         userIdText = findViewById(R.id.userProfileUserIdText);
         displayNameText = findViewById(R.id.userProfileNameText);
         userImage = findViewById(R.id.userProfileImage);
+        libraryRecycler = findViewById(R.id.userLibraryRecycler);
+        wishlistRecycler = findViewById(R.id.userWishlistRecycler);
+
+        //create adapter
+        profileLibraryGameAdapter = new ProfileLibraryGameAdapter(this, null);
+        profileWishlistGameAdapter = new ProfileWishlistGameAdapter(this, null);
+
+        // setup recycler view
+
+        libraryRecycler.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        libraryRecycler.setAdapter(profileLibraryGameAdapter);
+        wishlistRecycler.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        wishlistRecycler.setAdapter(profileWishlistGameAdapter);
 
         // get intent
         Intent intent = getIntent();
@@ -53,6 +72,7 @@ public class UserProfileActivity extends AppCompatActivity {
         //bind model
         model = new ViewModelProvider(this).get(userProfileViewModel.class);
         model.fetchUser(userId);
+
         model.getUser().observe(this,(user)->{
 
             if (user == null) {
@@ -79,6 +99,12 @@ public class UserProfileActivity extends AppCompatActivity {
                     .into(userImage);
             }
 
+        });
+        model.getLibrary().observe(this, (librarys) -> {
+            profileLibraryGameAdapter.setItems(librarys);
+        });
+        model.getWishlist().observe(this, (wishlists) -> {
+            profileWishlistGameAdapter.setItems(wishlists);
         });
 
 

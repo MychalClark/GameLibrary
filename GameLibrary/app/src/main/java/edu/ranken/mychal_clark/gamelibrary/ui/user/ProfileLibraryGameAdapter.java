@@ -15,7 +15,7 @@ import java.util.List;
 import edu.ranken.mychal_clark.gamelibrary.R;
 import edu.ranken.mychal_clark.gamelibrary.data.Library;
 
-public class ProfileGameAdapter extends RecyclerView.Adapter<ProfileGameViewHolder>{
+public class ProfileLibraryGameAdapter extends RecyclerView.Adapter<ProfileGameViewHolder>{
 
     private static final String LOG_TAG = "ProfileGameAdapter";
 
@@ -25,11 +25,11 @@ public class ProfileGameAdapter extends RecyclerView.Adapter<ProfileGameViewHold
     private Picasso picasso;
 
 
-    public ProfileGameAdapter(AppCompatActivity context, List<Library> items) {
+    public ProfileLibraryGameAdapter(AppCompatActivity context, List<Library> items) {
         this.context = context;
         this.layoutInflater = LayoutInflater.from(context);
         this.items = items;
-        this.picasso = picasso;
+        this.picasso = picasso.get();
     }
 
         public void setItems(List<Library> items) {
@@ -68,10 +68,13 @@ public class ProfileGameAdapter extends RecyclerView.Adapter<ProfileGameViewHold
         vh.profileGameText.setText(item.name);
 
 
+
+
         // Image Setter
         if (item.gameImage == null || item.gameImage.length() == 0) {
             vh.profileGameImage.setImageResource(R.drawable.no_image);
-        } else {
+        }
+        else {
             vh.profileGameImage.setImageResource(R.drawable.no_image);
             this.picasso
                 .load(item.gameImage)

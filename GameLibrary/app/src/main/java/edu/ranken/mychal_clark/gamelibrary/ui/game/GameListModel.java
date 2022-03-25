@@ -259,44 +259,6 @@ public class GameListModel extends ViewModel {
 
     }
 
-    // FIXME: don't read the document again to determine if should be added or deleted
-//    public void wishlistChange(GameSummary game) {
-//        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-//
-//        DocumentReference docRef = db.collection("userWishlist")
-//            .document(user.getUid() + ";" + game.id);
-//
-//        docRef.get()
-//            .addOnCompleteListener((Task<DocumentSnapshot> task) -> {
-//                // FIXME: display error message, when failed
-//                if (task.isSuccessful()) {
-//                    DocumentSnapshot document = task.getResult();
-//                    if (document.exists()) {
-//                        docRef.delete();
-//                        Log.i(LOG_TAG, "Deleting document");
-//                    } else {
-//                        Map<String, Object> newGame = new HashMap<>();
-//                        newGame.put("userId", user.getUid());
-//                        newGame.put("gameId", game.id);
-//                        newGame.put("consoles", game.consoles);
-//                        newGame.put("description", game.description);
-//                        newGame.put("releaseYear", game.releaseYear);
-//                        newGame.put("gameImage", game.gameImage);
-//                        newGame.put("name", game.name);
-//
-//                        Log.i(LOG_TAG, "Creating document");
-//
-//                        docRef.set(newGame);
-//                    }
-//
-//                }
-//
-//            });
-//
-//    }
-
-    // FIXME: don't read the document again to determine if should be added or deleted
-
     public void addGameToLibrary(GameSummary game) {
 
         Map<String, Object> newGame = new HashMap<>();
@@ -335,6 +297,47 @@ public class GameListModel extends ViewModel {
             .addOnFailureListener((error) -> {
                 Log.e(LOG_TAG, "Document not removed", error);
                 snackbarMessage.postValue("Game not removed from Library.");
+            });
+
+
+    }
+    public void addGameToWishlist(GameSummary game) {
+
+        Map<String, Object> newGame = new HashMap<>();
+        newGame.put("userId", userId);
+        newGame.put("gameId", game.id);
+        newGame.put("consoles", game.consoles);
+        newGame.put("description", game.description);
+        newGame.put("releaseYear", game.releaseYear);
+        newGame.put("gameImage", game.gameImage);
+        newGame.put("name", game.name);
+
+
+        db.collection("userWishlist")
+            .document(userId + ";" + game.id)
+            .set(newGame)
+            .addOnSuccessListener((result) -> {
+                Log.i(LOG_TAG, "Creating document.");
+                snackbarMessage.postValue("Game added to Wishlist.");
+            })
+            .addOnFailureListener((error) -> {
+                Log.e(LOG_TAG, "Document not added.", error);
+                snackbarMessage.postValue("Game not added to Wishlist.");
+            });
+
+
+    }
+    public void removeGameFromWishlist(String gameId) {
+        db.collection("userWishlist")
+            .document(userId + ";" + gameId)
+            .delete()
+            .addOnSuccessListener((result) -> {
+                Log.i(LOG_TAG, "Document deleted.");
+                snackbarMessage.postValue("Game removed from Wishlist.");
+            })
+            .addOnFailureListener((error) -> {
+                Log.e(LOG_TAG, "Document not removed", error);
+                snackbarMessage.postValue("Game not removed from Wishlist.");
             });
 
 

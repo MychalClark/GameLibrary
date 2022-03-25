@@ -2,22 +2,28 @@ package edu.ranken.mychal_clark.gamelibrary.data;
 
 import androidx.annotation.NonNull;
 
-import com.google.firebase.firestore.DocumentId;
-
 public class WishList
 {
-    @DocumentId
-    public String id;
     public String gameId;
     public String userId;
+    public String gameImage;
+    public String name;
 
     public GameSummary game;
 
     public WishList(){}
 
+    public WishList(String gameId, String userId, String gameImage, String name){
+        this.gameId = gameId;
+        this.userId = userId;
+        this.gameImage = gameImage;
+        this.name = name;
+
+    }
+
     @NonNull
     @Override
     public String toString() {
-        return "WishList {id=" + id + ", value=" + userId + "}";
+        return "Wishlist {id=" + gameId + ", userId=" + userId + "}";
     }
 }

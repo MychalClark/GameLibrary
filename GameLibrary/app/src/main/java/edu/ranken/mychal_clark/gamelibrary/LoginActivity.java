@@ -86,12 +86,12 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void onLoginSuccess() {
-        Intent intent = new Intent(this, HomeActivity.class);
-        startActivity(intent);
+//        Intent intent = new Intent(this, HomeActivity.class);
+//        startActivity(intent);
 
-//        model.createUser(() -> {
-//            Intent intent = new Intent(this, HomeActivity.class);
-//            startActivity(intent);
-//        });
+        model.createUser(() -> {
+            Intent intent = new Intent(this, HomeActivity.class);
+            startActivity(intent);
+        });
     }
 }

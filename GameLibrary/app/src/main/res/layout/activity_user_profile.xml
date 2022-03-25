@@ -77,11 +77,43 @@
                 android:textAlignment="center"
                 tools:text="2309sdf09375023DKFJ750923570" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/libraryRecycler"
+            <TextView
+                android:id="@+id/userLibraryRecyclerLabel"
                 android:layout_width="match_parent"
-                android:layout_height="129dp"
-                android:isScrollContainer="false" />
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:text="Library"
+                android:textAlignment="center"
+                android:textStyle="bold" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/userLibraryRecycler"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="8dp"
+                android:orientation="horizontal"
+                android:scrollbarStyle="insideInset"
+                android:scrollbars="horizontal"
+                app:layoutManager="LinearLayoutManager" />
+
+            <TextView
+                android:id="@+id/userWishlistRecyclerLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:text="Wishlist"
+                android:textAlignment="center"
+                android:textStyle="bold" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/userWishlistRecycler"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="8dp"
+                android:orientation="horizontal"
+                android:scrollbarStyle="insideInset"
+                android:scrollbars="horizontal"
+                app:layoutManager="LinearLayoutManager" />
 
         </LinearLayout>
     </ScrollView>

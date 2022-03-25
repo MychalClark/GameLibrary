@@ -1,6 +1,8 @@
 package edu.ranken.mychal_clark.gamelibrary;
 
+import android.Manifest;
 import android.content.pm.PackageManager;
+import android.hardware.Camera;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -15,6 +17,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.FileProvider;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -31,17 +34,31 @@ import java.util.Locale;
 import java.util.Objects;
 
 import edu.ranken.mychal_clark.gamelibrary.ui.user.MyProfileViewModel;
-import edu.ranken.mychal_clark.gamelibrary.ui.user.ProfileGameAdapter;
+import edu.ranken.mychal_clark.gamelibrary.ui.user.ProfileLibraryGameAdapter;
+import edu.ranken.mychal_clark.gamelibrary.ui.user.ProfileWishlistGameAdapter;
 
 public class MyProfileActivity extends AppCompatActivity {
 
-    private static final String LOG_TAG = "GameListActivity";
+    private static final String LOG_TAG = MyProfileActivity.class.getSimpleName();
+
+    private static final String FILE_PROVIDER_AUTHORITY =
+        "com.example.myapp.fileprovider";
+
+    private Uri fileToUri(File file) {
+        return FileProvider.getUriForFile(this, FILE_PROVIDER_AUTHORITY, file);
+    }
+
+    File publicPicturesDir =
+        Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
 
     //States
     private MyProfileViewModel model;
     private Picasso picasso;
-    private ProfileGameAdapter profileGameAdapter;
+    private ProfileLibraryGameAdapter profileLibraryGameAdapter;
+    private ProfileWishlistGameAdapter profileWishlistGameAdapter;
     private RecyclerView libraryRecycler;
+    private RecyclerView wishlistRecycler;
+
     // Camera States
     private File outputImageFile;
     private Uri outputImageUri;
@@ -77,8 +94,17 @@ public class MyProfileActivity extends AppCompatActivity {
                 }
             }
         );
-    
-
+    private final ActivityResultLauncher<String> requestPermissionLauncher =
+        registerForActivityResult(
+            new ActivityResultContracts.RequestPermission(),
+            (Boolean result) -> {
+                if (Objects.equals(result, Boolean.TRUE)) {
+                    Log.i(LOG_TAG, "permission granted");
+                } else {
+                    Log.e(LOG_TAG, "failed to get permission");
+                }
+            }
+        );
 
 
     @Override
@@ -87,14 +113,17 @@ public class MyProfileActivity extends AppCompatActivity {
         setContentView(R.layout.my_profile);
 
         libraryRecycler = findViewById(R.id.libraryRecycler);
+        wishlistRecycler = findViewById(R.id.wishlistRecycler);
         //create adapter
-        profileGameAdapter = new ProfileGameAdapter(this, null);
+        profileLibraryGameAdapter = new ProfileLibraryGameAdapter(this, null);
+        profileWishlistGameAdapter = new ProfileWishlistGameAdapter(this, null);
 
         // setup recycler view
-        libraryRecycler.setLayoutManager(new LinearLayoutManager(this));
-        libraryRecycler.setAdapter(profileGameAdapter);
 
-
+        libraryRecycler.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        libraryRecycler.setAdapter(profileLibraryGameAdapter);
+        wishlistRecycler.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        wishlistRecycler.setAdapter(profileWishlistGameAdapter);
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -107,7 +136,6 @@ public class MyProfileActivity extends AppCompatActivity {
         cameraBtn = findViewById(R.id.profileCameraBtn);
         galleryBtn = findViewById(R.id.profileGalleryBtn);
         downloadUrlText = findViewById(R.id.downloadTextUrl);
-        
 
 
         // get picasso
@@ -115,7 +143,12 @@ public class MyProfileActivity extends AppCompatActivity {
 
         //bind model
         model = new ViewModelProvider(this).get(MyProfileViewModel.class);
-        model.getLibrary().observe(this,(librarys) -> {profileGameAdapter.setItems(librarys);});
+        model.getLibrary().observe(this, (librarys) -> {
+            profileLibraryGameAdapter.setItems(librarys);
+        });
+        model.getWishlist().observe(this, (wishlists) -> {
+            profileWishlistGameAdapter.setItems(wishlists);
+        });
         model.getUploadErrorMessage().observe(this, (message) -> {
             //errorText.setText(message);
         });
@@ -128,17 +161,30 @@ public class MyProfileActivity extends AppCompatActivity {
         });
         //register Listeners
         userImage.setOnClickListener(view -> {
-galleryBtn.setVisibility(View.VISIBLE);
+            galleryBtn.setVisibility(View.VISIBLE);
             cameraBtn.setVisibility(View.VISIBLE);
         });
         cameraBtn.setOnClickListener((view) -> {
             Log.i(LOG_TAG, "camera");
             try {
-                outputImageFile = createImageFile();
-                Log.i(LOG_TAG, "outputImageFile = " + outputImageFile);
-                outputImageUri = fileToUri(outputImageFile);
-                Log.i(LOG_TAG, "outputImageUri = " + outputImageUri);
-                takePictureLauncher.launch(outputImageUri);
+                String permission = Manifest.permission.WRITE_EXTERNAL_STORAGE;
+                if (ActivityCompat.checkSelfPermission(this, permission) !=
+                    PackageManager.PERMISSION_GRANTED) {
+                    // launch permission request
+                    requestPermissionLauncher.launch(permission);
+                } else {
+                    boolean hasCamera = Camera.getNumberOfCameras() > 0;
+                    if (hasCamera) {
+
+                        outputImageFile = createImageFile();
+                        Log.i(LOG_TAG, "outputImageFile = " + outputImageFile);
+
+                        outputImageUri = fileToUri(outputImageFile);
+                        Log.i(LOG_TAG, "outputImageUri = " + outputImageUri);
+
+                        takePictureLauncher.launch(outputImageUri);
+                    }
+                }
             } catch (Exception ex) {
                 Log.e(LOG_TAG, "take picture failed", ex);
             }
@@ -149,7 +195,7 @@ galleryBtn.setVisibility(View.VISIBLE);
             getContentLauncher.launch("image/*");
         });
 
-            // set Text
+        // set Text
         emailText.setText(user.getEmail());
         userIdText.setText(user.getUid());
         displayNameText.setText(user.getDisplayName());
@@ -175,6 +221,7 @@ galleryBtn.setVisibility(View.VISIBLE);
             this.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY);
         cameraBtn.setVisibility(hasCamera ? View.VISIBLE : View.GONE);
     }
+
     //voids
     public void uploadImage(Uri uri) {
         Log.i(LOG_TAG, "upload image: " + uri);
@@ -182,7 +229,7 @@ galleryBtn.setVisibility(View.VISIBLE);
         Picasso
             .get()
             .load(uri)
-            .resize(400,400)
+            .resize(400, 400)
             .centerCrop()
             .into(userImage);
 
@@ -202,11 +249,6 @@ galleryBtn.setVisibility(View.VISIBLE);
         return imageFile;
     }
 
-    private static final String FILE_PROVIDER_AUTHORITY = "edu.ranken.mychal_clark.gamelibrary.fileprovider";
-
-    private Uri fileToUri(File file) {
-        return FileProvider.getUriForFile(this, FILE_PROVIDER_AUTHORITY, file);
-    }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
