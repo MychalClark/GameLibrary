@@ -55,7 +55,7 @@ public class UserListAdapter extends RecyclerView.Adapter<UserViewHolder> {
     @NonNull
     @Override
     public UserViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType){
-        View itemView = layoutInflater.inflate(R.layout.userlist_item, parent, false);
+        View itemView = layoutInflater.inflate(R.layout.user_list_item, parent, false);
 
         UserViewHolder vh = new UserViewHolder(itemView);
         vh.displayName = itemView.findViewById(R.id.userListNameText);

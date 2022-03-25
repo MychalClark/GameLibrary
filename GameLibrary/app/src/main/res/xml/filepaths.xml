@@ -1,0 +1,9 @@
+<paths xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Used with Environment.getExternalStoragePublicDirectory() -->
+    <external-path path="Pictures/" name="public_images" />
+    <!-- Used with Context.getExternalFilesDir() -->
+    <external-files-path path="Pictures/" name="public_app_images" />
+    <!-- Used with Context.getFilesDir() -->
+    <files-path path="Pictures/" name="private_app_images" />
+
+</paths>
