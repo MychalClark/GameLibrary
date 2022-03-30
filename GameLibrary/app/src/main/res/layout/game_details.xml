@@ -46,6 +46,12 @@
                 android:textStyle="bold"
                 tools:text="Longest Game in America Is Right here" />
 
+            <Button
+                android:id="@+id/ebayListBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="search Ebay" />
+
             <TextView
                 android:id="@+id/gameDetailDescription"
                 android:layout_width="match_parent"

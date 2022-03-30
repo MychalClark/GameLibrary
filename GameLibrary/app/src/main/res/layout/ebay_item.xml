@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <androidx.cardview.widget.CardView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp">
+
+        <TextView
+            android:id="@+id/ebayItemShipping"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:layout_marginTop="8dp"
+            android:textAlignment="viewStart"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/ebayItemShippingLabel"
+            app:layout_constraintTop_toBottomOf="@+id/ebayItemPrice"
+            tools:text="$489 USD" />
+
+        <TextView
+            android:id="@+id/ebayItemPriceLabel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:layout_marginStart="8dp"
+            android:text="Price:"
+            app:layout_constraintEnd_toEndOf="@+id/ebayItemShippingLabel"
+            app:layout_constraintStart_toEndOf="@+id/ebayItemImage"
+            app:layout_constraintTop_toBottomOf="@+id/ebayItemTitle" />
+
+        <TextView
+            android:id="@+id/ebayItemShippingLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:layout_marginStart="8dp"
+            android:text="Shipping:"
+            app:layout_constraintStart_toEndOf="@+id/ebayItemImage"
+            app:layout_constraintTop_toBottomOf="@+id/ebayItemPriceLabel" />
+
+        <TextView
+            android:id="@+id/ebayItemSellerLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:layout_marginStart="16dp"
+            android:text="Sold By:"
+            app:layout_constraintStart_toEndOf="@+id/ebayItemImage"
+            app:layout_constraintTop_toBottomOf="@+id/ebayItemShippingLabel" />
+
+        <TextView
+            android:id="@+id/ebayItemTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:layout_marginTop="8dp"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:textAlignment="viewStart"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/ebayItemImage"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="God of War" />
+
+        <TextView
+            android:id="@+id/ebayItemPrice"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:layout_marginTop="8dp"
+            android:ellipsize="end"
+            android:maxLines="3"
+            android:textAlignment="viewStart"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/ebayItemPriceLabel"
+            app:layout_constraintTop_toBottomOf="@+id/ebayItemTitle"
+            tools:text="$54.36 USD" />
+
+        <ImageView
+            android:id="@+id/ebayItemImage"
+            android:layout_width="100dp"
+            android:layout_height="150dp"
+            android:layout_margin="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:srcCompat="@drawable/game30xx" />
+
+        <TextView
+            android:id="@+id/ebayItemSeller"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/ebayItemImage"
+            app:layout_constraintTop_toBottomOf="@+id/ebayItemSellerLabel"
+            tools:text="Incorperated Ink Ink vile 4920" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>

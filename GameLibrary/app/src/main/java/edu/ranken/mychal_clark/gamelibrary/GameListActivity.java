@@ -66,12 +66,6 @@ public class GameListActivity extends AppCompatActivity {
         recyclerView.setAdapter(gamesAdapter);
 
 
-        // Test if works
-//        ArrayList<Game> newGame =  new ArrayList<Game>();
-//        newGame.add(new Game("name","something", 2018));
-//        newGame.add(new Game("war","some",2014));
-//adapter.setItems(newGame);
-
 //bind Model
 
 
@@ -117,10 +111,6 @@ public class GameListActivity extends AppCompatActivity {
             }
         });
 
-//        model.getErrorMessage().observe(this, (errorMessage) -> {
-//
-//            errorText.setText(errorMessage);
-//        });
 
         model.getSnackbarMessage().observe(this, (snackbarMessage) -> {
             if (snackbarMessage != null) {
@@ -156,7 +146,7 @@ public class GameListActivity extends AppCompatActivity {
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                // Do nothing.
+
             }
         });
 

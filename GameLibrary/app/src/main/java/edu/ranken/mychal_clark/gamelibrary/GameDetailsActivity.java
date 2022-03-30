@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -46,6 +47,7 @@ public class GameDetailsActivity extends AppCompatActivity {
     private ImageView[] gameScreenshots;
     private ImageView[] consoleIcons;
     private ImageButton composeReviewButton;
+    private Button ebayBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -221,9 +223,9 @@ public class GameDetailsActivity extends AppCompatActivity {
                 }
 
                 if (game.images == null || game.images.size() <= 0) {
+                    gameScreenshots[0].setImageResource(R.drawable.no_image);
                     gameScreenshots[1].setImageResource(R.drawable.no_image);
                     gameScreenshots[2].setImageResource(R.drawable.no_image);
-                    gameScreenshots[3].setImageResource(R.drawable.no_image);
                 } else {
                     // FIXME: what if there are not exactly 3 images?
                     //        what if there are 2 or 4 images?
@@ -255,6 +257,16 @@ public class GameDetailsActivity extends AppCompatActivity {
             intentTwo.putExtra(ComposeReviewActivity.EXTRA_GAME_ID, gameId);
             startActivity(intentTwo);
         });
+
+        ebayBtn = findViewById(R.id.ebayListBtn);
+
+        ebayBtn.setOnClickListener((view) -> {
+            Intent intentTwo = new Intent(this, EbayBrowseActivity.class);
+            intentTwo.putExtra(ComposeReviewActivity.EXTRA_GAME_ID, gameId);
+            startActivity(intentTwo);
+        });
+
+        Log.i(LOG_TAG,"HUHUH" + gameId);
     }
 
     @Override

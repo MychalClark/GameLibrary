@@ -46,7 +46,6 @@ public class GameDetailsViewModel extends ViewModel {
         if (gameRegistration != null) {
             gameRegistration.remove();
         }
-        // FIXME: remove reviews registration(fixed)
         super.onCleared();
     }
 
@@ -84,10 +83,7 @@ public class GameDetailsViewModel extends ViewModel {
         if (gameRegistration != null) {
             gameRegistration.remove();
         }
-        // FIXME: remove reviews registration(fixed)
 
-
-        // FIXME: only query reviews if gameId is not null(fixed)
         // get reviews
         if (gameId != null) {
             db.collection("reviews")
