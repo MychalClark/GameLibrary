@@ -23,8 +23,7 @@ public class ComposeReviewViewModel extends ViewModel {
     // firebase
     private final FirebaseFirestore db;
     private ListenerRegistration gameRegistration;
-    private String userId;
-    // FIXME: remove unused variable (fixed)
+    private String userId;  // FIXME: make this a local variable
 
     // live data
     private final MutableLiveData<String> gameName;
@@ -116,6 +115,8 @@ public class ComposeReviewViewModel extends ViewModel {
             // FIXME: tell the user when they are not logged in
             if (user != null) {
                 userId = user.getUid();
+
+                // FIXME: include the profile photo, if available
                 Log.i(LOG_TAG, "Creating Review");
                 Map<String, Object> newReview = new HashMap<>();
                 newReview.put("displayName", user.getDisplayName());

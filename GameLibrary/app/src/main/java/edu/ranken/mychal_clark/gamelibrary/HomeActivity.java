@@ -94,6 +94,7 @@ public class HomeActivity extends AppCompatActivity {
     @Override public void onBackPressed(){
         Log.i(LOG_TAG, "back pressed.");
     }
+
     public void onSignOut(){
         AuthUI.getInstance().signOut(this).addOnCompleteListener((result)->{
             Log.i(LOG_TAG, "Signed out.");

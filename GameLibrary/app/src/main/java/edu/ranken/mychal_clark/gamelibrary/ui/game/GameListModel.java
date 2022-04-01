@@ -178,13 +178,13 @@ public class GameListModel extends ViewModel {
 
                 Log.i(LOG_TAG, "Library Filtered");
                 break;
-            case LIBRARY_WISHLIST:
-                // FIXME: query not set in this case
-                db.collection("userLibrary")
-                    .whereEqualTo("userId", userId)
-                    .whereEqualTo("libraryValue", 1)
-                    .whereEqualTo("wishlistValue", 1);
-                break;
+                // FIXME: this case results in a crash, remove the option from the dropdown
+//            case LIBRARY_WISHLIST:
+//                db.collection("userLibrary")
+//                    .whereEqualTo("userId", userId)
+//                    .whereEqualTo("libraryValue", 1)
+//                    .whereEqualTo("wishlistValue", 1);
+//                break;
         }
 
         if (filterConsoleId != null) {
