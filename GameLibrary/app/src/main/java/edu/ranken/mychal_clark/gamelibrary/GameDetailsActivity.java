@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Picasso;
 
+import java.text.NumberFormat;
 import java.util.Map;
 import java.util.Objects;
 
@@ -48,6 +49,7 @@ public class GameDetailsActivity extends AppCompatActivity {
     private ImageView[] consoleIcons;
     private ImageButton composeReviewButton;
     private Button ebayBtn;
+    private TextView gameAverage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +74,7 @@ public class GameDetailsActivity extends AppCompatActivity {
         gameControllerText = findViewById(R.id.gameDetailController);
         gameMultiplayerText = findViewById(R.id.gameDetailMultiplayer);
         gameGenreText = findViewById(R.id.gameDetailGenre);
+        gameAverage = findViewById(R.id.gameDetailAveragePrice);
         gameScreenshots = new ImageView[]{
             findViewById(R.id.gameDetailImage1),
             findViewById(R.id.gameDetailImage2),
@@ -102,6 +105,36 @@ public class GameDetailsActivity extends AppCompatActivity {
         });
 
         model.fetchGame(gameId);
+
+        model.getSearchResponse().observe(this, (searchResponse) -> {
+
+            if (searchResponse != null) {
+                if (searchResponse.itemSummaries != null) {
+                    double maxPrice = 0;
+                    double maxShipping = 0;
+
+                    for (int i = 0; i < searchResponse.itemSummaries.size(); i++) {
+                        maxPrice += Double.parseDouble(searchResponse.itemSummaries.get(i).price.value);
+
+                        if (searchResponse.itemSummaries.get(i).shippingOptions != null &&
+                            searchResponse.itemSummaries.get(i).shippingOptions.get(0).shippingCost != null) {
+                            maxShipping += Double.parseDouble(searchResponse
+                                .itemSummaries.get(i)
+                                .shippingOptions.get(0)
+                                .shippingCost.value);
+                        }
+                    }
+                    double avg = (maxPrice + maxShipping) / searchResponse.itemSummaries.size();
+
+                    gameAverage.setText("Average Price: " + NumberFormat.getCurrencyInstance().format(avg));
+                } else {
+                    gameAverage.setText("Average Price: Unknown");
+                }
+            }
+
+
+        });
+
         model.getGame().observe(this, (game) -> {
 
 
@@ -266,7 +299,6 @@ public class GameDetailsActivity extends AppCompatActivity {
             startActivity(intentTwo);
         });
 
-        Log.i(LOG_TAG,"HUHUH" + gameId);
     }
 
     @Override

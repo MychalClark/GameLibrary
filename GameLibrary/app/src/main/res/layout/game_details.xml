@@ -60,6 +60,13 @@
                 tools:text="30XX is an indie platformer video game developed by Batterystaple Games, and the sequel to 20XX. It released in Steam early access on February 17, 2021, and is also planned to be released on unspecified consoles in the future." />
 
             <TextView
+                android:id="@+id/gameDetailAveragePrice"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                tools:text="Average Price: $543" />
+
+            <TextView
                 android:id="@+id/gameDetailController"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

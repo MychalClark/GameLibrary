@@ -23,19 +23,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        android:text="relevance/price"
+        android:showText="true"
         android:textAlignment="viewEnd"
+        android:textOff="Relevance"
+        android:textOn="Price"
+        android:thumbTint="#A6A3A3"
+        android:trackTint="#A6A3A3"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ebayConsoleSpinner" />
-
-    <Switch
-        android:id="@+id/ebaySoldSwitch"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="8dp"
-        android:text="active/sold"
-        android:textAlignment="viewEnd"
-        app:layout_constraintStart_toEndOf="@+id/ebayPriceSwitch"
         app:layout_constraintTop_toBottomOf="@+id/ebayConsoleSpinner" />
 
     <androidx.recyclerview.widget.RecyclerView

@@ -1,5 +1,6 @@
 package edu.ranken.mychal_clark.gamelibrary.ebay;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.net.Uri;
 import android.util.Log;
@@ -11,6 +12,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.squareup.picasso.Picasso;
 
 import edu.ranken.mychal_clark.gamelibrary.R;
@@ -70,16 +73,39 @@ public class EbayItemListAdapter extends RecyclerView.Adapter<EbayItemViewHolder
         return vh;
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull EbayItemViewHolder vh, int position) {
 
 
             EbayBrowseAPI.ItemSummary item = searchResponse.itemSummaries.get(position);
+Gson gson = new GsonBuilder().setPrettyPrinting().create();
+
+        //Log.i(LOG_TAG, "hh " + gson.toJson(searchResponse.itemSummaries.get(0).shippingOptions.get(0).shippingCost));
+        Log.i(LOG_TAG, "aa " + gson.toJson(item));
+
 
             vh.ebayItemTitle.setText(item.title);
-            vh.ebayItemPrice.setText(item.price.value + item.price.currency);
+            vh.ebayItemPrice.setText(item.price.value +" "+ item.price.currency);
             vh.ebayItemSeller.setText(item.seller.username);
-            vh.ebayItemShipping.setText("item.shipping.value");
+
+            if(item.shippingOptions != null && item.shippingOptions.size() > 0){
+                if(item.shippingOptions.get(0).shippingCost != null) {
+
+                    vh.ebayItemShipping.setText(
+                        item.shippingOptions.get(0).shippingCostType + " " +
+                            item.shippingOptions.get(0).shippingCost.value + " " +
+                            item.shippingOptions.get(0).shippingCost.currency
+                    );
+                } else {
+                    vh.ebayItemShipping.setText(item.shippingOptions.get(0).shippingCostType);
+                }
+            } else{
+                vh.ebayItemShipping.setText("No Shipping Options");
+            }
+//            if(item.shipping != null){
+//            vh.ebayItemShipping.setText(item.shipping.shippingCost.get(0).toString());}
+//            else{ vh.ebayItemShipping.setText("null");}
 
             if (item.image.imageUrl == null || item.image.imageUrl.length() == 0) {
                 vh.ebayItemImage.setImageResource(R.drawable.no_image);

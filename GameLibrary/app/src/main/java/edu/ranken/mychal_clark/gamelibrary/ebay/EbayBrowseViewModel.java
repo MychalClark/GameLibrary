@@ -27,7 +27,6 @@ public class EbayBrowseViewModel extends ViewModel {
     private final AuthAPI authAPI;
     private final EbayBrowseAPI browseAPI;
 
-    private String listingStatus;
     private String authToken;
     private String gameId;
     private String gameQuery;
@@ -51,7 +50,7 @@ public class EbayBrowseViewModel extends ViewModel {
 
     public EbayBrowseViewModel() {
         db = FirebaseFirestore.getInstance();
-        authAPI = new AuthAPI(AuthEnvironment.PRODUCTION, "PaulSmit-explorer-PRD-dba622b8c-288c89fc", "PRD-ba622b8c7a63-7c21-4cef-8a9f-55df");
+        authAPI = new AuthAPI(AuthEnvironment.PRODUCTION, "MychalCl-gamelibr-PRD-9dc58052e-94b770a0", "PRD-dc58052ebc99-d273-45fa-a91b-96ef");
         browseAPI = new EbayBrowseAPI(AuthEnvironment.PRODUCTION);
 
         //live Data
@@ -142,10 +141,7 @@ public class EbayBrowseViewModel extends ViewModel {
 
          });
     }
-public void fetchListingStatus(String listing){
-        this.listingStatus = listing;
-        search(console);
-}
+
     public void fetchSort(String sort){
         this.sort = sort;
         search(console);
@@ -156,7 +152,7 @@ public void fetchListingStatus(String listing){
 
             if(authToken != null && gameQuery != null) {
                 browseAPI.searchAsync(
-                    authToken, gameQuery+" "+ console, 5, 1249, sort, filter,
+                    authToken, gameQuery+" "+ console, 4, 1249, sort, filter,
                     new Callback<EbayBrowseAPI.SearchResponse>() {
                         @Override
                         public void onResponse(Call<EbayBrowseAPI.SearchResponse> call, Response<EbayBrowseAPI.SearchResponse> response) {

@@ -43,7 +43,7 @@ private static final String LOG_TAG = EbayBrowseActivity.class.getSimpleName();
 
         //tie views
         priceSwitchBtn = findViewById(R.id.ebayPriceSwitch);
-        soldSwitchBtn = findViewById(R.id.ebaySoldSwitch);
+
 
 
         // get intent
