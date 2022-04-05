@@ -5,8 +5,7 @@ import androidx.annotation.NonNull;
 public enum GameList {
     ALL_GAMES("All Games"),
     WISHLIST("Wishlist"),
-    LIBRARY("Library"),
-    LIBRARY_WISHLIST("Library and Wishlist");
+    LIBRARY("Library");
 
     private final String name;
 

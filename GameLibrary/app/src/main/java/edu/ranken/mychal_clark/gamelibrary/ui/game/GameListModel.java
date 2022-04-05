@@ -16,7 +16,6 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -24,6 +23,8 @@ import edu.ranken.mychal_clark.gamelibrary.data.Consoles;
 import edu.ranken.mychal_clark.gamelibrary.data.Game;
 import edu.ranken.mychal_clark.gamelibrary.data.GameList;
 import edu.ranken.mychal_clark.gamelibrary.data.GameSummary;
+import edu.ranken.mychal_clark.gamelibrary.data.Library;
+import edu.ranken.mychal_clark.gamelibrary.data.WishList;
 
 public class GameListModel extends ViewModel {
 
@@ -46,7 +47,8 @@ public class GameListModel extends ViewModel {
 
     private final MutableLiveData<List<Consoles>> consoles;
     private final MutableLiveData<String> snackbarMessage;
-    private final MutableLiveData<String> errorMessage;
+    private final MutableLiveData<List<Library>> library;
+    private final MutableLiveData<List<WishList>> wishlist;
 
 
     public GameListModel() {
@@ -54,8 +56,10 @@ public class GameListModel extends ViewModel {
         // add  live data
         consoles = new MutableLiveData<>(null);
         games = new MutableLiveData<>(null);
-        errorMessage = new MutableLiveData<>(null);
         snackbarMessage = new MutableLiveData<>(null);
+        library = new MutableLiveData<>(null);
+        wishlist = new MutableLiveData<>(null);
+
 
 
         //get current user
@@ -76,8 +80,25 @@ public class GameListModel extends ViewModel {
                     Log.e(LOG_TAG, "Error getting Library.", error);
                     snackbarMessage.postValue("Error getting Library.");
                 } else if (querySnapshot != null) {
-                    Log.i(LOG_TAG, "Library Updated.");
-                    // FIXME: update LiveData with returned library items
+                    Log.i(LOG_TAG, "Library Found.");
+
+                    List<Library> newLibrary = querySnapshot.toObjects(Library.class);
+                   library.postValue(newLibrary);
+                }
+
+
+            });
+
+        wishlistRegistration =
+            db.collection("userWishlist").whereEqualTo("userId", userId).addSnapshotListener((QuerySnapshot querySnapshot, FirebaseFirestoreException error) -> {
+                if (error != null) {
+                    Log.e(LOG_TAG, "Error getting Wishlist.", error);
+                    snackbarMessage.postValue("Error getting Wishlist.");
+                } else if (querySnapshot != null) {
+                    Log.i(LOG_TAG, "Wishlist Found.");
+
+                    List<WishList> newWishlist = querySnapshot.toObjects(WishList.class);
+                    wishlist.postValue(newWishlist);
                 }
 
 
@@ -122,11 +143,6 @@ public class GameListModel extends ViewModel {
         return games;
     }
 
-    // FIXME: must be observed and displayed to user
-    public LiveData<String> getErrorMessage() {
-        return errorMessage;
-    }
-
     public LiveData<String> getSnackbarMessage() {
         return snackbarMessage;
     }
@@ -138,6 +154,15 @@ public class GameListModel extends ViewModel {
     public String getFilterConsoleId() {
         return filterConsoleId;
     }
+
+    public LiveData<List<Library>> getLibrary() {
+        return library;
+    }
+
+    public LiveData<List<WishList>> getWishList() {
+        return wishlist;
+    }
+
 
     public void filterGamesByList(GameList list) {
         this.filterList = list;
@@ -160,7 +185,7 @@ public class GameListModel extends ViewModel {
             Log.i(LOG_TAG, "Games removed");
         }
 
-        Query query = null;  // FIXME: don't initialize query variable
+        Query query;
         switch (filterList) {
             default:
                 throw new IllegalStateException("Unsupported Option");
@@ -172,38 +197,14 @@ public class GameListModel extends ViewModel {
                     .whereEqualTo("userId", userId);
                 break;
             case LIBRARY:
-
                 query = db.collection("userLibrary").whereEqualTo("userId", userId);
-
-
                 Log.i(LOG_TAG, "Library Filtered");
                 break;
-            case LIBRARY_WISHLIST:
-                // FIXME: query not set in this case
-                db.collection("userLibrary")
-                    .whereEqualTo("userId", userId)
-                    .whereEqualTo("libraryValue", 1)
-                    .whereEqualTo("wishlistValue", 1);
-                break;
+
         }
 
         if (filterConsoleId != null) {
-            // FIXME: can be simplified to the below, as all cases do the same thing
-            // query = query.whereEqualTo("consoles." + filterConsoleId, true);
-
-            if (filterList == GameList.ALL_GAMES) {
-                query = query.whereEqualTo("consoles." + filterConsoleId, true);
-            } else {
-                if (filterList == GameList.LIBRARY) {
-                    query = query.whereEqualTo("consoles." + filterConsoleId, true);
-                } else if (filterList == GameList.WISHLIST) {
-                    query = query.whereEqualTo("consoles." + filterConsoleId, true);
-                } else if (filterList == GameList.LIBRARY_WISHLIST) {
-                    query = query.whereEqualTo("consoles." + filterConsoleId, true);
-                } else {
-                    query = query.whereEqualTo("games.consoles." + filterConsoleId, true);
-                }
-            }
+            query = query.whereEqualTo("consoles." + filterConsoleId, true);
         }
 
         // FIXME: Sort games by: name, releaseYear
@@ -215,7 +216,6 @@ public class GameListModel extends ViewModel {
                 if (error != null) {
                     // show error...
                     Log.e(LOG_TAG, "Error getting games.", error);
-                    errorMessage.postValue(error.getMessage());
                     snackbarMessage.postValue("Error getting games.");
 
                 } else if (querySnapshot != null) {
@@ -233,24 +233,19 @@ public class GameListModel extends ViewModel {
                             }
                             break;
                         case LIBRARY:
-                            List<Game> newGamesLibrary = querySnapshot.toObjects(Game.class);
-                            for (Game game : newGamesLibrary) {
-                                game.id = game.id.substring((game.id.indexOf(";") + 1));
+                            List<Library> newGamesLibrary = querySnapshot.toObjects(Library.class);
+                            for (Library game : newGamesLibrary) {
                                 newGameSummary.add(new GameSummary(game));
                             }
                             break;
                         case WISHLIST:
-                            List<Game> newGamesWishlist = querySnapshot.toObjects(Game.class);
-                            for (Game game : newGamesWishlist) {
-                                game.id = game.id.substring((game.id.indexOf(";") + 1));
+                            List<WishList> newGamesWishlist = querySnapshot.toObjects(WishList.class);
+                            for (WishList game : newGamesWishlist) {
                                 newGameSummary.add(new GameSummary(game));
                             }
-                        case LIBRARY_WISHLIST:
                             break;
                     }
                     games.postValue(newGameSummary);
-
-                    errorMessage.postValue(null);
                     snackbarMessage.postValue("Games Updated.");
                 }
 
@@ -259,17 +254,17 @@ public class GameListModel extends ViewModel {
 
     }
 
-    public void addGameToLibrary(GameSummary game) {
+    public void addGameToLibrary(GameSummary game, Map<String, Boolean> selectedConsoles) {
 
-        Map<String, Object> newGame = new HashMap<>();
-        newGame.put("userId", userId);
-        newGame.put("gameId", game.id);
-        newGame.put("consoles", game.consoles);
-        newGame.put("description", game.description);
-        newGame.put("releaseYear", game.releaseYear);
-        newGame.put("gameImage", game.gameImage);
-        newGame.put("name", game.name);
-
+        Library newGame = new Library();
+        newGame.userId = userId;
+        newGame.gameId = game.id;
+        newGame.consoles = game.consoles;
+        newGame.description = game.description;
+        newGame.releaseYear = game.releaseYear;
+        newGame.gameImage = game.gameImage;
+        newGame.name = game.name;
+        newGame.selectedConsoles = selectedConsoles;
 
         db.collection("userLibrary")
             .document(userId + ";" + game.id)
@@ -301,17 +296,17 @@ public class GameListModel extends ViewModel {
 
 
     }
-    public void addGameToWishlist(GameSummary game) {
+    public void addGameToWishlist(GameSummary game, Map<String, Boolean> selectedConsoles) {
 
-        Map<String, Object> newGame = new HashMap<>();
-        newGame.put("userId", userId);
-        newGame.put("gameId", game.id);
-        newGame.put("consoles", game.consoles);
-        newGame.put("description", game.description);
-        newGame.put("releaseYear", game.releaseYear);
-        newGame.put("gameImage", game.gameImage);
-        newGame.put("name", game.name);
-
+        WishList newGame = new WishList();
+        newGame.userId = userId;
+        newGame.gameId = game.id;
+        newGame.consoles = game.consoles;
+        newGame.description = game.description;
+        newGame.releaseYear = game.releaseYear;
+        newGame.gameImage = game.gameImage;
+        newGame.name = game.name;
+        newGame.selectedConsoles = selectedConsoles;
 
         db.collection("userWishlist")
             .document(userId + ";" + game.id)

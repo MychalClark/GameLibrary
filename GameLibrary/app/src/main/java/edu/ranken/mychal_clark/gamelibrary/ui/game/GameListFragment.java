@@ -43,6 +43,7 @@ public class GameListFragment extends Fragment {
 
     private ArrayAdapter<SpinnerOption<String>> consolesAdapter;
     private ArrayAdapter<SpinnerOption<GameList>> listAdapter;
+    private String listCategory = null;
 
 
     public GameListFragment() {
@@ -80,13 +81,19 @@ public class GameListFragment extends Fragment {
             new SpinnerOption<>(getString(R.string.allGames), GameList.ALL_GAMES),
             new SpinnerOption<>(getString(R.string.myLibrary), GameList.LIBRARY),
             new SpinnerOption<>(getString(R.string.myWishlist), GameList.WISHLIST),
-            new SpinnerOption<>(getString(R.string.myLibraryWishlist), GameList.LIBRARY_WISHLIST),
         };
         listAdapter = new ArrayAdapter<>(activity, android.R.layout.simple_spinner_item, listOptions);
         listSpinner.setAdapter(listAdapter);
 
         model.getGames().observe(lifecycleOwner, (games) -> {
             gamesAdapter.setGames(games);
+        });
+        model.getWishList().observe(lifecycleOwner, (wishlist) -> {
+            gamesAdapter.setWishlist(wishlist);
+        });
+        model.getLibrary().observe(lifecycleOwner, (library) -> {
+            gamesAdapter.setLibrary(library);
+            gamesAdapter.setListCategory(listCategory);
         });
 
 
@@ -150,6 +157,8 @@ public class GameListFragment extends Fragment {
                 SpinnerOption<GameList> option = (SpinnerOption<GameList>) parent.getItemAtPosition(position);
                 model.filterGamesByList(option.getValue());
                 Log.i(LOG_TAG, "Filter by list: " + option.getValue());
+
+                 listCategory = option.getValue().toString();
             }
 
             @Override

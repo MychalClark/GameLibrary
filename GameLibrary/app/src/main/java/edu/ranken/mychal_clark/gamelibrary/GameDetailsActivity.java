@@ -37,6 +37,7 @@ public class GameDetailsActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private ReviewListAdapter reviewsAdapter;
 
+
     //Create Views
     private TextView gameTitle;
     private TextView gameDescription;
@@ -65,6 +66,8 @@ public class GameDetailsActivity extends AppCompatActivity {
         // setup recycler view
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(reviewsAdapter);
+
+
 
 
         gameTitle = findViewById(R.id.gameDetailTitle);
