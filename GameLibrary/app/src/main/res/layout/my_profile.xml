@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+<<<<<<< HEAD
     <ImageView
         android:id="@+id/profileGameConsole1"
         android:layout_width="20dp"
@@ -60,6 +61,9 @@
         app:srcCompat="@drawable/ic_nintendo"
         tools:srcCompat="@drawable/ic_nintendo" />
 
+=======
+    <!-- FIXME: remove downloadTextUrl -->
+>>>>>>> c4be7c885b4d7733e480fb347e10fe5e9e309660
     <TextView
         android:id="@+id/downloadTextUrl"
         android:layout_width="match_parent"

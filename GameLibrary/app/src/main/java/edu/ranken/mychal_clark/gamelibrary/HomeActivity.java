@@ -95,6 +95,7 @@ public class HomeActivity extends AppCompatActivity {
     @Override public void onBackPressed(){
         Log.i(LOG_TAG, "back pressed.");
     }
+
     public void onSignOut(){
 
         ConfirmDialog confirmDialog = new ConfirmDialog(
