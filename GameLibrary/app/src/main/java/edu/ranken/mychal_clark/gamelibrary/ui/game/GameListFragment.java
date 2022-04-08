@@ -16,8 +16,6 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.snackbar.Snackbar;
-
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -121,17 +119,12 @@ public class GameListFragment extends Fragment {
             }
         });
 
-//        model.getErrorMessage().observe(this, (errorMessage) -> {
-//
-//            errorText.setText(errorMessage);
+//        model.getSnackbarMessage().observe(lifecycleOwner, (snackbarMessage) -> {
+//            if (snackbarMessage != null) {
+//                Snackbar.make(recyclerView, snackbarMessage, Snackbar.LENGTH_SHORT).show();
+//                model.clearSnackbar();
+//            }
 //        });
-
-        model.getSnackbarMessage().observe(lifecycleOwner, (snackbarMessage) -> {
-            if (snackbarMessage != null) {
-                Snackbar.make(recyclerView, snackbarMessage, Snackbar.LENGTH_SHORT).show();
-                model.clearSnackbar();
-            }
-        });
 
 
         //Register Listeners

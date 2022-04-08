@@ -200,17 +200,7 @@ public class GameListModel extends ViewModel {
                 query = db.collection("userLibrary").whereEqualTo("userId", userId);
                 Log.i(LOG_TAG, "Library Filtered");
                 break;
-<<<<<<< HEAD
 
-=======
-                // FIXME: this case results in a crash, remove the option from the dropdown
-//            case LIBRARY_WISHLIST:
-//                db.collection("userLibrary")
-//                    .whereEqualTo("userId", userId)
-//                    .whereEqualTo("libraryValue", 1)
-//                    .whereEqualTo("wishlistValue", 1);
-//                break;
->>>>>>> c4be7c885b4d7733e480fb347e10fe5e9e309660
         }
 
         if (filterConsoleId != null) {

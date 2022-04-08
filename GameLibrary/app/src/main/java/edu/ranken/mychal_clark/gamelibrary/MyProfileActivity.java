@@ -144,7 +144,6 @@ public class MyProfileActivity extends AppCompatActivity {
         userImage = findViewById(R.id.profileImage);
         cameraBtn = findViewById(R.id.profileCameraBtn);
         galleryBtn = findViewById(R.id.profileGalleryBtn);
-        downloadUrlText = findViewById(R.id.downloadTextUrl);
         xboxIcon = findViewById(R.id.profileGameConsole1);
         playstationIcon = findViewById(R.id.profileGameConsole2);
         windowsIcon = findViewById(R.id.profileGameConsole3);

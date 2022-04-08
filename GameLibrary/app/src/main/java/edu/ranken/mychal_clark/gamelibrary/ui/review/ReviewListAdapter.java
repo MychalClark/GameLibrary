@@ -96,7 +96,7 @@ public class ReviewListAdapter extends RecyclerView.Adapter<ReviewViewHolder>{
         vh.displayName.setText(item.displayName);
         vh.date.setText(reviewDate);
 
-        
+
         if(user != null) {
             if (item.userId.equals(user.getUid())) {
                 vh.reviewDeleteBtn.setVisibility(View.VISIBLE);
