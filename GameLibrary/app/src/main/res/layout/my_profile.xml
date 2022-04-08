@@ -6,12 +6,65 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <ImageView
+        android:id="@+id/profileGameConsole1"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_margin="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:contentDescription="@string/detail_console_3"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profileConsolesLabel"
+        app:srcCompat="@drawable/ic_xbox"
+        tools:srcCompat="@drawable/ic_xbox" />
+
+    <ImageView
+        android:id="@+id/profileGameConsole2"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_margin="8dp"
+        android:contentDescription="@string/detail_console_2"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toStartOf="@+id/profileGameConsole3"
+        app:layout_constraintTop_toBottomOf="@+id/profileConsolesLabel"
+        app:srcCompat="@drawable/ic_ps"
+        tools:srcCompat="@drawable/ic_ps" />
+
+    <ImageView
+        android:id="@+id/profileGameConsole3"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_margin="8dp"
+        android:layout_marginLeft="8dp"
+        android:contentDescription="@string/detail_console_1"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toStartOf="@+id/profileGameConsole1"
+        app:layout_constraintStart_toStartOf="@+id/gameImage"
+        app:layout_constraintTop_toBottomOf="@+id/profileConsolesLabel"
+        app:srcCompat="@drawable/ic_windows"
+        tools:srcCompat="@drawable/ic_windows" />
+
+    <ImageView
+        android:id="@+id/profileGameConsole4"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_margin="8dp"
+        android:contentDescription="@string/detail_console_4"
+        android:visibility="invisible"
+        app:layout_constraintStart_toEndOf="@+id/profileGameConsole1"
+        app:layout_constraintTop_toBottomOf="@+id/profileConsolesLabel"
+        app:srcCompat="@drawable/ic_nintendo"
+        tools:srcCompat="@drawable/ic_nintendo" />
+
     <TextView
         android:id="@+id/downloadTextUrl"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        android:text="TextView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -152,7 +205,7 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ProfileUserIdText" />
+        app:layout_constraintTop_toBottomOf="@+id/profileGameConsole1" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/libraryRecycler"
@@ -191,6 +244,28 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/profileWishlistLabel" />
+
+    <TextView
+        android:id="@+id/profileConsolesLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:text="@string/preferredConsoles"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ProfileUserIdText" />
+
+    <Button
+        android:id="@+id/profileChangeConsolesBtn"
+        android:layout_width="130dp"
+        android:layout_height="41dp"
+        android:layout_margin="8dp"
+        android:text="Change"
+        android:textAlignment="center"
+        app:layout_constraintBottom_toTopOf="@+id/profileLibraryLabel"
+        app:layout_constraintStart_toEndOf="@+id/profileConsolesLabel"
+        app:layout_constraintTop_toBottomOf="@+id/ProfileUserIdText" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 

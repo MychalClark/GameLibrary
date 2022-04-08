@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.Spinner;
 import android.widget.Switch;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
@@ -32,6 +33,7 @@ private static final String LOG_TAG = EbayBrowseActivity.class.getSimpleName();
     private Spinner consoleSpinner;
     private Switch priceSwitchBtn;
     private Switch soldSwitchBtn;
+    private TextView labelPriceSwitch;
 
     private String gameId;
     private ArrayAdapter<SpinnerOption<String>> consolesAdapter;
@@ -43,8 +45,8 @@ private static final String LOG_TAG = EbayBrowseActivity.class.getSimpleName();
 
         //tie views
         priceSwitchBtn = findViewById(R.id.ebayPriceSwitch);
-
-
+        labelPriceSwitch = findViewById(R.id.labelPriceSwitch);
+        labelPriceSwitch.setText(R.string.relevance);
 
         // get intent
         Intent intent = getIntent();
@@ -124,9 +126,11 @@ private static final String LOG_TAG = EbayBrowseActivity.class.getSimpleName();
                 if(isChecked){
                     model.fetchSort("price");
                     Log.i(LOG_TAG, "price button On");
+                    labelPriceSwitch.setText(R.string.price);
                 } else{
                     model.fetchSort("newlyListed");
-                    Log.i(LOG_TAG, "price button Off");}
+                    Log.i(LOG_TAG, "price button Off");
+                labelPriceSwitch.setText(R.string.relevance);}
 
 
             }

@@ -8,11 +8,65 @@
     android:gravity="center">
 
     <ImageView
+        android:id="@+id/userGameConsole1"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_margin="8dp"
+        android:contentDescription="@string/detail_console_4"
+        android:visibility="visible"
+        app:layout_constraintEnd_toStartOf="@+id/userGameConsole2"
+        app:layout_constraintStart_toEndOf="@+id/profileGameConsole1"
+        app:layout_constraintTop_toBottomOf="@+id/userPreferredConsolesLabel"
+        app:srcCompat="@drawable/ic_nintendo"
+        tools:srcCompat="@drawable/ic_nintendo" />
+
+    <ImageView
+        android:id="@+id/userGameConsole2"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_margin="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:contentDescription="@string/detail_console_3"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/userPreferredConsolesLabel"
+        app:srcCompat="@drawable/ic_xbox"
+        tools:srcCompat="@drawable/ic_xbox" />
+
+    <ImageView
+        android:id="@+id/userGameConsole3"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_margin="8dp"
+        android:contentDescription="@string/detail_console_2"
+        android:visibility="visible"
+        app:layout_constraintEnd_toStartOf="@+id/userGameConsole1"
+        app:layout_constraintTop_toBottomOf="@+id/userPreferredConsolesLabel"
+        app:srcCompat="@drawable/ic_ps"
+        tools:srcCompat="@drawable/ic_ps" />
+
+    <ImageView
+        android:id="@+id/userGameConsole4"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_margin="8dp"
+        android:contentDescription="@string/detail_console_1"
+        android:visibility="visible"
+        app:layout_constraintStart_toEndOf="@+id/userGameConsole2"
+        app:layout_constraintTop_toBottomOf="@+id/userPreferredConsolesLabel"
+        app:srcCompat="@drawable/ic_windows"
+        tools:srcCompat="@drawable/ic_windows" />
+
+    <ImageView
         android:id="@+id/userProfileImage"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_margin="8dp"
         android:layout_marginTop="8dp"
+        android:contentDescription="@string/userProfile"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -20,31 +74,23 @@
 
     <TextView
         android:id="@+id/userProfileDisplayNameLabel"
-        android:layout_width="0dp"
+        android:layout_width="395dp"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        android:text="DisplayName"
+        android:text="@string/displayName"
         android:textAlignment="center"
-        android:textSize="16dp"
+        android:textSize="16sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/userProfileNameText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/userProfileImage" />
 
     <TextView
         android:id="@+id/userProfileNameText"
-        android:layout_width="0dp"
+        android:layout_width="395dp"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
         android:textAlignment="center"
-        app:layout_constraintBottom_toTopOf="@+id/userProfileIdLabel"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/userProfileDisplayNameLabel"
@@ -52,31 +98,36 @@
 
     <TextView
         android:id="@+id/userProfileIdLabel"
-        android:layout_width="0dp"
+        android:layout_width="395dp"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        android:text="UserId"
+        android:text="@string/userId"
         android:textAlignment="center"
-        android:textSize="16dp"
+        android:textSize="16sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/userProfileUserIdText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/userProfileNameText" />
 
     <TextView
-        android:id="@+id/userProfileUserIdText"
-        android:layout_width="0dp"
+        android:id="@+id/userPreferredConsolesLabel"
+        android:layout_width="395dp"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
+        android:text="@string/preferredConsoles"
         android:textAlignment="center"
-        app:layout_constraintBottom_toTopOf="@+id/userLibraryRecyclerLabel"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/userProfileUserIdText" />
+
+    <TextView
+        android:id="@+id/userProfileUserIdText"
+        android:layout_width="395dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:textAlignment="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/userProfileIdLabel"
@@ -84,65 +135,50 @@
 
     <TextView
         android:id="@+id/userLibraryRecyclerLabel"
-        android:layout_width="0dp"
+        android:layout_width="395dp"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="17dp"
-        android:text="Library"
+        android:text="@string/library"
         android:textAlignment="center"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/userLibraryRecycler"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/userProfileUserIdText" />
+        app:layout_constraintTop_toBottomOf="@+id/userGameConsole2" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/userLibraryRecycler"
-        android:layout_width="0dp"
+        android:layout_width="395dp"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="15dp"
         android:orientation="horizontal"
         android:scrollbarStyle="insideInset"
         android:scrollbars="horizontal"
         app:layoutManager="LinearLayoutManager"
-        app:layout_constraintBottom_toTopOf="@+id/userWishlistRecyclerLabel"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/userLibraryRecyclerLabel" />
 
     <TextView
         android:id="@+id/userWishlistRecyclerLabel"
-        android:layout_width="0dp"
+        android:layout_width="395dp"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="17dp"
-        android:text="Wishlist"
+        android:text="@string/wishlist"
         android:textAlignment="center"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/userWishlistRecycler"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/userLibraryRecycler" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/userWishlistRecycler"
-        android:layout_width="0dp"
+        android:layout_width="395dp"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
         android:orientation="horizontal"
         android:scrollbarStyle="insideInset"
         android:scrollbars="horizontal"
         app:layoutManager="LinearLayoutManager"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/userWishlistRecyclerLabel" />

@@ -23,6 +23,7 @@ import java.util.Objects;
 import edu.ranken.mychal_clark.gamelibrary.ConsoleChooserDialog;
 import edu.ranken.mychal_clark.gamelibrary.GameDetailsActivity;
 import edu.ranken.mychal_clark.gamelibrary.R;
+import edu.ranken.mychal_clark.gamelibrary.data.GameList;
 import edu.ranken.mychal_clark.gamelibrary.data.GameSummary;
 import edu.ranken.mychal_clark.gamelibrary.data.Library;
 import edu.ranken.mychal_clark.gamelibrary.data.WishList;
@@ -39,14 +40,7 @@ public class GameListAdapter extends RecyclerView.Adapter<GameViewHolder> {
     private List<GameSummary> games;
     private List<Library> library;
     private List<WishList> wishlist;
-    private String listCategory;
-    private Map<String,Boolean> listOption;
-
-    private ConsoleChooserDialog consoleChooserDialog;
-
-
-
-
+    private GameList mode;
 
     public GameListAdapter(FragmentActivity context, GameListModel model) {
         this.context = context;
@@ -77,8 +71,8 @@ public class GameListAdapter extends RecyclerView.Adapter<GameViewHolder> {
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    public void setListCategory(String listCategory) {
-        this.listCategory = listCategory;
+    public void setMode(GameList mode) {
+        this.mode = mode;
         notifyDataSetChanged();
     }
 
@@ -249,7 +243,6 @@ public class GameListAdapter extends RecyclerView.Adapter<GameViewHolder> {
 
 
         //Icon Setter
-
         if (game.consoles == null) {
             for (int i = 0; i < vh.consoleIcons.length; ++i) {
                 vh.consoleIcons[i].setImageResource(0);
@@ -259,9 +252,12 @@ public class GameListAdapter extends RecyclerView.Adapter<GameViewHolder> {
 
             int iconIndex = 0;
 
-            listOption = game.consoles;
+            Map<String,Boolean> gameConsoles = game.consoles;
+            if (game.selectedConsoles != null) {
+                gameConsoles = game.selectedConsoles;
+            }
 
-            for (Map.Entry<String, Boolean> entry : listOption.entrySet()) {
+            for (Map.Entry<String, Boolean> entry : gameConsoles.entrySet()) {
 
                 if (Objects.equals(entry.getValue(), Boolean.TRUE)) {
 
@@ -270,22 +266,28 @@ public class GameListAdapter extends RecyclerView.Adapter<GameViewHolder> {
                         default:
                             vh.consoleIcons[iconIndex].setVisibility(View.VISIBLE);
                             vh.consoleIcons[iconIndex].setImageResource(R.drawable.ic_error);
+                            vh.consoleIcons[iconIndex].setContentDescription(context.getString(R.string.console_unknown));
                             break;
                         case "windows":
                             vh.consoleIcons[iconIndex].setVisibility(View.VISIBLE);
                             vh.consoleIcons[iconIndex].setImageResource(R.drawable.ic_windows);
+                            vh.consoleIcons[iconIndex].setContentDescription(context.getString(R.string.console_windows));
                             break;
                         case "xbox":
                             vh.consoleIcons[iconIndex].setVisibility(View.VISIBLE);
                             vh.consoleIcons[iconIndex].setImageResource(R.drawable.ic_xbox);
+                            vh.consoleIcons[iconIndex].setContentDescription(context.getString(R.string.console_xbox));
+
                             break;
                         case "nintendo":
                             vh.consoleIcons[iconIndex].setVisibility(View.VISIBLE);
                             vh.consoleIcons[iconIndex].setImageResource(R.drawable.ic_nintendo);
+                            vh.consoleIcons[iconIndex].setContentDescription(context.getString(R.string.console_nintendo));
                             break;
                         case "playstation":
                             vh.consoleIcons[iconIndex].setVisibility(View.VISIBLE);
                             vh.consoleIcons[iconIndex].setImageResource(R.drawable.ic_ps);
+                            vh.consoleIcons[iconIndex].setContentDescription(context.getString(R.string.console_playstation));
                             break;
                     }
                     iconIndex++;
@@ -299,6 +301,7 @@ public class GameListAdapter extends RecyclerView.Adapter<GameViewHolder> {
                 vh.consoleIcons[iconIndex].setVisibility(View.GONE);
             }
         }
+
 
         vh.buttonBook.setVisibility(library == null ? View.GONE : View.VISIBLE);
         vh.buttonWishlist.setVisibility(wishlist == null ? View.GONE : View.VISIBLE);

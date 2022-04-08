@@ -30,7 +30,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:layout_marginStart="8dp"
-            android:text="Price:"
+            android:text="@string/itemPriceLabel"
             app:layout_constraintEnd_toEndOf="@+id/ebayItemShippingLabel"
             app:layout_constraintStart_toEndOf="@+id/ebayItemImage"
             app:layout_constraintTop_toBottomOf="@+id/ebayItemTitle" />
@@ -41,7 +41,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:layout_marginStart="8dp"
-            android:text="Shipping:"
+            android:text="@string/itemShippingLabel"
             app:layout_constraintStart_toEndOf="@+id/ebayItemImage"
             app:layout_constraintTop_toBottomOf="@+id/ebayItemPriceLabel" />
 
@@ -51,7 +51,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:layout_marginStart="16dp"
-            android:text="Sold By:"
+            android:text="@string/itemSellerLabel"
             app:layout_constraintStart_toEndOf="@+id/ebayItemImage"
             app:layout_constraintTop_toBottomOf="@+id/ebayItemShippingLabel" />
 
@@ -94,7 +94,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:srcCompat="@drawable/game30xx" />
+            tools:srcCompat="@drawable/game30xx"
+            android:contentDescription="@string/item_image" />
 
         <TextView
             android:id="@+id/ebayItemSeller"

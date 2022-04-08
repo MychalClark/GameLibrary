@@ -43,7 +43,6 @@ public class GameListFragment extends Fragment {
 
     private ArrayAdapter<SpinnerOption<String>> consolesAdapter;
     private ArrayAdapter<SpinnerOption<GameList>> listAdapter;
-    private String listCategory = null;
 
 
     public GameListFragment() {
@@ -93,7 +92,6 @@ public class GameListFragment extends Fragment {
         });
         model.getLibrary().observe(lifecycleOwner, (library) -> {
             gamesAdapter.setLibrary(library);
-            gamesAdapter.setListCategory(listCategory);
         });
 
 
@@ -156,9 +154,8 @@ public class GameListFragment extends Fragment {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 SpinnerOption<GameList> option = (SpinnerOption<GameList>) parent.getItemAtPosition(position);
                 model.filterGamesByList(option.getValue());
+                gamesAdapter.setMode(option.getValue());
                 Log.i(LOG_TAG, "Filter by list: " + option.getValue());
-
-                 listCategory = option.getValue().toString();
             }
 
             @Override

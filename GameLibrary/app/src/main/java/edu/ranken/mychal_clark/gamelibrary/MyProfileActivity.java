@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -30,7 +31,9 @@ import com.squareup.picasso.Picasso;
 import java.io.File;
 import java.io.IOException;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Objects;
 
 import edu.ranken.mychal_clark.gamelibrary.ui.user.MyProfileViewModel;
@@ -67,10 +70,16 @@ public class MyProfileActivity extends AppCompatActivity {
     private TextView emailText;
     private TextView displayNameText;
     private TextView userIdText;
+    private TextView downloadUrlText;
+    private ImageView xboxIcon;
+    private ImageView windowsIcon;
+    private ImageView playstationIcon;
+    private ImageView nintendoIcon;
     private ImageView userImage;
     private Button cameraBtn;
     private Button galleryBtn;
-    private TextView downloadUrlText;
+    private Button changeConsoleBtn;
+
 
     // launchers
     private final ActivityResultLauncher<String> getContentLauncher =
@@ -136,6 +145,11 @@ public class MyProfileActivity extends AppCompatActivity {
         cameraBtn = findViewById(R.id.profileCameraBtn);
         galleryBtn = findViewById(R.id.profileGalleryBtn);
         downloadUrlText = findViewById(R.id.downloadTextUrl);
+        xboxIcon = findViewById(R.id.profileGameConsole1);
+        playstationIcon = findViewById(R.id.profileGameConsole2);
+        windowsIcon = findViewById(R.id.profileGameConsole3);
+        nintendoIcon = findViewById(R.id.profileGameConsole4);
+        changeConsoleBtn = findViewById(R.id.profileChangeConsolesBtn);
 
 
         // get picasso
@@ -159,11 +173,43 @@ public class MyProfileActivity extends AppCompatActivity {
                 downloadUrlText.setText("");
             }
         });
-        //register Listeners
-        userImage.setOnClickListener(view -> {
-            galleryBtn.setVisibility(View.VISIBLE);
-            cameraBtn.setVisibility(View.VISIBLE);
+
+        model.getCurrentUser().observe(this,(currentUser)->{
+
+            if(currentUser != null) {
+
+                if (currentUser.preferredConsoles != null) {
+                    Log.i(LOG_TAG, "got the user brah");
+
+                    if (currentUser.preferredConsoles.containsKey("xbox")) {
+                        xboxIcon.setVisibility(View.VISIBLE);
+                    } else {
+                        xboxIcon.setVisibility(View.INVISIBLE);
+                    }
+                    if (currentUser.preferredConsoles.containsKey("playstation")) {
+
+                        playstationIcon.setVisibility(View.VISIBLE);
+                    } else {
+                        playstationIcon.setVisibility(View.INVISIBLE);
+                    }
+                    if (currentUser.preferredConsoles.containsKey("nintendo")) {
+
+                        nintendoIcon.setVisibility(View.VISIBLE);
+                    } else {
+                        nintendoIcon.setVisibility(View.INVISIBLE);
+                    }
+                    if (currentUser.preferredConsoles.containsKey("windows")) {
+
+                        windowsIcon.setVisibility(View.VISIBLE);
+                    } else {
+                        windowsIcon.setVisibility(View.INVISIBLE);
+                    }
+
+                }
+            }
         });
+        //register Listeners
+
         cameraBtn.setOnClickListener((view) -> {
             Log.i(LOG_TAG, "camera");
             try {
@@ -215,11 +261,53 @@ public class MyProfileActivity extends AppCompatActivity {
         }
 
 //camera
+        changeConsoleBtn.setOnClickListener(view -> {
+
+                Map<String, Boolean> consoles = new HashMap<>();
+                consoles.put("xbox", true);
+                consoles.put("windows", true);
+                consoles.put("playstation", true);
+                consoles.put("nintendo", true);
+
+
+                ConsoleChooserDialog consoleChooserDialog = new ConsoleChooserDialog(
+                    MyProfileActivity.this,
+                    "Choose Consoles",
+                    consoles,
+                    null,
+                    (selected) -> {
+                        if (!selected.isEmpty()) {
+                            Map<String, Boolean> selectedConsoles = new HashMap<>();
+                            if (selected.containsKey("xbox")) {
+                                selectedConsoles.put("xbox", Boolean.TRUE);
+                            }
+                            if (selected.containsKey("windows")) {
+                                selectedConsoles.put("windows", Boolean.TRUE);
+                            }
+                            if (selected.containsKey("playstation")) {
+                                selectedConsoles.put("playstation", Boolean.TRUE);
+                            }
+                            if (selected.containsKey("nintendo")) {
+                                selectedConsoles.put("nintendo", Boolean.TRUE);
+                            }
+
+                            model.addPreferredGames(selectedConsoles);
+                        } else {
+                            Toast.makeText(view.getContext(), "No Console selected! Item not added.",
+                                Toast.LENGTH_LONG).show();
+                        }
+
+                    });
+            consoleChooserDialog.show();
+            });
 
         // disable the camera if not available
         boolean hasCamera =
             this.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY);
         cameraBtn.setVisibility(hasCamera ? View.VISIBLE : View.GONE);
+
+
+
     }
 
     //voids

@@ -34,7 +34,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
                 android:layout_marginBottom="8dp"
-                app:srcCompat="@drawable/common_google_signin_btn_text_dark" />
+                app:srcCompat="@drawable/common_google_signin_btn_text_dark"
+                android:contentDescription="@string/details_game_image" />
 
             <TextView
                 android:id="@+id/gameDetailTitle"
@@ -50,7 +51,7 @@
                 android:id="@+id/ebayListBtn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="search Ebay" />
+                android:text="@string/search_ebay" />
 
             <TextView
                 android:id="@+id/gameDetailDescription"
@@ -111,7 +112,8 @@
                     app:layout_constraintStart_toEndOf="@+id/gameConsole2"
                     app:layout_constraintTop_toBottomOf="@+id/gameImage"
                     app:layout_constraintVertical_bias="0.0"
-                    tools:srcCompat="@drawable/ic_xbox" />
+                    tools:srcCompat="@drawable/ic_xbox"
+                    android:contentDescription="@string/detail_console_1" />
 
                 <ImageView
                     android:id="@+id/gameDetailConsole2"
@@ -125,7 +127,8 @@
                     app:layout_constraintStart_toEndOf="@+id/gameConsole2"
                     app:layout_constraintTop_toBottomOf="@+id/gameImage"
                     app:layout_constraintVertical_bias="0.0"
-                    tools:srcCompat="@drawable/ic_xbox" />
+                    tools:srcCompat="@drawable/ic_xbox"
+                    android:contentDescription="@string/detail_console_2" />
 
                 <ImageView
                     android:id="@+id/gameDetailConsole3"
@@ -139,7 +142,8 @@
                     app:layout_constraintStart_toEndOf="@+id/gameConsole2"
                     app:layout_constraintTop_toBottomOf="@+id/gameImage"
                     app:layout_constraintVertical_bias="0.0"
-                    tools:srcCompat="@drawable/ic_xbox" />
+                    tools:srcCompat="@drawable/ic_xbox"
+                    android:contentDescription="@string/detail_console_3" />
 
                 <ImageView
                     android:id="@+id/gameDetailConsole4"
@@ -153,7 +157,8 @@
                     app:layout_constraintStart_toEndOf="@+id/gameConsole2"
                     app:layout_constraintTop_toBottomOf="@+id/gameImage"
                     app:layout_constraintVertical_bias="0.0"
-                    tools:srcCompat="@drawable/ic_xbox" />
+                    tools:srcCompat="@drawable/ic_xbox"
+                    android:contentDescription="@string/detail_console_4" />
             </LinearLayout>
 
             <ImageView
@@ -161,21 +166,24 @@
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
                 android:layout_marginBottom="8dp"
-                app:srcCompat="@drawable/common_google_signin_btn_text_dark_focused" />
+                app:srcCompat="@drawable/common_google_signin_btn_text_dark_focused"
+                android:contentDescription="@string/detail_image_1" />
 
             <ImageView
                 android:id="@+id/gameDetailImage2"
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
                 android:layout_marginBottom="8dp"
-                app:srcCompat="@drawable/common_google_signin_btn_text_dark" />
+                app:srcCompat="@drawable/common_google_signin_btn_text_dark"
+                android:contentDescription="@string/detail_image_2" />
 
             <ImageView
                 android:id="@+id/gameDetailImage3"
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
                 android:layout_marginBottom="8dp"
-                app:srcCompat="@drawable/common_google_signin_btn_text_dark" />
+                app:srcCompat="@drawable/common_google_signin_btn_text_dark"
+                android:contentDescription="@string/detail_image_3" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/reviewList"

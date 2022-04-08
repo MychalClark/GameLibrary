@@ -23,6 +23,7 @@ import java.util.Map;
 import java.util.Objects;
 
 import edu.ranken.mychal_clark.gamelibrary.ui.game.GameDetailsViewModel;
+import edu.ranken.mychal_clark.gamelibrary.ui.review.ComposeReviewViewModel;
 import edu.ranken.mychal_clark.gamelibrary.ui.review.ReviewListAdapter;
 
 public class GameDetailsActivity extends AppCompatActivity {
@@ -36,6 +37,7 @@ public class GameDetailsActivity extends AppCompatActivity {
     private Picasso picasso;
     private RecyclerView recyclerView;
     private ReviewListAdapter reviewsAdapter;
+    private ComposeReviewViewModel reviewViewModel;
 
 
     //Create Views
@@ -51,6 +53,7 @@ public class GameDetailsActivity extends AppCompatActivity {
     private ImageButton composeReviewButton;
     private Button ebayBtn;
     private TextView gameAverage;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

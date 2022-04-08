@@ -22,7 +22,8 @@
             app:layout_constraintStart_toEndOf="@+id/gameConsole2"
             app:layout_constraintTop_toBottomOf="@+id/gameImage"
             app:layout_constraintVertical_bias="0.0"
-            tools:srcCompat="@drawable/ic_xbox" />
+            tools:srcCompat="@drawable/ic_xbox"
+            android:contentDescription="@string/detail_console_3" />
 
         <ImageView
             android:id="@+id/gameConsole4"
@@ -35,7 +36,8 @@
             app:layout_constraintStart_toEndOf="@+id/gameConsole3"
             app:layout_constraintTop_toBottomOf="@+id/gameImage"
             app:layout_constraintVertical_bias="0.0"
-            tools:srcCompat="@drawable/ic_nintendo" />
+            tools:srcCompat="@drawable/ic_nintendo"
+            android:contentDescription="@string/detail_console_4"/>
 
         <ImageView
             android:id="@+id/gameConsole1"
@@ -47,7 +49,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="@+id/gameImage"
             app:layout_constraintTop_toBottomOf="@+id/gameImage"
-            tools:srcCompat="@drawable/ic_windows" />
+            tools:srcCompat="@drawable/ic_windows"
+            android:contentDescription="@string/detail_console_1"/>
 
         <ImageView
             android:id="@+id/gameConsole2"
@@ -59,7 +62,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/gameConsole1"
             app:layout_constraintTop_toBottomOf="@+id/gameImage"
-            tools:srcCompat="@drawable/ic_ps" />
+            tools:srcCompat="@drawable/ic_ps"
+            android:contentDescription="@string/detail_console_2"/>
 
         <TextView
             android:id="@+id/gameReleaseYearText"
@@ -107,7 +111,9 @@
             android:layout_height="150dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:srcCompat="@drawable/game30xx" />
+            tools:srcCompat="@drawable/game30xx"
+            android:contentDescription="@string/item_image"/>
+
 
         <ImageButton
             android:id="@+id/buttonBook"
@@ -117,7 +123,8 @@
             android:scaleType="centerInside"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/bookoutline" />
+            app:srcCompat="@drawable/bookoutline"
+            android:contentDescription="@string/button_book"/>
 
         <ImageButton
             android:id="@+id/buttonWishlist"
@@ -127,7 +134,8 @@
             android:scaleType="centerInside"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/buttonBook"
-            app:srcCompat="@drawable/wishlistoutline" />
+            app:srcCompat="@drawable/wishlistoutline"
+            android:contentDescription="@string/wishlist_button"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

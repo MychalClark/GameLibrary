@@ -101,7 +101,7 @@ Gson gson = new GsonBuilder().setPrettyPrinting().create();
                     vh.ebayItemShipping.setText(item.shippingOptions.get(0).shippingCostType);
                 }
             } else{
-                vh.ebayItemShipping.setText("No Shipping Options");
+                vh.ebayItemShipping.setText(R.string.no_shipping);
             }
 //            if(item.shipping != null){
 //            vh.ebayItemShipping.setText(item.shipping.shippingCost.get(0).toString());}

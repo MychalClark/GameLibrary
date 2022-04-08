@@ -115,10 +115,21 @@ public class GameDetailsViewModel extends ViewModel {
         return reviews;
     }
 
-    //clears the snackbar
-    public void clearSnackbar() {
-        snackbarMessage.postValue(null);
-    }
+    
+//    public void addSnackbar(@StringRes Integer messageId){
+//        List<Integer> messages = snackbarMessages.getValue();
+//        if(messages == null) { messages = new ArrayList<>();}
+//        messages.add(messageId);
+//        snackbarMessages.postValue(messages);
+//    }
+//    //clears the snackbar
+//    public void clearSnackbar() {
+//        List<Integer> messages = snackbarMessages.getValue();
+//        if(messages != null) {
+//            messages.remove(0);
+//            snackbarMessages.postValue(messages);
+//        }
+//    }
 
     //Get the Game
     public void fetchGame(String gameId) {
@@ -136,7 +147,7 @@ public class GameDetailsViewModel extends ViewModel {
                     if (error != null) {
                         // show error...
                         Log.e(LOG_TAG, "Error getting reviews.", error);
-                        snackbarMessage.postValue("Error getting Reviews.");
+                        snackbarMessage.postValue("error getting reviews");
                     } else {
                         List<Review> newReviews =
                             querySnapshot != null ? querySnapshot.toObjects(Review.class) : null;

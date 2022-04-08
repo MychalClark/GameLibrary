@@ -127,7 +127,6 @@ public class ConsoleChooserDialog {
         });
         dialog = builder.create();
 
-
     }
 
     public void show() { dialog.show(); }

@@ -2,7 +2,9 @@ package edu.ranken.mychal_clark.gamelibrary;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -38,6 +40,12 @@ public class UserProfileActivity extends AppCompatActivity {
     private TextView displayNameText;
     private TextView userIdText;
     private ImageView userImage;
+    private ImageView xboxIcon;
+    private ImageView playstationIcon;
+    private ImageView windowsIcon;
+    private ImageView nintendoIcon;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +58,10 @@ public class UserProfileActivity extends AppCompatActivity {
         userImage = findViewById(R.id.userProfileImage);
         libraryRecycler = findViewById(R.id.userLibraryRecycler);
         wishlistRecycler = findViewById(R.id.userWishlistRecycler);
+        xboxIcon = findViewById(R.id.userGameConsole2);
+        playstationIcon = findViewById(R.id.userGameConsole3);
+        windowsIcon = findViewById(R.id.userGameConsole4);
+        nintendoIcon = findViewById(R.id.userGameConsole1);
 
         //create adapter
         profileLibraryGameAdapter = new ProfileLibraryGameAdapter(this, null);
@@ -98,6 +110,36 @@ public class UserProfileActivity extends AppCompatActivity {
                     .centerCrop()
                     .into(userImage);
             }
+if(user != null) {
+    if (user.preferredConsoles != null) {
+        Log.i(LOG_TAG, "got the user brah");
+
+        if (user.preferredConsoles.containsKey("xbox")) {
+            xboxIcon.setVisibility(View.VISIBLE);
+        } else {
+            xboxIcon.setVisibility(View.INVISIBLE);
+        }
+        if (user.preferredConsoles.containsKey("playstation")) {
+
+            playstationIcon.setVisibility(View.VISIBLE);
+        } else {
+            playstationIcon.setVisibility(View.INVISIBLE);
+        }
+        if (user.preferredConsoles.containsKey("nintendo")) {
+
+            nintendoIcon.setVisibility(View.VISIBLE);
+        } else {
+            nintendoIcon.setVisibility(View.INVISIBLE);
+        }
+        if (user.preferredConsoles.containsKey("windows")) {
+
+            windowsIcon.setVisibility(View.VISIBLE);
+        } else {
+            windowsIcon.setVisibility(View.INVISIBLE);
+        }
+
+    }
+}
 
         });
         model.getLibrary().observe(this, (librarys) -> {

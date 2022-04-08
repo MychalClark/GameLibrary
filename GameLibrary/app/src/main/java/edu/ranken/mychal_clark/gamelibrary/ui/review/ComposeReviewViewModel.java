@@ -31,6 +31,7 @@ public class ComposeReviewViewModel extends ViewModel {
     private final MutableLiveData<String> errorMessage;
     private final MutableLiveData<String> snackbarMessage;
     private final MutableLiveData<Boolean> finished;
+    private final MutableLiveData<String> currentUserId;
 
 
     public ComposeReviewViewModel() {
@@ -42,6 +43,9 @@ public class ComposeReviewViewModel extends ViewModel {
         errorMessage = new MutableLiveData<>(null);
         snackbarMessage = new MutableLiveData<>(null);
         finished = new MutableLiveData<>(false);
+        currentUserId = new MutableLiveData<>(null);
+
+        currentUserId.postValue(FirebaseAuth.getInstance().getCurrentUser().toString());
     }
 
     @Override
@@ -68,6 +72,8 @@ public class ComposeReviewViewModel extends ViewModel {
     public LiveData<Boolean> getFinished() {
         return finished;
     }
+    public LiveData<String> getUserId(){return currentUserId;}
+
 
     //get game
     public void fetchGame(String gameId) {
@@ -127,12 +133,20 @@ public class ComposeReviewViewModel extends ViewModel {
                 finished.postValue(true);
                 db.collection("reviews").document(userId + ";" + gameId).set(newReview);
 
-                // FIXME: activity is finished, before the review is actually published. (fixed)
                 // FIXME: handle errors with publishing the review
                 finished.postValue(true);
             }
         }
 
+
+
+    }
+
+    public void deleteReview(String reviewId){
+
+        db.collection("reviews").document(reviewId).delete();
+        Log.i(LOG_TAG, "document deleted");
+        this.snackbarMessage.postValue("Comment deleted.");
 
 
     }

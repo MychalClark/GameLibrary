@@ -17,7 +17,8 @@
         app:layout_constraintHorizontal_chainStyle="spread"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_nintendo" />
+        app:srcCompat="@drawable/ic_nintendo"
+        android:contentDescription="@string/nintendo_button" />
 
     <ImageButton
         android:id="@+id/xboxBtn"
@@ -30,7 +31,8 @@
         app:layout_constraintEnd_toStartOf="@+id/playstationBtn"
         app:layout_constraintStart_toEndOf="@+id/windowsBtn"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_xbox" />
+        app:srcCompat="@drawable/ic_xbox"
+        android:contentDescription="@string/xbox_button" />
 
     <ImageButton
         android:id="@+id/playstationBtn"
@@ -42,7 +44,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/xboxBtn"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_ps" />
+        app:srcCompat="@drawable/ic_ps"
+        android:contentDescription="@string/playstation_button" />
 
     <ImageButton
         android:id="@+id/windowsBtn"
@@ -55,6 +58,7 @@
         app:layout_constraintEnd_toStartOf="@+id/xboxBtn"
         app:layout_constraintStart_toEndOf="@+id/nintendoBtn"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_windows" />
+        app:srcCompat="@drawable/ic_windows"
+        android:contentDescription="@string/windows_button" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
