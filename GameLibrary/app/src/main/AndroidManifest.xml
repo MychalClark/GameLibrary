@@ -56,30 +56,64 @@
             android:name=".ComposeReviewActivity"
             android:exported="true"
             android:label="@string/createReview"
-            android:parentActivityName=".GameListActivity"
+            android:parentActivityName=".GameDetailsActivity"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".MyProfileActivity"
             android:exported="true"
             android:label="@string/myProfile"
-            android:parentActivityName=".GameListActivity" />
+            android:parentActivityName=".HomeActivity" />
         <activity
             android:name=".GameDetailsActivity"
             android:exported="true"
             android:label="@string/gameDetails"
-            android:parentActivityName=".GameListActivity">
+            android:parentActivityName=".HomeActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="edu.ranken.mychal_clark.gamelibrary.GameListActivity" />
+                android:value="edu.ranken.mychal_clark.gamelibrary.HomeActivity" />
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="http" />
+                <data android:scheme="https" />
+                <data android:host="my-game-list.com" />
+                <data android:pathPrefix="/game" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="games" />
+                <data android:host="games" />
+                <data android:pathPrefix="/game" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".UserProfileActivity"
             android:exported="true"
             android:label="@string/userProfile"
-            android:parentActivityName=".GameListActivity">
+            android:parentActivityName=".HomeActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="edu.ranken.mychal_clark.gamelibrary.GameListActivity" />
+                android:value="edu.ranken.mychal_clark.gamelibrary.HomeActivity" />
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="http" />
+                <data android:scheme="https" />
+                <data android:host="my-user-list.com" />
+                <data android:pathPrefix="/user" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="users" />
+                <data android:host="users" />
+                <data android:pathPrefix="/user" />
+            </intent-filter>
         </activity>
     </application>
 

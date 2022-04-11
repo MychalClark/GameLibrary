@@ -1,10 +1,12 @@
 package edu.ranken.mychal_clark.gamelibrary;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -16,6 +18,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Picasso;
 
+import java.util.Objects;
+
+import edu.ranken.mychal_clark.gamelibrary.data.User;
 import edu.ranken.mychal_clark.gamelibrary.ui.user.ProfileLibraryGameAdapter;
 import edu.ranken.mychal_clark.gamelibrary.ui.user.ProfileWishlistGameAdapter;
 import edu.ranken.mychal_clark.gamelibrary.ui.userProfileViewModel;
@@ -44,6 +49,8 @@ public class UserProfileActivity extends AppCompatActivity {
     private ImageView playstationIcon;
     private ImageView windowsIcon;
     private ImageView nintendoIcon;
+    private ImageButton shareUserButton;
+    private User selectedUser;
 
 
 
@@ -62,6 +69,7 @@ public class UserProfileActivity extends AppCompatActivity {
         playstationIcon = findViewById(R.id.userGameConsole3);
         windowsIcon = findViewById(R.id.userGameConsole4);
         nintendoIcon = findViewById(R.id.userGameConsole1);
+        shareUserButton = findViewById(R.id.shareUserButton);
 
         //create adapter
         profileLibraryGameAdapter = new ProfileLibraryGameAdapter(this, null);
@@ -91,6 +99,7 @@ public class UserProfileActivity extends AppCompatActivity {
                 displayNameText.setText("No Name");
             } else {
                  displayNameText.setText(user.displayName);
+                selectedUser = user;
             }
             if (user == null) {
                 userIdText.setText("No id");
@@ -113,6 +122,7 @@ public class UserProfileActivity extends AppCompatActivity {
 if(user != null) {
     if (user.preferredConsoles != null) {
         Log.i(LOG_TAG, "got the user brah");
+
 
         if (user.preferredConsoles.containsKey("xbox")) {
             xboxIcon.setVisibility(View.VISIBLE);
@@ -149,6 +159,49 @@ if(user != null) {
             profileWishlistGameAdapter.setItems(wishlists);
         });
 
+        shareUserButton.setOnClickListener((view) -> {
+            Log.i(LOG_TAG, "Share game clicked.");
+
+            if (selectedUser == null) {
+//                Snackbar.make(view, R.string.errorMovieNotFound, Snackbar.LENGTH_SHORT).show();
+                Log.i(LOG_TAG, "gamey no foundy gggggggggggg");
+            } else if (selectedUser.displayName == null) {
+//                Snackbar.make(view, R.string.movieHasNoName, Snackbar.LENGTH_SHORT).show();
+                Log.i(LOG_TAG, "gamey namey no  foundy LLLLLLLLLLL");
+            } else {
+                String gameName;
+                if (selectedUser.displayName == null) {
+                    gameName = selectedUser.id;
+                } else {
+                    gameName = selectedUser.id + " (" + selectedUser.displayName + ")";
+                }
+
+                String message =
+                    getString(R.string.shareUserMessage) +
+                        gameName +
+                        "\nhttps://my-user-list.com/user/" + selectedUser.id;
+
+                Intent sendIntent = new Intent(Intent.ACTION_SEND);
+                sendIntent.putExtra(Intent.EXTRA_TEXT, message);
+
+                sendIntent.setType("text/plain");
+
+                startActivity(Intent.createChooser(sendIntent, getString(R.string.shareUser)));
+            }
+        });
+
+        // get intent
+        Intent intentTwo = getIntent();
+        String intentAction = intentTwo.getAction();
+        Uri intentData = intentTwo.getData();
+
+        if (intentAction == null) {
+            userId = intentTwo.getStringExtra(EXTRA_USER_ID);
+            model.fetchUser(userId);
+        } else if (Objects.equals(intentAction, Intent.ACTION_VIEW) && intentData != null) {
+            handleWebLink(intentTwo);
+        }
+
 
     }
     @Override
@@ -163,4 +216,22 @@ if(user != null) {
         }
     }
 
+    private void handleWebLink(Intent intent) {
+        Uri uri = intent.getData();
+        String path = uri.getPath();
+        String prefix = "/user/";
+
+        // parse uri path
+        if (path.startsWith(prefix)) {
+            int gameIdEnd = path.indexOf("/", prefix.length());
+            if (gameIdEnd < 0) {
+                userId = path.substring(prefix.length());
+            } else {
+                userId = path.substring(prefix.length(), gameIdEnd);
+            }
+        } else {
+            userId = null;
+        }
+
+}
 }

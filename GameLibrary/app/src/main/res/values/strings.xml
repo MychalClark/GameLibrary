@@ -58,4 +58,9 @@
     <string name="wishlist">Wishlist</string>
     <string name="users">users</string>
     <string name="games">games</string>
+    <string name="shareGame">Share Game</string>
+    <string name="shareGameMessage">"Check this game out! "</string>
+    <string name="shareUser">Share User</string>
+    <string name="shareUserMessage">"Look at this users profile!"</string>
+
 </resources>

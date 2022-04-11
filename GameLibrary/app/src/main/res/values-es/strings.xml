@@ -16,7 +16,6 @@
     <string name="home">Casa</string>
     <string name="userProfile">Perfil del usuario</string>
     <string name="hello_blank_fragment">Hola fragmento en blanco</string>
-    <string name="myLibraryWishlist">Mi biblioteca y lista de deseos</string>
     <string name="console_unknown">Consola desconocida</string>
     <string name="review_hint">Ingrese la reseña aquí...</string>
     <string name="publish">Publicar</string>
@@ -51,4 +50,8 @@
     <string name="users">usuarias</string>
     <string name="games">juegos</string>
     <string name="preferredConsoles">Consolas preferidas</string>
+    <string name="shareGame">Compartir juego</string>
+    <string name="shareGameMessage">¡Mira este juego!</string>
+    <string name="shareUser">Compartir usuario</string>
+    <string name="shareUserMessage">¡Mira el perfil de este usuario!</string>
 </resources>
