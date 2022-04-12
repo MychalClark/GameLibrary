@@ -50,12 +50,15 @@ public class ReceiptItemListAdapter extends RecyclerView.Adapter<ReceiptItemView
             return 0;
         }
     }
-    public Double itemTotal(){
 
+    // FIXME: total cannot be null, so use "double"
+    public Double itemTotal(){
+        // FIXME: total cannot be null, so use "double"
         Double total = 0.00;
         if(items != null) {
             Log.i(LOG_TAG, "yup");
             for (int i = 0; i < items.size(); i++) {
+                // FIXME: handle null fields
                 Double price = items.get(i).price;
                 Integer quantity = items.get(i).quantity;
                 Double discount = items.get(i).discountPercent;
@@ -80,6 +83,7 @@ public class ReceiptItemListAdapter extends RecyclerView.Adapter<ReceiptItemView
         vh.itemTotalPriceText = itemView.findViewById(R.id.itemTotalPriceText);
 
 
+        // FIXME: indentation
         vh.itemDeleteBtn.setOnClickListener((view) -> {
             ReceiptItem item = items.get(vh.getAdapterPosition());
 if(model != null){
@@ -96,12 +100,14 @@ if(model != null){
         NumberFormat nm = NumberFormat.getNumberInstance();
 
         if (item.quantity != null) {
+            // FIXME: use NumberFormat.getIntegerInstance()
             vh.itemQuantityText.setText(Integer.toString(item.quantity));
         } else {
             vh.itemQuantityText.setText("null");
         }
 
         if (item.discountPercent != null) {
+            // FIXME: use NumberFormat.getPercentInstance()
             vh.itemDiscountText.setText("%"+nm.format(item.discountPercent));
         } else {
             vh.itemQuantityText.setText("null");
@@ -113,9 +119,11 @@ if(model != null){
             vh.itemPriceText.setText("null");
         }
 
+        // FIXME: handle nulls
         Double total = (item.price * item.quantity) * (1-item.discountPercent/100);
         vh.itemTotalPriceText.setText(NumberFormat.getCurrencyInstance().format(total));
 
+        // FIXME: do not save this total to an instance variable!!!
         this.total = total;
 
 

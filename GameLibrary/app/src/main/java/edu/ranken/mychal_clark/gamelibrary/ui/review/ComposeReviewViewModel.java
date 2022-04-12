@@ -125,11 +125,9 @@ public class ComposeReviewViewModel extends ViewModel {
                 newReview.put("reviewText", reviewText);
                 newReview.put("gameId", gameId);
 
-                finished.postValue(true);
-                db.collection("reviews").document(userId + ";" + gameId).set(newReview);
-
-                // FIXME: activity is finished, before the review is actually published. (fixed)
+                // FIXME: activity is finished, before the review is actually published.
                 // FIXME: handle errors with publishing the review
+                db.collection("reviews").document(userId + ";" + gameId).set(newReview);
                 finished.postValue(true);
             }
         }

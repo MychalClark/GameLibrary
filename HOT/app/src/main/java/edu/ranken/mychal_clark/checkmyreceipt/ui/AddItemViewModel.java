@@ -22,6 +22,7 @@ public class AddItemViewModel extends ViewModel {
     //Misc
     private static final String LOG_TAG = "AddItemViewModel";
     private String userId = "Mych";
+    // FIXME: receiptId
 
     //FireBase
     private final FirebaseFirestore db;
@@ -29,7 +30,7 @@ public class AddItemViewModel extends ViewModel {
     //Listeners
 
     //Live Data Creation
-    private final MutableLiveData<String> ErrorMessage;
+    private final MutableLiveData<String> ErrorMessage; // FIXME: instance variables should be camelCase
     private final MutableLiveData<Boolean> receiptSaved;
 
     public AddItemViewModel(){
@@ -55,6 +56,7 @@ public class AddItemViewModel extends ViewModel {
         })
             .addOnFailureListener((OnFailureListener) e -> {
                Log.i(LOG_TAG, "Failed Adding new item");
+               // FIXME: show error message
             });
 
     }

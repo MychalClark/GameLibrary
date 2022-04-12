@@ -45,6 +45,9 @@ public class TotalsActivity extends AppCompatActivity {
 
         model.getReceipt().observe(this, (receipt) -> {
             if (receipt != null) {
+                // FIXME: update salesTax field
+                // FIXME: handle nulls
+                // FIXME: reuse NumberFormat object
                 tax.setText(NumberFormat.getCurrencyInstance().format(receipt.taxAmount));
                 tip10.setText(NumberFormat.getCurrencyInstance().format(receipt.tip10));
                 tip20.setText(NumberFormat.getCurrencyInstance().format(receipt.tip20));
@@ -57,12 +60,14 @@ public class TotalsActivity extends AppCompatActivity {
         salesTax.setOnEditorActionListener((textView, actionId, keyEvent) -> {
 
             if (actionId == EditorInfo.IME_ACTION_DONE) {
+                // FIXME: handle exceptions
                 Double saleTaxNum;
                 if (salesTax.getText().toString().isEmpty()) {
                     saleTaxNum = 0.00;
                     model.setSalesTax(saleTaxNum);
                 }
                 else if(Double.parseDouble(salesTax.getText().toString()) < 0 || Double.parseDouble(salesTax.getText().toString()) > 100 ){
+                    // FIXME: set error message
                     model.getErrorSalesTax();
                 }
                 else {
@@ -70,10 +75,15 @@ public class TotalsActivity extends AppCompatActivity {
                     model.setSalesTax(saleTaxNum);
                 }
 
+                // FIXME: return true, to signal event handled
                 return false;
             }
+
+            // FIXME: return false, to signal event not handled
             return true;
         });
+
+        // FIXME: remove dead code
 //        salesTax.setOnEditorActionListener((textView, i, keyEvent) -> {
 //            if(i == EditorInfo.IME_ACTION_DONE){
 //                Toast.makeText(getApplicationContext(),"Done pressed",Toast.LENGTH_SHORT).show();

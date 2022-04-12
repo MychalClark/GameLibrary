@@ -69,6 +69,8 @@ public class AddItemActivity extends AppCompatActivity {
         Double price;
         Integer quantity;
 
+        // FIXME: handle exceptions
+
         if (priceText.getText().toString().isEmpty()) {
             errorMessage.setText("Please enter a price");
             errorMessage.setVisibility(View.VISIBLE);
@@ -76,6 +78,7 @@ public class AddItemActivity extends AppCompatActivity {
 
         } else {
             price = Double.parseDouble(priceText.getText().toString());
+
             if (!discountText.getText().toString().isEmpty()) {
                 discount = Double.parseDouble(discountText.getText().toString());
             } else {
@@ -87,13 +90,14 @@ public class AddItemActivity extends AppCompatActivity {
                 quantity = 1;
             }
 
+            // FIXME: indicate what fields are invalid
 
             if (quantity != null && discount != null && price != null && price > 0 && quantity > 0 && quantity < 1001 && discount >= 0 && discount <= 100) {
                 ReceiptItem newItem = new ReceiptItem();
                 newItem.price = price;
                 newItem.discountPercent = discount;
                 newItem.quantity = quantity;
-                newItem.addedOn = new Date();
+                newItem.addedOn = new Date();  // FIXME: use server timestamp instead of client timestamp
                 model.addItem(newItem);
 
             } else {
