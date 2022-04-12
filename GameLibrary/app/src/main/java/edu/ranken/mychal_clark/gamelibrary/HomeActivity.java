@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,7 +19,6 @@ import edu.ranken.mychal_clark.gamelibrary.ui.home.HomePageAdapter;
 public class HomeActivity extends AppCompatActivity {
 
     private String LOG_TAG = "HomeActivity";
-
     //create views
     private ViewPager2 pager;
     private BottomNavigationView bottomNav;
@@ -30,6 +30,7 @@ public class HomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home);
+
 
         //find views
         pager = findViewById(R.id.homePager);
@@ -96,10 +97,18 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     public void onSignOut(){
-        AuthUI.getInstance().signOut(this).addOnCompleteListener((result)->{
-            Log.i(LOG_TAG, "Signed out.");
-            finish();
-        });
+
+        ConfirmDialog confirmDialog = new ConfirmDialog(
+            HomeActivity.this,
+            "Are you sure you want to log out?",
+            (which) -> AuthUI.getInstance().signOut(this).addOnCompleteListener((result)->{
+                Log.i(LOG_TAG, "Signed out.");
+                finish();
+            }),
+            (which) -> {Toast.makeText(HomeActivity.this, "cancel", Toast.LENGTH_SHORT).show();});
+        confirmDialog.show();
+
+
     }
     public void onGetProfile(){
         Intent intent = new Intent(this, MyProfileActivity.class);

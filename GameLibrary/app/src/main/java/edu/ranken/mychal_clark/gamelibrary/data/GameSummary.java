@@ -11,6 +11,7 @@ public String id;
         public Integer releaseYear;
         public String gameImage;
         public Map<String, Boolean> consoles;
+        public Map<String,Boolean> selectedConsoles;
 
         public GameSummary(){}
 
@@ -21,6 +22,27 @@ public String id;
                 this.releaseYear = game.releaseYear;
                 this.gameImage = game.gameImage;
                 this.consoles = game.consoles;
+                this.selectedConsoles = null;
+        }
+
+        public GameSummary(@NonNull Library game){
+                this.id = game.gameId;
+                this.name = game.name;
+                this.description = game.description;
+                this.releaseYear = game.releaseYear;
+                this.gameImage = game.gameImage;
+                this.consoles = game.consoles;
+                this.selectedConsoles = game.selectedConsoles;
+        }
+
+        public GameSummary(@NonNull WishList game){
+                this.id = game.gameId;
+                this.name = game.name;
+                this.description = game.description;
+                this.releaseYear = game.releaseYear;
+                this.gameImage = game.gameImage;
+                this.consoles = game.consoles;
+                this.selectedConsoles = game.selectedConsoles;
         }
 
         @NonNull

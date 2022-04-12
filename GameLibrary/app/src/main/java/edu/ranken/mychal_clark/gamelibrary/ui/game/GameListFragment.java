@@ -16,8 +16,6 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.snackbar.Snackbar;
-
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -80,13 +78,18 @@ public class GameListFragment extends Fragment {
             new SpinnerOption<>(getString(R.string.allGames), GameList.ALL_GAMES),
             new SpinnerOption<>(getString(R.string.myLibrary), GameList.LIBRARY),
             new SpinnerOption<>(getString(R.string.myWishlist), GameList.WISHLIST),
-            new SpinnerOption<>(getString(R.string.myLibraryWishlist), GameList.LIBRARY_WISHLIST),
         };
         listAdapter = new ArrayAdapter<>(activity, android.R.layout.simple_spinner_item, listOptions);
         listSpinner.setAdapter(listAdapter);
 
         model.getGames().observe(lifecycleOwner, (games) -> {
             gamesAdapter.setGames(games);
+        });
+        model.getWishList().observe(lifecycleOwner, (wishlist) -> {
+            gamesAdapter.setWishlist(wishlist);
+        });
+        model.getLibrary().observe(lifecycleOwner, (library) -> {
+            gamesAdapter.setLibrary(library);
         });
 
 
@@ -116,17 +119,12 @@ public class GameListFragment extends Fragment {
             }
         });
 
-//        model.getErrorMessage().observe(this, (errorMessage) -> {
-//
-//            errorText.setText(errorMessage);
+//        model.getSnackbarMessage().observe(lifecycleOwner, (snackbarMessage) -> {
+//            if (snackbarMessage != null) {
+//                Snackbar.make(recyclerView, snackbarMessage, Snackbar.LENGTH_SHORT).show();
+//                model.clearSnackbar();
+//            }
 //        });
-
-        model.getSnackbarMessage().observe(lifecycleOwner, (snackbarMessage) -> {
-            if (snackbarMessage != null) {
-                Snackbar.make(recyclerView, snackbarMessage, Snackbar.LENGTH_SHORT).show();
-                model.clearSnackbar();
-            }
-        });
 
 
         //Register Listeners
@@ -149,6 +147,7 @@ public class GameListFragment extends Fragment {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 SpinnerOption<GameList> option = (SpinnerOption<GameList>) parent.getItemAtPosition(position);
                 model.filterGamesByList(option.getValue());
+                gamesAdapter.setMode(option.getValue());
                 Log.i(LOG_TAG, "Filter by list: " + option.getValue());
             }
 

@@ -1,29 +1,19 @@
 package edu.ranken.mychal_clark.gamelibrary.data;
 
-import androidx.annotation.NonNull;
+import com.google.firebase.firestore.DocumentId;
+
+import java.util.Map;
 
 public class Library {
+    @DocumentId
+    public String id;
 
-    public String gameId;
     public String userId;
+    public String gameId;
+    public Map<String, Boolean> consoles;
+    public String description;
+    public Integer releaseYear;
     public String gameImage;
     public String name;
-
-    public GameSummary game;
-
-    public Library(){}
-
-    public Library(String gameId, String userId, String gameImage, String name){
-        this.gameId = gameId;
-        this.userId = userId;
-        this.gameImage = gameImage;
-        this.name = name;
-
-    }
-
-    @NonNull
-    @Override
-    public String toString() {
-        return "Library {id=" + gameId + ", userId=" + userId + "}";
-    }
+    public Map<String, Boolean> selectedConsoles;
 }

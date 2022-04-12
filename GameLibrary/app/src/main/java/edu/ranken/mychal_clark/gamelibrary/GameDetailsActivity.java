@@ -1,6 +1,7 @@
 package edu.ranken.mychal_clark.gamelibrary;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -18,10 +19,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Picasso;
 
+import java.text.NumberFormat;
 import java.util.Map;
 import java.util.Objects;
 
+import edu.ranken.mychal_clark.gamelibrary.data.Game;
 import edu.ranken.mychal_clark.gamelibrary.ui.game.GameDetailsViewModel;
+import edu.ranken.mychal_clark.gamelibrary.ui.review.ComposeReviewViewModel;
 import edu.ranken.mychal_clark.gamelibrary.ui.review.ReviewListAdapter;
 
 public class GameDetailsActivity extends AppCompatActivity {
@@ -35,6 +39,8 @@ public class GameDetailsActivity extends AppCompatActivity {
     private Picasso picasso;
     private RecyclerView recyclerView;
     private ReviewListAdapter reviewsAdapter;
+    private ComposeReviewViewModel reviewViewModel;
+
 
     //Create Views
     private TextView gameTitle;
@@ -47,7 +53,11 @@ public class GameDetailsActivity extends AppCompatActivity {
     private ImageView[] gameScreenshots;
     private ImageView[] consoleIcons;
     private ImageButton composeReviewButton;
+    private ImageButton shareGameButton;
     private Button ebayBtn;
+    private TextView gameAverage;
+    private Game selectedGame;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +75,8 @@ public class GameDetailsActivity extends AppCompatActivity {
         recyclerView.setAdapter(reviewsAdapter);
 
 
+
+
         gameTitle = findViewById(R.id.gameDetailTitle);
         gameDescription = findViewById(R.id.gameDetailDescription);
         gameTags = findViewById(R.id.gameDetailTags);
@@ -72,6 +84,7 @@ public class GameDetailsActivity extends AppCompatActivity {
         gameControllerText = findViewById(R.id.gameDetailController);
         gameMultiplayerText = findViewById(R.id.gameDetailMultiplayer);
         gameGenreText = findViewById(R.id.gameDetailGenre);
+        gameAverage = findViewById(R.id.gameDetailAveragePrice);
         gameScreenshots = new ImageView[]{
             findViewById(R.id.gameDetailImage1),
             findViewById(R.id.gameDetailImage2),
@@ -85,6 +98,7 @@ public class GameDetailsActivity extends AppCompatActivity {
         };
 
         composeReviewButton = findViewById(R.id.composeReviewButton);
+        shareGameButton = findViewById(R.id.shareGameButton);
 
         // get intent
         Intent intent = getIntent();
@@ -102,6 +116,36 @@ public class GameDetailsActivity extends AppCompatActivity {
         });
 
         model.fetchGame(gameId);
+
+        model.getSearchResponse().observe(this, (searchResponse) -> {
+
+            if (searchResponse != null) {
+                if (searchResponse.itemSummaries != null) {
+                    double maxPrice = 0;
+                    double maxShipping = 0;
+
+                    for (int i = 0; i < searchResponse.itemSummaries.size(); i++) {
+                        maxPrice += Double.parseDouble(searchResponse.itemSummaries.get(i).price.value);
+
+                        if (searchResponse.itemSummaries.get(i).shippingOptions != null &&
+                            searchResponse.itemSummaries.get(i).shippingOptions.get(0).shippingCost != null) {
+                            maxShipping += Double.parseDouble(searchResponse
+                                .itemSummaries.get(i)
+                                .shippingOptions.get(0)
+                                .shippingCost.value);
+                        }
+                    }
+                    double avg = (maxPrice + maxShipping) / searchResponse.itemSummaries.size();
+
+                    gameAverage.setText("Average Price: " + NumberFormat.getCurrencyInstance().format(avg));
+                } else {
+                    gameAverage.setText("Average Price: Unknown");
+                }
+            }
+
+
+        });
+
         model.getGame().observe(this, (game) -> {
 
 
@@ -109,6 +153,7 @@ public class GameDetailsActivity extends AppCompatActivity {
                 Log.i(LOG_TAG, "no game" + gameId);
             } else {
 
+                selectedGame =  game;
                 Log.i(LOG_TAG, "have game" + gameId);
 
                 //picassoo
@@ -266,7 +311,50 @@ public class GameDetailsActivity extends AppCompatActivity {
             startActivity(intentTwo);
         });
 
-        Log.i(LOG_TAG,"HUHUH" + gameId);
+
+        shareGameButton.setOnClickListener((view) -> {
+            Log.i(LOG_TAG, "Share game clicked.");
+
+            if (selectedGame == null) {
+//                Snackbar.make(view, R.string.errorMovieNotFound, Snackbar.LENGTH_SHORT).show();
+                Log.i(LOG_TAG, "gamey no foundy gggggggggggg");
+            } else if (selectedGame.name == null) {
+//                Snackbar.make(view, R.string.movieHasNoName, Snackbar.LENGTH_SHORT).show();
+                Log.i(LOG_TAG, "gamey namey no  foundy LLLLLLLLLLL");
+            } else {
+                String gameName;
+                if (selectedGame.releaseYear == null) {
+                    gameName = selectedGame.name;
+                } else {
+                    gameName = selectedGame.name + " (" + selectedGame.releaseYear + ")";
+                }
+
+                String message =
+                    getString(R.string.shareGameMessage) +
+                        gameName +
+                        "\nhttps://my-game-list.com/game/" + selectedGame.id;
+
+                Intent sendIntent = new Intent(Intent.ACTION_SEND);
+                sendIntent.putExtra(Intent.EXTRA_TEXT, message);
+
+                sendIntent.setType("text/plain");
+
+                startActivity(Intent.createChooser(sendIntent, getString(R.string.shareGame)));
+            }
+        });
+
+        // get intent
+        Intent intentTwo = getIntent();
+        String intentAction = intentTwo.getAction();
+        Uri intentData = intentTwo.getData();
+
+        if (intentAction == null) {
+            gameId = intentTwo.getStringExtra(EXTRA_GAME_ID);
+            model.fetchGame(gameId);
+        } else if (Objects.equals(intentAction, Intent.ACTION_VIEW) && intentData != null) {
+            handleWebLink(intentTwo);
+        }
+
     }
 
     @Override
@@ -281,4 +369,22 @@ public class GameDetailsActivity extends AppCompatActivity {
         }
     }
 
+    private void handleWebLink(Intent intent) {
+        Uri uri = intent.getData();
+        String path = uri.getPath();
+        String prefix = "/game/";
+
+        // parse uri path
+        if (path.startsWith(prefix)) {
+            int gameIdEnd = path.indexOf("/", prefix.length());
+            if (gameIdEnd < 0) {
+                gameId = path.substring(prefix.length());
+            } else {
+                gameId = path.substring(prefix.length(), gameIdEnd);
+            }
+        } else {
+            gameId = null;
+        }
+
+}
 }

@@ -34,7 +34,9 @@ public class EbayBrowseAPI {
     }
 
 
-    public BrowseService getService() { return service; }
+    public BrowseService getService() {
+        return service;
+    }
 
     public Call<SearchResponse> searchAsync(
         String authToken,
@@ -64,15 +66,16 @@ public class EbayBrowseAPI {
     public static class ItemSummary {
         public String itemId;      // the listing's unique id
         public String title;       // the title of the listing
-        public ItemImage image;    // the primary image for the listing
+        public ItemImage image;// the primary image for the listing
         public ArrayList<ItemImage> thumbnailImages;  // images to use in search results
         public String condition;   // new/used
         public ItemSeller seller;  // the seller's name and ratings
         public ItemPrice price;    // the price and currency
         // more fields ...
-        public ArrayList<ShippingOptions> shippingOptions;
         public String itemWebUrl;
-        public ShippingOptions.ShippingCost shipping ;
+
+        public ArrayList<ShippingOption> shippingOptions;
+
 
     }
 
@@ -83,13 +86,16 @@ public class EbayBrowseAPI {
     public static class ItemImage {
         public String imageUrl;
     }
-    public static class ShippingOptions {
 
-        public static class ShippingCost{
-            public String value;
-        }
+    public static class ShippingOption {
+        public String shippingCostType;
+        public ShippingCost shippingCost;
     }
 
+    public static class ShippingCost{
+        public String value;
+        public String currency;
+    }
 
 
     public static class ItemSeller {
@@ -122,7 +128,6 @@ public class EbayBrowseAPI {
         );
 
     }
-
 
 
 }

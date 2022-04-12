@@ -18,8 +18,10 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.List;
+import java.util.Map;
 
 import edu.ranken.mychal_clark.gamelibrary.data.Library;
+import edu.ranken.mychal_clark.gamelibrary.data.User;
 import edu.ranken.mychal_clark.gamelibrary.data.WishList;
 
 public class MyProfileViewModel extends ViewModel {
@@ -36,6 +38,7 @@ public class MyProfileViewModel extends ViewModel {
     //listeners
     private ListenerRegistration libraryRegistration;
     private ListenerRegistration wishListRegistration;
+    private ListenerRegistration userRegistration;
 
     //live data
     private final MutableLiveData<String> snackbarMessage;
@@ -44,6 +47,7 @@ public class MyProfileViewModel extends ViewModel {
     private final MutableLiveData<List<WishList>> wishlists;
     private MutableLiveData<String> uploadErrorMessage;
     private MutableLiveData<Uri> downloadUrl;
+    private final  MutableLiveData<User> currentUser;
 
     public MyProfileViewModel(){
         db = FirebaseFirestore.getInstance();
@@ -55,6 +59,7 @@ public class MyProfileViewModel extends ViewModel {
         snackbarMessage = new MutableLiveData<>(null);
         librarys = new MutableLiveData<>(null);
         wishlists = new MutableLiveData<>(null);
+        currentUser = new MutableLiveData<>(null);
         uploadErrorMessage = new MutableLiveData<>();
         downloadUrl = new MutableLiveData<>();
 
@@ -91,9 +96,21 @@ public class MyProfileViewModel extends ViewModel {
                 });
 
 
+        userRegistration = db.collection("users")
+            .document(user.getUid())
+            .addSnapshotListener((document, error) -> {
+                if (error != null) {
+                    Log.e(LOG_TAG, "Error getting game.", error);
+                    this.snackbarMessage.postValue("Error getting game.");
+                } else if (document != null && document.exists()) {
+                    User user = document.toObject(User.class);
+                    this.currentUser.postValue(user);
+                    this.snackbarMessage.postValue("User found");
+            }});
     }
     public LiveData<List<Library>> getLibrary(){return librarys;}
     public LiveData<List<WishList>> getWishlist(){return wishlists;}
+    public LiveData<User> getCurrentUser(){return currentUser;}
     public LiveData<String> getUploadErrorMessage() {
         return uploadErrorMessage;
     }
@@ -166,4 +183,8 @@ public class MyProfileViewModel extends ViewModel {
             });
     }
 
+    public void addPreferredGames(Map<String, Boolean> selectedConsoles) {
+
+        db.collection("users").document(user.getUid()).update("preferredConsoles", selectedConsoles);
     }
+}

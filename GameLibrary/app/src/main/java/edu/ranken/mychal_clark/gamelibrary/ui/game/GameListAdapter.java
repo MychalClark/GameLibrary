@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
@@ -14,14 +15,18 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Picasso;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import edu.ranken.mychal_clark.gamelibrary.ConsoleChooserDialog;
 import edu.ranken.mychal_clark.gamelibrary.GameDetailsActivity;
 import edu.ranken.mychal_clark.gamelibrary.R;
+import edu.ranken.mychal_clark.gamelibrary.data.GameList;
 import edu.ranken.mychal_clark.gamelibrary.data.GameSummary;
 import edu.ranken.mychal_clark.gamelibrary.data.Library;
+import edu.ranken.mychal_clark.gamelibrary.data.WishList;
 
 public class GameListAdapter extends RecyclerView.Adapter<GameViewHolder> {
 
@@ -34,16 +39,15 @@ public class GameListAdapter extends RecyclerView.Adapter<GameViewHolder> {
 
     private List<GameSummary> games;
     private List<Library> library;
-
-
-
+    private List<WishList> wishlist;
+    private GameList mode;
 
     public GameListAdapter(FragmentActivity context, GameListModel model) {
         this.context = context;
         this.layoutInflater = LayoutInflater.from(context);
-
         this.picasso = Picasso.get();
         this.model = model;
+
     }
 
 //Notify when data changes, add background data to view.
@@ -60,12 +64,17 @@ public class GameListAdapter extends RecyclerView.Adapter<GameViewHolder> {
         notifyDataSetChanged();
     }
 
+    @SuppressLint("NotifyDataSetChanged")
+    public void setWishlist(List<WishList> wishlist) {
+        this.wishlist = wishlist;
+        notifyDataSetChanged();
+    }
 
-
-//    public void setItems(List<Game> items) {
-//        this.items = items;
-//        notifyDataSetChanged();
-//    }
+    @SuppressLint("NotifyDataSetChanged")
+    public void setMode(GameList mode) {
+        this.mode = mode;
+        notifyDataSetChanged();
+    }
 
     @Override
     public int getItemCount() {
@@ -102,16 +111,86 @@ public class GameListAdapter extends RecyclerView.Adapter<GameViewHolder> {
             GameSummary game = games.get(vh.getAdapterPosition());
             if(vh.inLibrary){
                 model.removeGameFromLibrary(game.id);
-            }else{model.addGameToLibrary(game);}
+                vh.inLibrary = false;
+                vh.buttonBook.setImageResource(R.drawable.bookoutline);
+            }else{
+                ConsoleChooserDialog consoleChooserDialog = new ConsoleChooserDialog(
+                    context,
+                    "Choose Consoles",
+                    game.consoles,
+                    null,
+                    (selected) ->{
+                        if(!selected.isEmpty()) {
+                            Map<String, Boolean> selectedConsoles = new HashMap<>();
+                            if (selected.containsKey("xbox")) {
+                                selectedConsoles.put("xbox",Boolean.TRUE);
+                            }
+                            if (selected.containsKey("windows")) {
+                                selectedConsoles.put("windows",Boolean.TRUE);
+                            }
+                            if (selected.containsKey("playstation")) {
+                                selectedConsoles.put("playstation",Boolean.TRUE);
+                            }
+                            if (selected.containsKey("nintendo")) {
+                                selectedConsoles.put("nintendo",Boolean.TRUE);
+                            }
+
+                            model.addGameToLibrary(game, selectedConsoles);
+                            vh.inLibrary = true;
+                            vh.buttonBook.setImageResource(R.drawable.book);
+                        }else{
+                            Toast.makeText(view.getContext(), "No Console selected! Item not added.",
+                                Toast.LENGTH_LONG).show();
+                        }
+
+                    });
+                consoleChooserDialog.show();
+
+                }
 
         });
 
         vh.buttonWishlist.setOnClickListener((view) -> {
             Log.i(LOG_TAG, "Wishlist pressed");
             GameSummary game = games.get(vh.getAdapterPosition());
-            if(vh.inLibrary){
+            if(vh.inWishlist){
                 model.removeGameFromWishlist(game.id);
-            }else{model.addGameToWishlist(game);}
+                vh.inWishlist = false;
+                vh.buttonWishlist.setImageResource(R.drawable.wishlistoutline);
+            }else{
+               ConsoleChooserDialog consoleChooserDialog = new ConsoleChooserDialog(
+                   context,
+                   "Choose Consoles",
+                   game.consoles,
+                   null,
+                   (selected) ->{
+                       if(!selected.isEmpty()) {
+                           Map<String, Boolean> selectedConsoles = new HashMap<>();
+                           if (selected.containsKey("xbox")) {
+                               selectedConsoles.put("xbox",Boolean.TRUE);
+                           }
+                           if (selected.containsKey("windows")) {
+                               selectedConsoles.put("windows",Boolean.TRUE);
+                           }
+                           if (selected.containsKey("playstation")) {
+                               selectedConsoles.put("playstation",Boolean.TRUE);
+                           }
+                           if (selected.containsKey("nintendo")) {
+                               selectedConsoles.put("nintendo",Boolean.TRUE);
+                           }
+
+                           model.addGameToWishlist(game, selectedConsoles);
+                           vh.inWishlist = true;
+                           vh.buttonWishlist.setImageResource(R.drawable.wishlist);
+                       }else{
+                           Toast.makeText(view.getContext(), "No Console selected! Item not added.",
+                               Toast.LENGTH_LONG).show();
+                       }
+
+                   });
+               consoleChooserDialog.show();
+
+                }
 
 
 
@@ -164,7 +243,6 @@ public class GameListAdapter extends RecyclerView.Adapter<GameViewHolder> {
 
 
         //Icon Setter
-
         if (game.consoles == null) {
             for (int i = 0; i < vh.consoleIcons.length; ++i) {
                 vh.consoleIcons[i].setImageResource(0);
@@ -174,7 +252,12 @@ public class GameListAdapter extends RecyclerView.Adapter<GameViewHolder> {
 
             int iconIndex = 0;
 
-            for (Map.Entry<String, Boolean> entry : game.consoles.entrySet()) {
+            Map<String,Boolean> gameConsoles = game.consoles;
+            if (game.selectedConsoles != null) {
+                gameConsoles = game.selectedConsoles;
+            }
+
+            for (Map.Entry<String, Boolean> entry : gameConsoles.entrySet()) {
 
                 if (Objects.equals(entry.getValue(), Boolean.TRUE)) {
 
@@ -183,22 +266,28 @@ public class GameListAdapter extends RecyclerView.Adapter<GameViewHolder> {
                         default:
                             vh.consoleIcons[iconIndex].setVisibility(View.VISIBLE);
                             vh.consoleIcons[iconIndex].setImageResource(R.drawable.ic_error);
+                            vh.consoleIcons[iconIndex].setContentDescription(context.getString(R.string.console_unknown));
                             break;
                         case "windows":
                             vh.consoleIcons[iconIndex].setVisibility(View.VISIBLE);
                             vh.consoleIcons[iconIndex].setImageResource(R.drawable.ic_windows);
+                            vh.consoleIcons[iconIndex].setContentDescription(context.getString(R.string.console_windows));
                             break;
                         case "xbox":
                             vh.consoleIcons[iconIndex].setVisibility(View.VISIBLE);
                             vh.consoleIcons[iconIndex].setImageResource(R.drawable.ic_xbox);
+                            vh.consoleIcons[iconIndex].setContentDescription(context.getString(R.string.console_xbox));
+
                             break;
                         case "nintendo":
                             vh.consoleIcons[iconIndex].setVisibility(View.VISIBLE);
                             vh.consoleIcons[iconIndex].setImageResource(R.drawable.ic_nintendo);
+                            vh.consoleIcons[iconIndex].setContentDescription(context.getString(R.string.console_nintendo));
                             break;
                         case "playstation":
                             vh.consoleIcons[iconIndex].setVisibility(View.VISIBLE);
                             vh.consoleIcons[iconIndex].setImageResource(R.drawable.ic_ps);
+                            vh.consoleIcons[iconIndex].setContentDescription(context.getString(R.string.console_playstation));
                             break;
                     }
                     iconIndex++;
@@ -213,29 +302,42 @@ public class GameListAdapter extends RecyclerView.Adapter<GameViewHolder> {
             }
         }
 
-//        vh.buttonBook.setVisibility(choices == null ? View.GONE : View.VISIBLE);
-//        vh.buttonWishlist.setVisibility(choices == null ? View.GONE : View.VISIBLE);
+
+        vh.buttonBook.setVisibility(library == null ? View.GONE : View.VISIBLE);
+        vh.buttonWishlist.setVisibility(wishlist == null ? View.GONE : View.VISIBLE);
         vh.buttonBook.setImageResource(R.drawable.bookoutline);
         vh.buttonWishlist.setImageResource(R.drawable.wishlistoutline);
         vh.inLibrary = false;
         vh.inWishlist = false;
 
-        for (int i = 0; i < games.size(); i++) {
-            
-            
+
+        if(library != null) {
+            for (int i = 0; i < library.size(); i++) {
+
+                if (library.get(i).gameId.equals(game.id)) {
+                    vh.inLibrary = true;
+                    vh.buttonBook.setImageResource(R.drawable.book);
+                }
+
+            }
+        }
+        if(wishlist != null) {
+            for (int i = 0; i < wishlist.size(); i++) {
+
+                if (wishlist.get(i).gameId.equals(game.id)) {
+                    vh.inWishlist = true;
+                    vh.buttonWishlist.setImageResource(R.drawable.wishlist);
+                }
+
+            }
         }
 
 
+        vh.buttonBook.setVisibility(View.VISIBLE);
+        vh.buttonWishlist.setVisibility(View.VISIBLE);
 
-
-
-//        if (Objects.equals(game.id, )) {
-//            vh.buttonBook.setImageResource(R.drawable.book);
-//        }
 
 
     }
-
-
 }
 

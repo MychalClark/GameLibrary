@@ -13,13 +13,15 @@ public class Review {
     public String displayName;
     public String reviewText;
     public Date date;
+    public String userId;
 
     public Review() {}
 
-    public Review(String displayName, String reviewText, Date date){
+    public Review(String displayName, String reviewText, Date date, String userId){
         this.displayName = displayName;
         this.reviewText = reviewText;
         this.date = date;
+        this.userId = userId;
     }
 
     @NonNull

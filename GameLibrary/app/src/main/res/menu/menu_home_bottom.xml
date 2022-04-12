@@ -2,10 +2,10 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item android:id="@+id/actionGameList"
-        android:title="games"
+        android:title="@string/games"
         android:icon="@drawable/ic_game"/>
 
     <item android:id="@+id/actionUserList"
-        android:title="users"
+        android:title="@string/users"
         android:icon="@drawable/ic_person"/>
 </menu>
