@@ -20,6 +20,7 @@ public class TotalsViewModel extends ViewModel {
     //Misc
     private static final String LOG_TAG = "TotalsViewModel";
     private String userId = "Mych";
+    // FIXME: receiptId
 
     //FireBase
     private final FirebaseFirestore db;
@@ -52,13 +53,19 @@ public class TotalsViewModel extends ViewModel {
         });
     }
 
+    // FIXME: override onCleared so that registrations get removed
+
     //Return Live Data Here
     public LiveData<Receipt> getReceipt(){return receipt;}
     public LiveData<String> getErrorReceipt(){return errorReceipt;}
     public LiveData<String> getErrorSalesTax(){return errorSalesTax;}
 
+    // FIXME: inconsistent indentation
+
 //Functions
    public void setSalesTax(double taxPercent){
+       // FIXME: crashes if receipt or subtotal is null
+       // FIXME: total = subtotal + tax
         Double subtotal = receipt.getValue().subtotal;
        Double total = receipt.getValue().subtotal*(taxPercent/100) + receipt.getValue().subtotal;
         Double tax =  receipt.getValue().subtotal*(taxPercent/100);
@@ -74,10 +81,13 @@ public class TotalsViewModel extends ViewModel {
        newTotal.put("tip20", tip20);
        newTotal.put("tip30", tip30);
        newTotal.put("userId", userId);
-       newTotal.put("updatedOn", new Date());
+       newTotal.put("updatedOn", new Date()); // FIXME: use server timestamp
        newTotal.put("taxPercent", taxPercent);
 
+       // FIXME: handle errors
+       // FIXME: merge
        db.collection("receipts").document(userId).set(newTotal);
 
+       // FIXME: set error message
    }
 }

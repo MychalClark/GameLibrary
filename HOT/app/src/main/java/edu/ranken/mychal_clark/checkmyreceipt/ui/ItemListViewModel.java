@@ -23,6 +23,7 @@ public class ItemListViewModel extends ViewModel {
     //Misc
     private static final String LOG_TAG = "ItemListViewModel";
     private String userId = "Mych";
+    // FIXME: receiptId
 
     //FireBase
     private final FirebaseFirestore db;
@@ -35,8 +36,8 @@ public class ItemListViewModel extends ViewModel {
     //Live Data Creation
     private final MutableLiveData<Receipt> receipt;
     private final MutableLiveData<List<ReceiptItem>> receiptItems;
-    private final MutableLiveData<String> MessageReceipt;
-    private final MutableLiveData<String> MessageReceiptItems;
+    private final MutableLiveData<String> MessageReceipt;       // FIXME: instance variables should be camelCase
+    private final MutableLiveData<String> MessageReceiptItems;  // FIXME: instance variables should be camelCase
 
 
     public ItemListViewModel() {
@@ -64,6 +65,8 @@ public class ItemListViewModel extends ViewModel {
         });
 
     }
+
+    // FIXME: override onCleared so that registrations get removed
 
     //OnCleared Here
 //    @Override
@@ -102,6 +105,7 @@ public class ItemListViewModel extends ViewModel {
     }
 
     public void deleteItem(String receiptItemId) {
+        // FIXME: error handling
         db.collection("receiptItems").document(receiptItemId).delete();
         Log.i(LOG_TAG, "Item Deleted");
     }
@@ -109,7 +113,9 @@ public class ItemListViewModel extends ViewModel {
     public void deleteAllItems() {
         Receipt receipt = this.getReceipt().getValue();
 
+        // FIXME: crashes if receipt is null
         db.collection("receiptItems").whereEqualTo("receiptId", receipt.receiptId).get().addOnCompleteListener(task -> {
+            // FIXME: error handling
             for (DocumentSnapshot document : task.getResult().getDocuments()) {
                 db.collection("receiptItems").document(document.getId()).delete();
 
@@ -117,6 +123,7 @@ public class ItemListViewModel extends ViewModel {
         });
     }
 
+    // FIXME: rename to fetchReceiptItems
     public void getReceiptId(String receiptId) {
         receiptItemRegistration = db.collection("receiptItems").whereEqualTo("receiptId", receiptId).addSnapshotListener((QuerySnapshot querySnapshot, FirebaseFirestoreException error) -> {
             if (error != null) {
@@ -133,6 +140,9 @@ public class ItemListViewModel extends ViewModel {
     }
 
     public void updateSubtotal(Double subtotal) {
+        // FIXME: set() and merge, so that receipt can be created
+        // FIXME: error handling
+        // FIXME: userId vs receiptId
         db.collection("receipts").document(userId).update("subtotal", subtotal);
         //db.collection("receipts").document(userId).update("updatedOn", new Date());
 
