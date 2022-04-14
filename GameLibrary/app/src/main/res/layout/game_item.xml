@@ -13,8 +13,8 @@
 
         <ImageView
             android:id="@+id/gameConsole3"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="@dimen/gameItemIconSize"
+            android:layout_height="@dimen/gameItemIconSize"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
@@ -27,8 +27,8 @@
 
         <ImageView
             android:id="@+id/gameConsole4"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="@dimen/gameItemIconSize"
+            android:layout_height="@dimen/gameItemIconSize"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
@@ -41,8 +41,8 @@
 
         <ImageView
             android:id="@+id/gameConsole1"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="@dimen/gameItemIconSize"
+            android:layout_height="@dimen/gameItemIconSize"
             android:layout_marginLeft="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
@@ -54,8 +54,8 @@
 
         <ImageView
             android:id="@+id/gameConsole2"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="@dimen/gameItemIconSize"
+            android:layout_height="@dimen/gameItemIconSize"
             android:layout_marginLeft="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
@@ -67,7 +67,7 @@
 
         <TextView
             android:id="@+id/gameReleaseYearText"
-            android:layout_width="0dp"
+            android:layout_width="@dimen/gameItemYearWidth"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:textAlignment="viewStart"
@@ -79,7 +79,7 @@
 
         <TextView
             android:id="@+id/gameNameText"
-            android:layout_width="0dp"
+            android:layout_width="@dimen/gameItemNameWidth"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:textAlignment="viewStart"
@@ -93,7 +93,7 @@
 
         <TextView
             android:id="@+id/gameDescriptionText"
-            android:layout_width="0dp"
+            android:layout_width="@dimen/gameItemDescriptionWidth"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:ellipsize="end"
@@ -107,8 +107,8 @@
 
         <ImageView
             android:id="@+id/gameImage"
-            android:layout_width="100dp"
-            android:layout_height="150dp"
+            android:layout_width="@dimen/gameItemImageWidth"
+            android:layout_height="@dimen/gameItemImageHeight"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:srcCompat="@drawable/game30xx"
@@ -117,24 +117,24 @@
 
         <ImageButton
             android:id="@+id/buttonBook"
-            android:layout_width="54dp"
-            android:layout_height="56dp"
+            android:layout_width="@dimen/gameItemButtonSize"
+            android:layout_height="@dimen/gameItemButtonSize"
             android:adjustViewBounds="true"
             android:scaleType="centerInside"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/bookoutline"
+            app:srcCompat="@drawable/ic_book_outline"
             android:contentDescription="@string/button_book"/>
 
         <ImageButton
             android:id="@+id/buttonWishlist"
-            android:layout_width="54dp"
-            android:layout_height="49dp"
+            android:layout_width="@dimen/gameItemButtonSize"
+            android:layout_height="@dimen/gameItemButtonSize"
             android:adjustViewBounds="true"
             android:scaleType="centerInside"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/buttonBook"
-            app:srcCompat="@drawable/wishlistoutline"
+            app:srcCompat="@drawable/ic_wishlist_outline"
             android:contentDescription="@string/wishlist_button"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -13,8 +13,10 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -62,8 +64,8 @@ public class GameListFragment extends Fragment {
         LifecycleOwner lifecycleOwner = getViewLifecycleOwner();
 
         // setup recycler view
-
-        recyclerView.setLayoutManager(new LinearLayoutManager(activity));
+        int columns = getResources().getInteger(R.integer.gameListColumns);
+        recyclerView.setLayoutManager(new GridLayoutManager(activity, columns));
 
         //recycler and adapter attach
         model = new ViewModelProvider(this).get(GameListModel.class);
@@ -91,6 +93,16 @@ public class GameListFragment extends Fragment {
         model.getLibrary().observe(lifecycleOwner, (library) -> {
             gamesAdapter.setLibrary(library);
         });
+
+        model.getSnackbarMessage().observe(getViewLifecycleOwner(), (messageId) -> {
+            if (messageId != null) {
+                Snackbar.make(consoleSpinner, messageId, Snackbar.LENGTH_SHORT).show();
+                model.clearSnackbar();
+            } else {
+                // no message to show
+            }
+        });
+
 
 
         model.getConsoles().observe(lifecycleOwner, (consoles) -> {

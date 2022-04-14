@@ -1,4 +1,4 @@
-package edu.ranken.mychal_clark.gamelibrary.ui.user;
+package edu.ranken.mychal_clark.gamelibrary.ui.myProfile;
 
 import android.net.Uri;
 import android.util.Log;
@@ -20,6 +20,7 @@ import com.google.firebase.storage.StorageReference;
 import java.util.List;
 import java.util.Map;
 
+import edu.ranken.mychal_clark.gamelibrary.R;
 import edu.ranken.mychal_clark.gamelibrary.data.Library;
 import edu.ranken.mychal_clark.gamelibrary.data.User;
 import edu.ranken.mychal_clark.gamelibrary.data.WishList;
@@ -41,7 +42,7 @@ public class MyProfileViewModel extends ViewModel {
     private ListenerRegistration userRegistration;
 
     //live data
-    private final MutableLiveData<String> snackbarMessage;
+    private final MutableLiveData<Integer> snackbarMessage;
     private final MutableLiveData<String> errorMessage;
     private final MutableLiveData<List<Library>> librarys;
     private final MutableLiveData<List<WishList>> wishlists;
@@ -71,12 +72,11 @@ public class MyProfileViewModel extends ViewModel {
                    if (error != null) {
                        // show error...
                        Log.e(LOG_TAG, "Error getting Library.", error);
-                       snackbarMessage.postValue("Error getting Library.");
+                       snackbarMessage.postValue(R.string.errorGettingLibrary);
                    } else {
                        List<Library> newLibrary =
                            querySnapshot != null ? querySnapshot.toObjects(Library.class) : null;
                        librarys.postValue(newLibrary);
-                       snackbarMessage.postValue("Library Found.");
                    }
                });
         wishListRegistration =
@@ -86,12 +86,11 @@ public class MyProfileViewModel extends ViewModel {
                     if (error != null) {
                         // show error...
                         Log.e(LOG_TAG, "Error getting Wishlist.", error);
-                        snackbarMessage.postValue("Error getting Wishlist.");
+                        snackbarMessage.postValue(R.string.errorGettingWishlist);
                     } else {
                         List<WishList> newWishlist =
                             querySnapshot != null ? querySnapshot.toObjects(WishList.class) : null;
                         wishlists.postValue(newWishlist);
-                        snackbarMessage.postValue("Wishlist Found.");
                     }
                 });
 
@@ -101,11 +100,11 @@ public class MyProfileViewModel extends ViewModel {
             .addSnapshotListener((document, error) -> {
                 if (error != null) {
                     Log.e(LOG_TAG, "Error getting game.", error);
-                    this.snackbarMessage.postValue("Error getting game.");
+                    this.snackbarMessage.postValue(R.string.errorGettingGame);
                 } else if (document != null && document.exists()) {
                     User user = document.toObject(User.class);
                     this.currentUser.postValue(user);
-                    this.snackbarMessage.postValue("User found");
+                    this.snackbarMessage.postValue(R.string.userFound);
             }});
     }
     public LiveData<List<Library>> getLibrary(){return librarys;}
@@ -114,6 +113,7 @@ public class MyProfileViewModel extends ViewModel {
     public LiveData<String> getUploadErrorMessage() {
         return uploadErrorMessage;
     }
+    public LiveData<Integer> getSnackbarMessage(){return snackbarMessage;}
 
     public LiveData<Uri> getDownloadUrl() {
         return downloadUrl;
@@ -130,10 +130,11 @@ public class MyProfileViewModel extends ViewModel {
             .addOnCompleteListener((task) -> {
                 if (!task.isSuccessful()) {
                     Log.e(LOG_TAG, "failed to upload image to: " + storageRef.getPath(), task.getException());
-                    uploadErrorMessage.postValue("Failed to upload.");
+
                 } else {
                     Log.i(LOG_TAG, "image uploaded to: " + storageRef.getPath());
                     getProfileImageDownloadUrl(storageRef);
+                    snackbarMessage.postValue(R.string.imageUploaded);
                 }
             });
     }
@@ -159,10 +160,10 @@ public class MyProfileViewModel extends ViewModel {
                     user.updateProfile(profileUpdates)
                         .addOnCompleteListener(task -> {
                             if (!task.isSuccessful()) {
-                                snackbarMessage.postValue("User auth profile not updated.");
+                                snackbarMessage.postValue(R.string.userAuthUpdateError);
                                 Log.d(LOG_TAG, "User auth profile  not updated.");
                             }else{
-                                snackbarMessage.postValue("User auth profile updated.");
+                                snackbarMessage.postValue(R.string.userAuthUpdated);
                                 Log.d(LOG_TAG, "User auth profile updated.");
                             }
                         });
@@ -172,10 +173,10 @@ public class MyProfileViewModel extends ViewModel {
                         .update("profilePictureUrl", downloadUrl.toString())
                         .addOnCompleteListener(task -> {
                             if (!task.isSuccessful()) {
-                                snackbarMessage.postValue("User data profile not updated.");
+                                snackbarMessage.postValue(R.string.updateUserError);
                                 Log.d(LOG_TAG, "User data profile  not updated.");
                             }else{
-                                snackbarMessage.postValue("User data profile updated.");
+                                snackbarMessage.postValue(R.string.userUpdated);
                                 Log.d(LOG_TAG, "User data profile updated.");
                             }
                         });

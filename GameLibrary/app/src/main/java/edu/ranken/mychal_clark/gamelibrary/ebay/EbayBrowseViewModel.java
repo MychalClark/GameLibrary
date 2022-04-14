@@ -14,6 +14,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.List;
 
+import edu.ranken.mychal_clark.gamelibrary.R;
 import edu.ranken.mychal_clark.gamelibrary.data.Consoles;
 import edu.ranken.mychal_clark.gamelibrary.data.Game;
 import retrofit2.Call;
@@ -44,7 +45,7 @@ public class EbayBrowseViewModel extends ViewModel {
     //Live Data
     private final MutableLiveData<EbayBrowseAPI.SearchResponse> searchResponse;
     private final MutableLiveData<Game> game;
-    private final MutableLiveData<String> snackbarMessage;
+    private final MutableLiveData<Integer> snackbarMessage;
     private final MutableLiveData<List<Consoles>> consoles;
 
 
@@ -83,6 +84,7 @@ public class EbayBrowseViewModel extends ViewModel {
 
                     if (error != null) {
                         Log.e(LOG_TAG, "Error getting consoles.", error);
+                        snackbarMessage.postValue(R.string.errorGettingConsole);
 
                     } else {
                         List<Consoles> newConsoles = querySnapshot.toObjects(Consoles.class);
@@ -96,7 +98,7 @@ public class EbayBrowseViewModel extends ViewModel {
     public LiveData<EbayBrowseAPI.SearchResponse> getSearchResponse() {
         return searchResponse;
     }
-    public LiveData<String> getSnackbarMessage() {
+    public LiveData<Integer> getSnackbarMessage() {
         return snackbarMessage;
     }
     public LiveData<Game> getGame() {
@@ -108,6 +110,9 @@ public class EbayBrowseViewModel extends ViewModel {
     public String getFilterConsoleId() {
         return filterConsoleId;
     }
+
+    // remove snackbar message
+    public void clearSnackbar() { snackbarMessage.postValue(null); }
 
     public void fetchGame(String gameId) {
         this.gameId = gameId;
@@ -127,17 +132,17 @@ public class EbayBrowseViewModel extends ViewModel {
                        filter =  "price:["+ gameMin + ".." + gameMax + "],priceCurrency:USD";
                     }else{filter = "";}
 
-
-
-
                     Log.i(LOG_TAG, "gamequery = " + gameQuery);
-
                     search("");
                 }else{
                     Log.e(LOG_TAG, "Game not found.");
+                    snackbarMessage.postValue(R.string.noExsistingGame);
+
+
                 }
          }).addOnFailureListener(error -> {
              Log.e(LOG_TAG, "Failed to query the database for game." ,error);
+             snackbarMessage.postValue(R.string.errorGettingConsole);
 
          });
     }

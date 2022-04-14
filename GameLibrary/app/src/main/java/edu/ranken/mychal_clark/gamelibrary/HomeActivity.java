@@ -15,10 +15,11 @@ import com.firebase.ui.auth.AuthUI;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import edu.ranken.mychal_clark.gamelibrary.ui.home.HomePageAdapter;
+import edu.ranken.mychal_clark.gamelibrary.ui.utils.ConfirmDialog;
 
 public class HomeActivity extends AppCompatActivity {
 
-    private String LOG_TAG = "HomeActivity";
+    private String LOG_TAG = HomeActivity.class.getSimpleName();
     //create views
     private ViewPager2 pager;
     private BottomNavigationView bottomNav;
@@ -100,12 +101,12 @@ public class HomeActivity extends AppCompatActivity {
 
         ConfirmDialog confirmDialog = new ConfirmDialog(
             HomeActivity.this,
-            "Are you sure you want to log out?",
+            getString(R.string.confirmSignOut),
             (which) -> AuthUI.getInstance().signOut(this).addOnCompleteListener((result)->{
                 Log.i(LOG_TAG, "Signed out.");
                 finish();
             }),
-            (which) -> {Toast.makeText(HomeActivity.this, "cancel", Toast.LENGTH_SHORT).show();});
+            (which) -> {Toast.makeText(HomeActivity.this,  getString(R.string.cancel), Toast.LENGTH_SHORT).show();});
         confirmDialog.show();
 
 

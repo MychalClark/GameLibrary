@@ -36,9 +36,10 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
-import edu.ranken.mychal_clark.gamelibrary.ui.user.MyProfileViewModel;
-import edu.ranken.mychal_clark.gamelibrary.ui.user.ProfileLibraryGameAdapter;
-import edu.ranken.mychal_clark.gamelibrary.ui.user.ProfileWishlistGameAdapter;
+import edu.ranken.mychal_clark.gamelibrary.ui.myProfile.MyProfileViewModel;
+import edu.ranken.mychal_clark.gamelibrary.ui.myProfile.ProfileLibraryGameAdapter;
+import edu.ranken.mychal_clark.gamelibrary.ui.myProfile.ProfileWishlistGameAdapter;
+import edu.ranken.mychal_clark.gamelibrary.ui.utils.ConsoleChooserDialog;
 
 public class MyProfileActivity extends AppCompatActivity {
 

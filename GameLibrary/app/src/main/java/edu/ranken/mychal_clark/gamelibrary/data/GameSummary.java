@@ -11,7 +11,9 @@ public String id;
         public Integer releaseYear;
         public String gameImage;
         public Map<String, Boolean> consoles;
+
         public Map<String,Boolean> selectedConsoles;
+        public Map<String,Map> languages;
 
         public GameSummary(){}
 

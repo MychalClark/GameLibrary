@@ -1,4 +1,4 @@
-package edu.ranken.mychal_clark.gamelibrary;
+package edu.ranken.mychal_clark.gamelibrary.ui.utils;
 
 import android.app.AlertDialog;
 import android.app.Dialog;

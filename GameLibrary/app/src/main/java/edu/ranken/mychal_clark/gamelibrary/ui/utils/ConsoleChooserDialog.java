@@ -1,4 +1,4 @@
-package edu.ranken.mychal_clark.gamelibrary;
+package edu.ranken.mychal_clark.gamelibrary.ui.utils;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -14,6 +14,8 @@ import androidx.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+
+import edu.ranken.mychal_clark.gamelibrary.R;
 
 public class ConsoleChooserDialog {
 

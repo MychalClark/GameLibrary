@@ -8,8 +8,8 @@
 
     <ImageView
         android:id="@+id/profileGameConsole1"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
+        android:layout_width="@dimen/profileIconSize"
+        android:layout_height="@dimen/profileIconSize"
         android:layout_margin="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
@@ -24,8 +24,8 @@
 
     <ImageView
         android:id="@+id/profileGameConsole2"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
+        android:layout_width="@dimen/profileIconSize"
+        android:layout_height="@dimen/profileIconSize"
         android:layout_margin="8dp"
         android:contentDescription="@string/detail_console_2"
         android:visibility="invisible"
@@ -36,8 +36,8 @@
 
     <ImageView
         android:id="@+id/profileGameConsole3"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
+        android:layout_width="@dimen/profileIconSize"
+        android:layout_height="@dimen/profileIconSize"
         android:layout_margin="8dp"
         android:layout_marginLeft="8dp"
         android:contentDescription="@string/detail_console_1"
@@ -49,8 +49,8 @@
 
     <ImageView
         android:id="@+id/profileGameConsole4"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
+        android:layout_width="@dimen/profileIconSize"
+        android:layout_height="@dimen/profileIconSize"
         android:layout_margin="8dp"
         android:contentDescription="@string/detail_console_4"
         android:visibility="invisible"
@@ -61,8 +61,8 @@
 
     <ImageView
         android:id="@+id/profileImage"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
+        android:layout_width="@dimen/profileImageSize"
+        android:layout_height="@dimen/profileImageSize"
         android:layout_margin="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -75,7 +75,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
         android:layout_weight="1"
-        android:text="Camera"
+        android:text="@string/camera"
         android:visibility="gone"
         app:layout_constraintEnd_toStartOf="@+id/profileGalleryBtn"
         app:layout_constraintHorizontal_bias="0.5"
@@ -90,7 +90,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
         android:layout_weight="1"
-        android:text="Gallery"
+        android:text="@string/gallery"
         android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -103,9 +103,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        android:text="Email"
+        android:text="@string/email"
         android:textAlignment="center"
-        android:textSize="16dp"
+        android:textSize="@dimen/profileLabelTextSize"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -118,9 +118,9 @@
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
         android:layout_weight="1"
-        android:text="Email Verified"
+        android:text="@string/emailVerified"
         android:textAlignment="center"
-        android:textSize="16sp"
+        android:textSize="@dimen/profileLabelTextSize"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -142,9 +142,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        android:text="DisplayName"
+        android:text="@string/displayName"
         android:textAlignment="center"
-        android:textSize="16dp"
+        android:textSize="@dimen/profileLabelTextSize"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -166,9 +166,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        android:text="UserId"
+        android:text="@string/userId"
         android:textAlignment="center"
-        android:textSize="16dp"
+        android:textSize="@dimen/profileLabelTextSize"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -190,12 +190,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        android:text="Library"
+        android:text="@string/library"
         android:textAlignment="center"
+        android:textSize="@dimen/profileLabelTextSize"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profileGameConsole1" />
+        app:layout_constraintTop_toBottomOf="@+id/profileChangeConsolesBtn" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/libraryRecycler"
@@ -215,8 +216,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        android:text="WishList"
+        android:text="@string/wishlist"
         android:textAlignment="center"
+        android:textSize="@dimen/profileLabelTextSize"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -240,7 +242,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        android:text="Preferred Consoles"
+        android:text="@string/preferredConsoles"
+        android:textSize="@dimen/profileLabelTextSize"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -248,14 +251,14 @@
 
     <Button
         android:id="@+id/profileChangeConsolesBtn"
-        android:layout_width="130dp"
-        android:layout_height="41dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        android:text="Change"
+        android:text="@string/change"
         android:textAlignment="center"
-        app:layout_constraintBottom_toTopOf="@+id/profileLibraryLabel"
-        app:layout_constraintStart_toEndOf="@+id/profileConsolesLabel"
-        app:layout_constraintTop_toBottomOf="@+id/ProfileUserIdText" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profileGameConsole4" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 

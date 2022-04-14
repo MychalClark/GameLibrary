@@ -5,7 +5,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
-import edu.ranken.mychal_clark.gamelibrary.ui.UserListFragment;
+import edu.ranken.mychal_clark.gamelibrary.userProfile.UserListFragment;
 import edu.ranken.mychal_clark.gamelibrary.ui.game.GameListFragment;
 
 public class HomePageAdapter extends FragmentStateAdapter {

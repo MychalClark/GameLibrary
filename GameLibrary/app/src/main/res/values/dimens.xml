@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<!--Game detail page-->
+    <dimen name="gameDetailScreenshotHeight">150dp</dimen>
+    <dimen name="gameDetailIconSize">20dp</dimen>
+
+    <!--Game item -->
+    <dimen name="gameItemImageHeight">150dp</dimen>
+    <dimen name="gameItemImageWidth">150dp</dimen>
+    <dimen name="gameItemButtonSize">50dp</dimen>
+    <dimen name="gameItemNameWidth">0dp</dimen>
+    <dimen name="gameItemYearWidth">0dp</dimen>
+    <dimen name="gameItemIconSize">20dp</dimen>
+    <dimen name="gameItemDescriptionWidth">0dp</dimen>
+
+    <!-- Game list -->
+    <integer name="gameListColumns">1</integer>
+
+    <!-- Console chooser Dialog -->
+    <dimen name="consoleDialogButtonSize">50dp</dimen>
+
+    <!-- Compose Review -->
+    <!-- ebay Browse -->
+    <integer name="ebayListColumns">1</integer>
+    <!--ebay Item -->
+    <!--home -->
+    <!-- login-->
+    <!-- user List-->
+
+    <!--My profile -->
+    <dimen name="profileIconSize">20dp</dimen>
+    <dimen name="profileImageSize">150dp</dimen>
+
+    <!-- My profile Game Item -->
+    <dimen name="profileGameImageWidth">115dp</dimen>
+    <dimen name="profileGameImageHeight">175dp</dimen>
+
+    <!-- Review Item-->
+    <dimen name="reviewDeleteButtonWidth">139dp</dimen>
+    <dimen name="reviewDeleteButtonHeight">41dp</dimen>
+
+
+
+    <!-- User List Item -->
+    <dimen name="userListPictureSize">90dp</dimen>
+
+    <!--user Profile -->
+    <dimen name="userProfileIconSize">20dp</dimen>
+    <dimen name="profileLabelTextSize">16sp</dimen>
+
+
+</resources>

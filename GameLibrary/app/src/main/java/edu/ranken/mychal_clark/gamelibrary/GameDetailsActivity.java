@@ -317,10 +317,10 @@ public class GameDetailsActivity extends AppCompatActivity {
 
             if (selectedGame == null) {
 //                Snackbar.make(view, R.string.errorMovieNotFound, Snackbar.LENGTH_SHORT).show();
-                Log.i(LOG_TAG, "gamey no foundy gggggggggggg");
+
             } else if (selectedGame.name == null) {
 //                Snackbar.make(view, R.string.movieHasNoName, Snackbar.LENGTH_SHORT).show();
-                Log.i(LOG_TAG, "gamey namey no  foundy LLLLLLLLLLL");
+
             } else {
                 String gameName;
                 if (selectedGame.releaseYear == null) {

@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import edu.ranken.mychal_clark.gamelibrary.ConsoleChooserDialog;
+import edu.ranken.mychal_clark.gamelibrary.ui.utils.ConsoleChooserDialog;
 import edu.ranken.mychal_clark.gamelibrary.GameDetailsActivity;
 import edu.ranken.mychal_clark.gamelibrary.R;
 import edu.ranken.mychal_clark.gamelibrary.data.GameList;
@@ -112,7 +112,7 @@ public class GameListAdapter extends RecyclerView.Adapter<GameViewHolder> {
             if(vh.inLibrary){
                 model.removeGameFromLibrary(game.id);
                 vh.inLibrary = false;
-                vh.buttonBook.setImageResource(R.drawable.bookoutline);
+                vh.buttonBook.setImageResource(R.drawable.ic_book_outline);
             }else{
                 ConsoleChooserDialog consoleChooserDialog = new ConsoleChooserDialog(
                     context,
@@ -137,9 +137,9 @@ public class GameListAdapter extends RecyclerView.Adapter<GameViewHolder> {
 
                             model.addGameToLibrary(game, selectedConsoles);
                             vh.inLibrary = true;
-                            vh.buttonBook.setImageResource(R.drawable.book);
+                            vh.buttonBook.setImageResource(R.drawable.ic_book_fill);
                         }else{
-                            Toast.makeText(view.getContext(), "No Console selected! Item not added.",
+                            Toast.makeText(view.getContext(), context.getString(R.string.itemNotAdded),
                                 Toast.LENGTH_LONG).show();
                         }
 
@@ -156,7 +156,7 @@ public class GameListAdapter extends RecyclerView.Adapter<GameViewHolder> {
             if(vh.inWishlist){
                 model.removeGameFromWishlist(game.id);
                 vh.inWishlist = false;
-                vh.buttonWishlist.setImageResource(R.drawable.wishlistoutline);
+                vh.buttonWishlist.setImageResource(R.drawable.ic_wishlist_outline);
             }else{
                ConsoleChooserDialog consoleChooserDialog = new ConsoleChooserDialog(
                    context,
@@ -181,9 +181,9 @@ public class GameListAdapter extends RecyclerView.Adapter<GameViewHolder> {
 
                            model.addGameToWishlist(game, selectedConsoles);
                            vh.inWishlist = true;
-                           vh.buttonWishlist.setImageResource(R.drawable.wishlist);
+                           vh.buttonWishlist.setImageResource(R.drawable.ic_wishlist_fill);
                        }else{
-                           Toast.makeText(view.getContext(), "No Console selected! Item not added.",
+                           Toast.makeText(view.getContext(), context.getString(R.string.itemNotAdded),
                                Toast.LENGTH_LONG).show();
                        }
 
@@ -220,8 +220,8 @@ public class GameListAdapter extends RecyclerView.Adapter<GameViewHolder> {
         vh.gameDescriptionText.setText(game.description);
         vh.gameReleaseYearText.setText(String.valueOf(game.releaseYear));
         vh.gameImage.setImageResource(R.drawable.no_image);
-        vh.buttonBook.setImageResource(R.drawable.bookoutline);
-        vh.buttonWishlist.setImageResource(R.drawable.wishlistoutline);
+        vh.buttonBook.setImageResource(R.drawable.ic_book_outline);
+        vh.buttonWishlist.setImageResource(R.drawable.ic_wishlist_outline);
 
 
         // If statements
@@ -305,8 +305,8 @@ public class GameListAdapter extends RecyclerView.Adapter<GameViewHolder> {
 
         vh.buttonBook.setVisibility(library == null ? View.GONE : View.VISIBLE);
         vh.buttonWishlist.setVisibility(wishlist == null ? View.GONE : View.VISIBLE);
-        vh.buttonBook.setImageResource(R.drawable.bookoutline);
-        vh.buttonWishlist.setImageResource(R.drawable.wishlistoutline);
+        vh.buttonBook.setImageResource(R.drawable.ic_book_outline);
+        vh.buttonWishlist.setImageResource(R.drawable.ic_wishlist_outline);
         vh.inLibrary = false;
         vh.inWishlist = false;
 
@@ -316,7 +316,7 @@ public class GameListAdapter extends RecyclerView.Adapter<GameViewHolder> {
 
                 if (library.get(i).gameId.equals(game.id)) {
                     vh.inLibrary = true;
-                    vh.buttonBook.setImageResource(R.drawable.book);
+                    vh.buttonBook.setImageResource(R.drawable.ic_book_fill);
                 }
 
             }
@@ -326,7 +326,7 @@ public class GameListAdapter extends RecyclerView.Adapter<GameViewHolder> {
 
                 if (wishlist.get(i).gameId.equals(game.id)) {
                     vh.inWishlist = true;
-                    vh.buttonWishlist.setImageResource(R.drawable.wishlist);
+                    vh.buttonWishlist.setImageResource(R.drawable.ic_wishlist_fill);
                 }
 
             }

@@ -1,4 +1,4 @@
-package edu.ranken.mychal_clark.gamelibrary.ui;
+package edu.ranken.mychal_clark.gamelibrary.userProfile;
 
 import android.util.Log;
 
@@ -13,6 +13,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.List;
 
+import edu.ranken.mychal_clark.gamelibrary.R;
 import edu.ranken.mychal_clark.gamelibrary.data.Library;
 import edu.ranken.mychal_clark.gamelibrary.data.User;
 import edu.ranken.mychal_clark.gamelibrary.data.WishList;
@@ -30,7 +31,7 @@ public class userProfileViewModel extends ViewModel {
 
     //live data
     private final MutableLiveData<User> user;
-    private final MutableLiveData<String> snackbarMessage;
+    private final MutableLiveData<Integer> snackbarMessage;
     private final MutableLiveData<List<Library>> librarys;
     private final MutableLiveData<List<WishList>> wishlists;
 
@@ -57,6 +58,7 @@ public class userProfileViewModel extends ViewModel {
     public LiveData<List<Library>> getLibrary(){return librarys;}
     public LiveData<List<WishList>> getWishlist(){return wishlists;}
     public LiveData<User> getUser(){return user;}
+    public LiveData<Integer> getSnackbarMessage(){return snackbarMessage;}
 
     //clears the snackbar
     public void clearSnackbar() {
@@ -70,11 +72,9 @@ public class userProfileViewModel extends ViewModel {
             userRegistration.remove();
         }
 
-        Log.i(LOG_TAG, "hey "+ userId);
-
         if(userId == null){
             this.user.postValue(null);
-            this.snackbarMessage.postValue("No User selected.");
+            this.snackbarMessage.postValue(R.string.noUserSelected);
         }
         else {
            userRegistration =
@@ -84,14 +84,14 @@ public class userProfileViewModel extends ViewModel {
                     if (error != null) {
                         // show error...
                         Log.e(LOG_TAG, "Error getting User.", error);
-                        snackbarMessage.postValue("Error getting User.");
+                        snackbarMessage.postValue(R.string.errorGettingUsers);
                     } else if (document != null && document.exists()) {
                         User user = document.toObject(User.class);
                         this.user.postValue(user);
-                        this.snackbarMessage.postValue("Game updated.");
+                        this.snackbarMessage.postValue(R.string.gameUpdated);
                     } else {
                         this.user.postValue(null);
-                        this.snackbarMessage.postValue("Game does not exist.");
+                        this.snackbarMessage.postValue(R.string.errorGettingGame);
                     }
                 });
             libraryRegistration =
@@ -101,12 +101,12 @@ public class userProfileViewModel extends ViewModel {
                         if (error != null) {
                             // show error...
                             Log.e(LOG_TAG, "Error getting Library.", error);
-                            snackbarMessage.postValue("Error getting Library.");
+                            snackbarMessage.postValue(R.string.errorGettingLibrary);
                         } else {
                             List<Library> newLibrary =
                                 querySnapshot != null ? querySnapshot.toObjects(Library.class) : null;
                             librarys.postValue(newLibrary);
-                            snackbarMessage.postValue("Library Found.");
+
                         }
                     });
             wishListRegistration =
@@ -116,12 +116,11 @@ public class userProfileViewModel extends ViewModel {
                         if (error != null) {
                             // show error...
                             Log.e(LOG_TAG, "Error getting Wishlist.", error);
-                            snackbarMessage.postValue("Error getting Wishlist.");
+                            snackbarMessage.postValue(R.string.errorGettingWishlist);
                         } else {
                             List<WishList> newWishlist =
                                 querySnapshot != null ? querySnapshot.toObjects(WishList.class) : null;
                             wishlists.postValue(newWishlist);
-                            snackbarMessage.postValue("Wishlist Found.");
                         }
                     });
         }

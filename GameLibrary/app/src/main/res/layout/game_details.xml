@@ -42,7 +42,7 @@
             <ImageView
                 android:id="@+id/gameDetailGameImage"
                 android:layout_width="match_parent"
-                android:layout_height="150dp"
+                android:layout_height="@dimen/gameDetailScreenshotHeight"
                 android:layout_marginBottom="8dp"
                 app:srcCompat="@drawable/common_google_signin_btn_text_dark"
                 android:contentDescription="@string/details_game_image" />
@@ -112,8 +112,8 @@
 
                 <ImageView
                     android:id="@+id/gameDetailConsole1"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
+                    android:layout_width="@dimen/gameDetailIconSize"
+                    android:layout_height="@dimen/gameDetailIconSize"
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginBottom="8dp"
@@ -127,8 +127,8 @@
 
                 <ImageView
                     android:id="@+id/gameDetailConsole2"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
+                    android:layout_width="@dimen/gameDetailIconSize"
+                    android:layout_height="@dimen/gameDetailIconSize"
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginBottom="8dp"
@@ -142,8 +142,8 @@
 
                 <ImageView
                     android:id="@+id/gameDetailConsole3"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
+                    android:layout_width="@dimen/gameDetailIconSize"
+                    android:layout_height="@dimen/gameDetailIconSize"
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginBottom="8dp"
@@ -157,8 +157,8 @@
 
                 <ImageView
                     android:id="@+id/gameDetailConsole4"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
+                    android:layout_width="@dimen/gameDetailIconSize"
+                    android:layout_height="@dimen/gameDetailIconSize"
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginBottom="8dp"
@@ -174,7 +174,7 @@
             <ImageView
                 android:id="@+id/gameDetailImage1"
                 android:layout_width="match_parent"
-                android:layout_height="150dp"
+                android:layout_height="@dimen/gameDetailScreenshotHeight"
                 android:layout_marginBottom="8dp"
                 app:srcCompat="@drawable/common_google_signin_btn_text_dark_focused"
                 android:contentDescription="@string/detail_image_1" />
@@ -182,7 +182,7 @@
             <ImageView
                 android:id="@+id/gameDetailImage2"
                 android:layout_width="match_parent"
-                android:layout_height="150dp"
+                android:layout_height="@dimen/gameDetailScreenshotHeight"
                 android:layout_marginBottom="8dp"
                 app:srcCompat="@drawable/common_google_signin_btn_text_dark"
                 android:contentDescription="@string/detail_image_2" />
@@ -190,7 +190,7 @@
             <ImageView
                 android:id="@+id/gameDetailImage3"
                 android:layout_width="match_parent"
-                android:layout_height="150dp"
+                android:layout_height="@dimen/gameDetailScreenshotHeight"
                 android:layout_marginBottom="8dp"
                 app:srcCompat="@drawable/common_google_signin_btn_text_dark"
                 android:contentDescription="@string/detail_image_3" />

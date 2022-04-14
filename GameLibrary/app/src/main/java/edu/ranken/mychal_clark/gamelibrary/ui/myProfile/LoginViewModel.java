@@ -1,4 +1,4 @@
-package edu.ranken.mychal_clark.gamelibrary.ui.user;
+package edu.ranken.mychal_clark.gamelibrary.ui.myProfile;
 
 import android.util.Log;
 
@@ -14,6 +14,8 @@ import com.google.firebase.firestore.SetOptions;
 import java.util.HashMap;
 import java.util.Map;
 
+import edu.ranken.mychal_clark.gamelibrary.R;
+
 public class LoginViewModel extends ViewModel {
 
     private static final String LOG_TAG = LoginViewModel.class.getSimpleName();
@@ -21,7 +23,7 @@ public class LoginViewModel extends ViewModel {
     private final FirebaseFirestore db;
 
     //live data
-    private final MutableLiveData<String> snackbarMessage;
+    private final MutableLiveData<Integer> snackbarMessage;
     private final MutableLiveData<String> errorMessage;
 
 
@@ -44,7 +46,7 @@ public class LoginViewModel extends ViewModel {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user == null) {
             Log.i(LOG_TAG, "No user logged in");
-            snackbarMessage.postValue("No user logged in.");
+            snackbarMessage.postValue(R.string.noUserLogged);
         } else {
             String userId = user.getUid();
             Log.i(LOG_TAG, "Updating user document " + userId);
@@ -65,11 +67,11 @@ public class LoginViewModel extends ViewModel {
                 .addOnCompleteListener((task) -> {
                     if (task.isSuccessful()) {
                         Log.i(LOG_TAG, "user updated in database.");
-                        snackbarMessage.postValue("User updated in database.");
+                        snackbarMessage.postValue(R.string.userUpdated);
                         callback.onLoginSuccess();
                     } else {
                         Log.e(LOG_TAG, "user not updated in database.", task.getException());
-                        snackbarMessage.postValue("Unable to update the database.");
+                        snackbarMessage.postValue(R.string.updateDatabaseError);
                     }
                 });
         }

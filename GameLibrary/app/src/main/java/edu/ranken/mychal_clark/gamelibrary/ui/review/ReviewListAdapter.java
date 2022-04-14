@@ -16,7 +16,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
-import edu.ranken.mychal_clark.gamelibrary.ConfirmDialog;
+import edu.ranken.mychal_clark.gamelibrary.ui.utils.ConfirmDialog;
 import edu.ranken.mychal_clark.gamelibrary.R;
 import edu.ranken.mychal_clark.gamelibrary.data.Review;
 
@@ -71,7 +71,7 @@ public class ReviewListAdapter extends RecyclerView.Adapter<ReviewViewHolder>{
             Log.i(LOG_TAG, reviewId);
             ConfirmDialog confirmDialog = new ConfirmDialog(
                 context,
-                "Are you sure you want to delete Review?",
+                context.getString(R.string.confirmDeleteReview),
                 (which) -> { model.deleteReview(reviewId);},
                 (which) -> { });
             confirmDialog.show();

@@ -13,6 +13,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.List;
 
+import edu.ranken.mychal_clark.gamelibrary.R;
 import edu.ranken.mychal_clark.gamelibrary.data.Game;
 import edu.ranken.mychal_clark.gamelibrary.data.Review;
 import edu.ranken.mychal_clark.gamelibrary.ebay.AuthAPI;
@@ -45,7 +46,7 @@ public class GameDetailsViewModel extends ViewModel {
     // live data
     private final MutableLiveData<Game> game;
     private final MutableLiveData<String> gameError;
-    private final MutableLiveData<String> snackbarMessage;
+    private final MutableLiveData<Integer> snackbarMessage;
     private final MutableLiveData<List<Review>> reviews;
     private final MutableLiveData<EbayBrowseAPI.SearchResponse> searchResponse;
 
@@ -107,7 +108,7 @@ public class GameDetailsViewModel extends ViewModel {
     }
 
 
-    public LiveData<String> getSnackbarMessage() {
+    public LiveData<Integer> getSnackbarMessage() {
         return snackbarMessage;
     }
 
@@ -115,21 +116,8 @@ public class GameDetailsViewModel extends ViewModel {
         return reviews;
     }
 
-    
-//    public void addSnackbar(@StringRes Integer messageId){
-//        List<Integer> messages = snackbarMessages.getValue();
-//        if(messages == null) { messages = new ArrayList<>();}
-//        messages.add(messageId);
-//        snackbarMessages.postValue(messages);
-//    }
-//    //clears the snackbar
-//    public void clearSnackbar() {
-//        List<Integer> messages = snackbarMessages.getValue();
-//        if(messages != null) {
-//            messages.remove(0);
-//            snackbarMessages.postValue(messages);
-//        }
-//    }
+    // remove snackbar message
+    public void clearSnackbar() { snackbarMessage.postValue(null); }
 
     //Get the Game
     public void fetchGame(String gameId) {
@@ -147,14 +135,14 @@ public class GameDetailsViewModel extends ViewModel {
                     if (error != null) {
                         // show error...
                         Log.e(LOG_TAG, "Error getting reviews.", error);
-                        snackbarMessage.postValue("error getting reviews");
+                        snackbarMessage.postValue(R.string.errorGettingReviews);
                     } else {
                         List<Review> newReviews =
                             querySnapshot != null ? querySnapshot.toObjects(Review.class) : null;
 
                         reviews.postValue(newReviews);
 
-                        snackbarMessage.postValue("Reviews Updated.");
+                        snackbarMessage.postValue(R.string.reviewsUpdate);
                         // show games...
                     }
                 });
@@ -163,7 +151,7 @@ public class GameDetailsViewModel extends ViewModel {
         if (gameId == null) {
             this.game.postValue(null);
             this.gameError.postValue("No Game selected.");
-            this.snackbarMessage.postValue("No Game selected.");
+            this.snackbarMessage.postValue(R.string.noGameSelected);
         } else {
             gameRegistration =
                 db.collection("games")
@@ -172,12 +160,12 @@ public class GameDetailsViewModel extends ViewModel {
                         if (error != null) {
                             Log.e(LOG_TAG, "Error getting game.", error);
                             this.gameError.postValue("Error getting game.");
-                            this.snackbarMessage.postValue("Error getting game.");
+                            this.snackbarMessage.postValue(R.string.errorGettingGame);
                         } else if (document != null && document.exists()) {
                             Game game = document.toObject(Game.class);
                             this.game.postValue(game);
                             this.gameError.postValue(null);
-                            this.snackbarMessage.postValue("Game updated.");
+                            this.snackbarMessage.postValue(R.string.gameUpdated);
 
                             //For Ebay Price
                             gameQuery = document.getString("ebay.query");
@@ -200,7 +188,7 @@ public class GameDetailsViewModel extends ViewModel {
                         } else {
                             this.game.postValue(null);
                             this.gameError.postValue("Game does not exist.");
-                            this.snackbarMessage.postValue("Game does not exist.");
+                            this.snackbarMessage.postValue(R.string.noExsistingGame);
                         }
                     });
         }
@@ -225,6 +213,8 @@ public class GameDetailsViewModel extends ViewModel {
                             searchResponse.postValue(response.body()); // Status code 200-299
                         } else {
                             Log.e(LOG_TAG, "search request unsuccessful");  // Status code 400-599
+
+
                         }
 
                     }
@@ -232,6 +222,7 @@ public class GameDetailsViewModel extends ViewModel {
                     @Override
                     public void onFailure(Call<EbayBrowseAPI.SearchResponse> call, Throwable t) {
                         Log.e(LOG_TAG, "network error", t);
+                        snackbarMessage.postValue(R.string.networkError);
                     }
                 });
         }

@@ -21,9 +21,9 @@ import com.squareup.picasso.Picasso;
 import java.util.Objects;
 
 import edu.ranken.mychal_clark.gamelibrary.data.User;
-import edu.ranken.mychal_clark.gamelibrary.ui.user.ProfileLibraryGameAdapter;
-import edu.ranken.mychal_clark.gamelibrary.ui.user.ProfileWishlistGameAdapter;
-import edu.ranken.mychal_clark.gamelibrary.ui.userProfileViewModel;
+import edu.ranken.mychal_clark.gamelibrary.ui.myProfile.ProfileLibraryGameAdapter;
+import edu.ranken.mychal_clark.gamelibrary.ui.myProfile.ProfileWishlistGameAdapter;
+import edu.ranken.mychal_clark.gamelibrary.userProfile.userProfileViewModel;
 
 public class UserProfileActivity extends AppCompatActivity {
 

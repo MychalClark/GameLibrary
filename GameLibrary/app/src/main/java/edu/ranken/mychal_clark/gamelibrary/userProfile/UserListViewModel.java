@@ -1,4 +1,4 @@
-package edu.ranken.mychal_clark.gamelibrary.ui;
+package edu.ranken.mychal_clark.gamelibrary.userProfile;
 
 import android.util.Log;
 
@@ -13,6 +13,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.List;
 
+import edu.ranken.mychal_clark.gamelibrary.R;
 import edu.ranken.mychal_clark.gamelibrary.data.User;
 
 public class UserListViewModel extends ViewModel {
@@ -24,7 +25,7 @@ public class UserListViewModel extends ViewModel {
     //Live Data
     private final MutableLiveData<List<User>> users;
     private final MutableLiveData<String> errorMessage;
-    private final MutableLiveData<String> snackbarMessage;
+    private final MutableLiveData<Integer> snackbarMessage;
 
     public UserListViewModel() {
         db = FirebaseFirestore.getInstance();
@@ -42,12 +43,12 @@ public class UserListViewModel extends ViewModel {
                     if (error != null) {
                         // show error...
                         Log.e(LOG_TAG, "Error getting Users.", error);
-                        snackbarMessage.postValue("Error getting Users.");
+                        snackbarMessage.postValue(R.string.errorGettingUsers);
                     } else {
                         List<User> newUsers =
                             querySnapshot != null ? querySnapshot.toObjects(User.class) : null;
                         users.postValue(newUsers);
-                        snackbarMessage.postValue("Users Updated.");
+                        snackbarMessage.postValue(R.string.userUpdated);
                     }
                 });
     }
@@ -68,7 +69,7 @@ public class UserListViewModel extends ViewModel {
         return users;
     }
 
-    public LiveData<String> getSnackbarMessage() {
+    public LiveData<Integer> getSnackbarMessage() {
         return snackbarMessage;
     }
 

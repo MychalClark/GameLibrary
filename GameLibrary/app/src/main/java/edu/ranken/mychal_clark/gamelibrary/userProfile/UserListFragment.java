@@ -1,7 +1,6 @@
-package edu.ranken.mychal_clark.gamelibrary.ui;
+package edu.ranken.mychal_clark.gamelibrary.userProfile;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -36,7 +35,6 @@ public class UserListFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 
         super.onViewCreated(view, savedInstanceState);
-Log.i(LOG_TAG, "hello");
         //findViews
         recyclerView = view.findViewById(R.id.userListRecycler);
 
@@ -55,9 +53,9 @@ Log.i(LOG_TAG, "hello");
 model.getUsers().observe(lifecycleOwner, (users) ->{
 userListAdapter.setItems(users);
 });
-        model.getSnackbarMessage().observe(lifecycleOwner, (snackbarMessage) -> {
-            if (snackbarMessage != null) {
-                Snackbar.make(recyclerView, snackbarMessage, Snackbar.LENGTH_SHORT).show();
+        model.getSnackbarMessage().observe(lifecycleOwner, (messageId) -> {
+            if (messageId != null) {
+                Snackbar.make(recyclerView, messageId, Snackbar.LENGTH_SHORT).show();
                 model.clearSnackbar();
             }
         });

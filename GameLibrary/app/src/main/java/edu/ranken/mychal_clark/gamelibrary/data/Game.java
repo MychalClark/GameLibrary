@@ -23,10 +23,21 @@ public String id;
     public ArrayList<String> tags;
     public ArrayList<String> genre;
     public ArrayList<String> images;
+//Language Options
+//    public Map<String,Map> languages;
+//    public Map<String, String> description;
+//    public Map<String,ArrayList<String>> genres;
+//    public Map<String,ArrayList<String>> tags;
+
 
     public Game() {}
 
-    public Game(String name, String description, Integer releaseYear, String gameImage, String id , Map<String,Boolean> consoles, String controllerSupport, String multiplayerSupport, ArrayList<String> tags, ArrayList<String> genre, ArrayList<String> images) {
+    public Game(String name, String description, Integer releaseYear,
+                String gameImage, String id , Map<String,Boolean> consoles,
+                String controllerSupport, String multiplayerSupport,
+                ArrayList<String> tags, ArrayList<String> genre ,ArrayList<String> images
+                //Map<String,Map> languages
+    ) {
         this.name = name;
         this.description = description;
         this.releaseYear = releaseYear;
@@ -38,6 +49,7 @@ public String id;
         this.tags = tags;
         this.genre = genre;
         this.images = images;
+//        this.languages = languages;
     }
 
 

@@ -19,21 +19,20 @@
 
     <ImageView
         android:id="@+id/userGameConsole1"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
+        android:layout_width="@dimen/userProfileIconSize"
+        android:layout_height="@dimen/userProfileIconSize"
         android:layout_margin="8dp"
         android:contentDescription="@string/detail_console_4"
         android:visibility="invisible"
         app:layout_constraintEnd_toStartOf="@+id/userGameConsole2"
-        app:layout_constraintStart_toEndOf="@+id/profileGameConsole1"
         app:layout_constraintTop_toBottomOf="@+id/userPreferredConsolesLabel"
         app:srcCompat="@drawable/ic_nintendo"
         tools:srcCompat="@drawable/ic_nintendo" />
 
     <ImageView
         android:id="@+id/userGameConsole2"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
+        android:layout_width="@dimen/userProfileIconSize"
+        android:layout_height="@dimen/userProfileIconSize"
         android:layout_margin="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
@@ -48,8 +47,8 @@
 
     <ImageView
         android:id="@+id/userGameConsole3"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
+        android:layout_width="@dimen/userProfileIconSize"
+        android:layout_height="@dimen/userProfileIconSize"
         android:layout_margin="8dp"
         android:contentDescription="@string/detail_console_2"
         android:visibility="invisible"
@@ -60,8 +59,8 @@
 
     <ImageView
         android:id="@+id/userGameConsole4"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
+        android:layout_width="@dimen/userProfileIconSize"
+        android:layout_height="@dimen/userProfileIconSize"
         android:layout_margin="8dp"
         android:contentDescription="@string/detail_console_1"
         android:visibility="invisible"
@@ -84,12 +83,12 @@
 
     <TextView
         android:id="@+id/userProfileDisplayNameLabel"
-        android:layout_width="395dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
         android:text="@string/displayName"
         android:textAlignment="center"
-        android:textSize="16sp"
+        android:textSize="@dimen/profileLabelTextSize"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -97,7 +96,7 @@
 
     <TextView
         android:id="@+id/userProfileNameText"
-        android:layout_width="395dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
         android:textAlignment="center"
@@ -108,12 +107,12 @@
 
     <TextView
         android:id="@+id/userProfileIdLabel"
-        android:layout_width="395dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
         android:text="@string/userId"
         android:textAlignment="center"
-        android:textSize="16sp"
+        android:textSize="@dimen/profileLabelTextSize"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -121,12 +120,12 @@
 
     <TextView
         android:id="@+id/userPreferredConsolesLabel"
-        android:layout_width="395dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
         android:text="@string/preferredConsoles"
         android:textAlignment="center"
-        android:textSize="16sp"
+        android:textSize="@dimen/profileLabelTextSize"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -134,7 +133,7 @@
 
     <TextView
         android:id="@+id/userProfileUserIdText"
-        android:layout_width="395dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
         android:textAlignment="center"
@@ -145,11 +144,12 @@
 
     <TextView
         android:id="@+id/userLibraryRecyclerLabel"
-        android:layout_width="395dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
         android:text="@string/library"
         android:textAlignment="center"
+        android:textSize="@dimen/profileLabelTextSize"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -157,7 +157,7 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/userLibraryRecycler"
-        android:layout_width="395dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
         android:orientation="horizontal"
@@ -170,11 +170,12 @@
 
     <TextView
         android:id="@+id/userWishlistRecyclerLabel"
-        android:layout_width="395dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
         android:text="@string/wishlist"
         android:textAlignment="center"
+        android:textSize="@dimen/profileLabelTextSize"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -182,7 +183,7 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/userWishlistRecycler"
-        android:layout_width="395dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
         android:orientation="horizontal"

@@ -1,4 +1,4 @@
-package edu.ranken.mychal_clark.gamelibrary.ui;
+package edu.ranken.mychal_clark.gamelibrary.userProfile;
 
 import android.content.Intent;
 import android.util.Log;

@@ -12,8 +12,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.squareup.picasso.Picasso;
 
 import edu.ranken.mychal_clark.gamelibrary.R;
@@ -79,11 +77,6 @@ public class EbayItemListAdapter extends RecyclerView.Adapter<EbayItemViewHolder
 
 
             EbayBrowseAPI.ItemSummary item = searchResponse.itemSummaries.get(position);
-Gson gson = new GsonBuilder().setPrettyPrinting().create();
-
-        //Log.i(LOG_TAG, "hh " + gson.toJson(searchResponse.itemSummaries.get(0).shippingOptions.get(0).shippingCost));
-        Log.i(LOG_TAG, "aa " + gson.toJson(item));
-
 
             vh.ebayItemTitle.setText(item.title);
             vh.ebayItemPrice.setText(item.price.value +" "+ item.price.currency);

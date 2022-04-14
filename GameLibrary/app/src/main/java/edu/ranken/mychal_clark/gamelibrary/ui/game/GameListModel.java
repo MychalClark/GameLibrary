@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import edu.ranken.mychal_clark.gamelibrary.R;
 import edu.ranken.mychal_clark.gamelibrary.data.Consoles;
 import edu.ranken.mychal_clark.gamelibrary.data.Game;
 import edu.ranken.mychal_clark.gamelibrary.data.GameList;
@@ -46,7 +47,7 @@ public class GameListModel extends ViewModel {
     private final MutableLiveData<List<GameSummary>> games;
 
     private final MutableLiveData<List<Consoles>> consoles;
-    private final MutableLiveData<String> snackbarMessage;
+    private final MutableLiveData<Integer> snackbarMessage;
     private final MutableLiveData<List<Library>> library;
     private final MutableLiveData<List<WishList>> wishlist;
 
@@ -78,7 +79,7 @@ public class GameListModel extends ViewModel {
             db.collection("userLibrary").whereEqualTo("userId", userId).addSnapshotListener((QuerySnapshot querySnapshot, FirebaseFirestoreException error) -> {
                 if (error != null) {
                     Log.e(LOG_TAG, "Error getting Library.", error);
-                    snackbarMessage.postValue("Error getting Library.");
+                    snackbarMessage.postValue(R.string.errorGettingLibrary);
                 } else if (querySnapshot != null) {
                     Log.i(LOG_TAG, "Library Found.");
 
@@ -93,7 +94,7 @@ public class GameListModel extends ViewModel {
             db.collection("userWishlist").whereEqualTo("userId", userId).addSnapshotListener((QuerySnapshot querySnapshot, FirebaseFirestoreException error) -> {
                 if (error != null) {
                     Log.e(LOG_TAG, "Error getting Wishlist.", error);
-                    snackbarMessage.postValue("Error getting Wishlist.");
+                    snackbarMessage.postValue(R.string.errorGettingWishlist);
                 } else if (querySnapshot != null) {
                     Log.i(LOG_TAG, "Wishlist Found.");
 
@@ -104,8 +105,6 @@ public class GameListModel extends ViewModel {
 
             });
 
-        // FIXME: observe user's wishlist as well
-
         consolesRegistration =
             db.collection("consoles")
                 .orderBy("name")
@@ -113,7 +112,7 @@ public class GameListModel extends ViewModel {
 
                     if (error != null) {
                         Log.e(LOG_TAG, "Error getting consoles.", error);
-
+                        snackbarMessage.postValue(R.string.errorGettingConsole);
                     } else {
                         List<Consoles> newConsoles = querySnapshot.toObjects(Consoles.class);
                         consoles.postValue(newConsoles);
@@ -143,7 +142,7 @@ public class GameListModel extends ViewModel {
         return games;
     }
 
-    public LiveData<String> getSnackbarMessage() {
+    public LiveData<Integer> getSnackbarMessage() {
         return snackbarMessage;
     }
 
@@ -216,7 +215,7 @@ public class GameListModel extends ViewModel {
                 if (error != null) {
                     // show error...
                     Log.e(LOG_TAG, "Error getting games.", error);
-                    snackbarMessage.postValue("Error getting games.");
+                    snackbarMessage.postValue(R.string.errorGettingGame);
 
                 } else if (querySnapshot != null) {
 
@@ -246,7 +245,7 @@ public class GameListModel extends ViewModel {
                             break;
                     }
                     games.postValue(newGameSummary);
-                    snackbarMessage.postValue("Games Updated.");
+                    snackbarMessage.postValue(R.string.gameUpdated);
                 }
 
             });
@@ -271,11 +270,11 @@ public class GameListModel extends ViewModel {
             .set(newGame)
             .addOnSuccessListener((result) -> {
                 Log.i(LOG_TAG, "Creating document.");
-                snackbarMessage.postValue("Game added to Library.");
+                snackbarMessage.postValue(R.string.libraryAdded);
             })
             .addOnFailureListener((error) -> {
                 Log.e(LOG_TAG, "Document not added.", error);
-                snackbarMessage.postValue("Game not added to Library.");
+                snackbarMessage.postValue(R.string.libraryAddedError);
             });
 
 
@@ -287,11 +286,11 @@ public class GameListModel extends ViewModel {
             .delete()
             .addOnSuccessListener((result) -> {
                 Log.i(LOG_TAG, "Document deleted.");
-                snackbarMessage.postValue("Game removed from Library.");
+                snackbarMessage.postValue(R.string.libraryRemoved);
             })
             .addOnFailureListener((error) -> {
                 Log.e(LOG_TAG, "Document not removed", error);
-                snackbarMessage.postValue("Game not removed from Library.");
+                snackbarMessage.postValue(R.string.libraryRemovedError);
             });
 
 
@@ -313,11 +312,11 @@ public class GameListModel extends ViewModel {
             .set(newGame)
             .addOnSuccessListener((result) -> {
                 Log.i(LOG_TAG, "Creating document.");
-                snackbarMessage.postValue("Game added to Wishlist.");
+                snackbarMessage.postValue(R.string.wishlistAdded);
             })
             .addOnFailureListener((error) -> {
                 Log.e(LOG_TAG, "Document not added.", error);
-                snackbarMessage.postValue("Game not added to Wishlist.");
+                snackbarMessage.postValue(R.string.wishlistAddedError);
             });
 
 
@@ -328,11 +327,11 @@ public class GameListModel extends ViewModel {
             .delete()
             .addOnSuccessListener((result) -> {
                 Log.i(LOG_TAG, "Document deleted.");
-                snackbarMessage.postValue("Game removed from Wishlist.");
+                snackbarMessage.postValue(R.string.wishlistRemoved);
             })
             .addOnFailureListener((error) -> {
                 Log.e(LOG_TAG, "Document not removed", error);
-                snackbarMessage.postValue("Game not removed from Wishlist.");
+                snackbarMessage.postValue(R.string.wishlistRemovedError);
             });
 
 

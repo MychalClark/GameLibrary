@@ -1,33 +1,45 @@
 package edu.ranken.mychal_clark.gamelibrary.ui.utils;
 
 import android.content.Context;
+import android.view.View;
+import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
+import androidx.lifecycle.LiveData;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class ErrorMessageContainer {
-    private Map<String, Integer> messages;
+public class ErrorMessageContainer extends LiveData<Void> {
+    private final Map<String, Integer> messages;
 
-    public ErrorMessageContainer(){
-        messages = new HashMap<>();
-
+    public ErrorMessageContainer() {
+        super();
+        messages = new LinkedHashMap<>();
     }
 
-    public CharSequence getMessages(Context context){
+    public void setMessage(@NonNull String key, @Nullable @StringRes Integer messageId) {
+        messages.put(key, messageId);
+        postValue(null);
+    }
 
+    public void showMessage(@NonNull Context context, @NonNull TextView view) {
         StringBuilder sb = new StringBuilder();
 
-        for(Integer messageId : messages.values()){
-            if(messageId != null){
+        for (Integer messageId : messages.values()) {
+            if (messageId != null) {
                 sb.append(context.getString(messageId)).append("\n");
             }
         }
-        return null;
-    }
 
-    public void setMessage(String key, @StringRes int messageId){
-        messages.put(key, messageId);
+        // remove trailing newline
+        if (sb.length() > 0) {
+            sb.setLength(sb.length() - 1);
+        }
+
+        view.setText(sb);
+        view.setVisibility(sb.length() > 0 ? View.VISIBLE : View.GONE);
     }
 }

@@ -18,10 +18,11 @@ import com.google.firebase.auth.FirebaseUser;
 import java.util.ArrayList;
 import java.util.List;
 
-import edu.ranken.mychal_clark.gamelibrary.ui.user.LoginViewModel;
+import edu.ranken.mychal_clark.gamelibrary.ui.myProfile.LoginViewModel;
 
 public class LoginActivity extends AppCompatActivity {
 
+    private static final String LOG_TAG = LoginActivity.class.getSimpleName();
     private Button loginBtn;
     private ActivityResultLauncher<Intent> signInLauncher;
     private LoginViewModel model;
@@ -75,20 +76,15 @@ public class LoginActivity extends AppCompatActivity {
     private void onSignInResult(FirebaseAuthUIAuthenticationResult result) {
         if (result.getResultCode() == RESULT_OK) {
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-            Log.i("LoginActivity", "sign-in successful: " + user.getUid());
+            Log.i(LOG_TAG, "sign-in successful: " + user.getUid());
             onLoginSuccess();
-
-
         } else {
             FirebaseUiException error = result.getIdpResponse().getError();
-            Log.e("LoginActivity", "sign-in failed", error);
+            Log.e(LOG_TAG, "sign-in failed", error);
         }
     }
 
     private void onLoginSuccess() {
-//        Intent intent = new Intent(this, HomeActivity.class);
-//        startActivity(intent);
-
         model.createUser(() -> {
             Intent intent = new Intent(this, HomeActivity.class);
             startActivity(intent);

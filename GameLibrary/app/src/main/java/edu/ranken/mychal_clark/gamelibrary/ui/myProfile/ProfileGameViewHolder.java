@@ -1,4 +1,4 @@
-package edu.ranken.mychal_clark.gamelibrary.ui.user;
+package edu.ranken.mychal_clark.gamelibrary.ui.myProfile;
 
 import android.view.View;
 import android.widget.ImageView;

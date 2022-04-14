@@ -13,9 +13,9 @@
 
         <ImageView
             android:id="@+id/profileGameImage"
-            android:layout_width="115dp"
-            android:layout_height="175dp"
-            app:srcCompat="@drawable/wishlist" />
+            android:layout_width="@dimen/profileGameImageWidth"
+            android:layout_height="@dimen/profileGameImageHeight"
+            app:srcCompat="@drawable/ic_wishlist_outline" />
 
         <TextView
             android:id="@+id/profileGameText"

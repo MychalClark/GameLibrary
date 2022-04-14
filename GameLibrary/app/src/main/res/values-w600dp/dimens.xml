@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <integer name="gameListColumns">2</integer>
+    <integer name="ebayListColumns">2</integer>
+</resources>

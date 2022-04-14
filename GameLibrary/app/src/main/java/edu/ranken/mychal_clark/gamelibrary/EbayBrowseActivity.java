@@ -13,7 +13,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -60,7 +60,8 @@ private static final String LOG_TAG = EbayBrowseActivity.class.getSimpleName();
         adapter = new EbayItemListAdapter(this, null);
 
         // setup recycler view
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        int columns = getResources().getInteger(R.integer.ebayListColumns);
+        recyclerView.setLayoutManager(new GridLayoutManager(this, columns));
         recyclerView.setAdapter(adapter);
 
         // bind model

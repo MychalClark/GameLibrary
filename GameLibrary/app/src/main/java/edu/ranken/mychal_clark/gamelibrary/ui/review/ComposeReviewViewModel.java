@@ -15,6 +15,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import edu.ranken.mychal_clark.gamelibrary.R;
 import edu.ranken.mychal_clark.gamelibrary.data.Game;
 
 public class ComposeReviewViewModel extends ViewModel {
@@ -28,7 +29,7 @@ public class ComposeReviewViewModel extends ViewModel {
     // live data
     private final MutableLiveData<String> gameName;
     private final MutableLiveData<String> errorMessage;
-    private final MutableLiveData<String> snackbarMessage;
+    private final MutableLiveData<Integer> snackbarMessage;
     private final MutableLiveData<Boolean> finished;
     private final MutableLiveData<String> currentUserId;
 
@@ -64,7 +65,7 @@ public class ComposeReviewViewModel extends ViewModel {
         return errorMessage;
     }
 
-    public LiveData<String> getSnackbarMessage() {
+    public LiveData<Integer> getSnackbarMessage() {
         return snackbarMessage;
     }
 
@@ -86,7 +87,7 @@ public class ComposeReviewViewModel extends ViewModel {
         if (gameId == null) {
             this.gameName.postValue(null);
             this.errorMessage.postValue("Error in writing Review");
-            this.snackbarMessage.postValue("error In Writing Review.");
+            this.snackbarMessage.postValue(R.string.writeReviewError);
         } else {
             gameRegistration =
                 db.collection("games")
@@ -95,16 +96,16 @@ public class ComposeReviewViewModel extends ViewModel {
                         if (error != null) {
                             Log.e(LOG_TAG, "Error getting game.", error);
                             this.errorMessage.postValue("Error getting game.");
-                            this.snackbarMessage.postValue("Error getting game.");
+                            this.snackbarMessage.postValue(R.string.errorGettingGame);
                         } else if (document != null && document.exists()) {
                             Game game = document.toObject(Game.class);
                             this.gameName.postValue(game.name);
                             this.errorMessage.postValue(null);
-                            this.snackbarMessage.postValue("Game name Found.");
+                            this.snackbarMessage.postValue(R.string.noGameFound);
                         } else {
                             this.gameName.postValue(null);
                             this.errorMessage.postValue("Game does not exist.");
-                            this.snackbarMessage.postValue("Game does not exist.");
+                            this.snackbarMessage.postValue(R.string.noExsistingGame);
                         }
                     });
         }
@@ -147,7 +148,7 @@ public class ComposeReviewViewModel extends ViewModel {
 
         db.collection("reviews").document(reviewId).delete();
         Log.i(LOG_TAG, "document deleted");
-        this.snackbarMessage.postValue("Comment deleted.");
+        this.snackbarMessage.postValue(R.string.commentDeleted);
 
 
     }

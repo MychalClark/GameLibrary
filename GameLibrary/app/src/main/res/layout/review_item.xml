@@ -46,8 +46,8 @@
 
         <Button
             android:id="@+id/reviewDeleteBtn"
-            android:layout_width="139dp"
-            android:layout_height="41dp"
+            android:layout_width="@dimen/reviewDeleteButtonWidth"
+            android:layout_height="@dimen/reviewDeleteButtonHeight"
             android:layout_marginTop="8dp"
             android:text="Delete"
             app:layout_constraintEnd_toEndOf="parent"
