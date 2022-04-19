@@ -153,6 +153,8 @@ public class GameDetailsViewModel extends ViewModel {
             this.gameError.postValue("No Game selected.");
             this.snackbarMessage.postValue(R.string.noGameSelected);
         } else {
+
+            Log.i(LOG_TAG, "game found. about to register.");
             gameRegistration =
                 db.collection("games")
                     .document(gameId)

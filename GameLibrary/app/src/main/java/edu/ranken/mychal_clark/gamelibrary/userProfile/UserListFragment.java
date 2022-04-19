@@ -9,7 +9,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.snackbar.Snackbar;
@@ -43,12 +43,14 @@ public class UserListFragment extends Fragment {
         LifecycleOwner lifecycleOwner = getViewLifecycleOwner();
 
         //setup recycler
-        recyclerView.setLayoutManager(new LinearLayoutManager(activity));
+        int columns = getResources().getInteger(R.integer.userListColumns);
+        recyclerView.setLayoutManager(new GridLayoutManager(activity, columns));
 
         //recycler and adapter attach
         model = new ViewModelProvider(this).get(UserListViewModel.class);
         userListAdapter = new UserListAdapter(activity, model);
         recyclerView.setAdapter(userListAdapter);
+
 
 model.getUsers().observe(lifecycleOwner, (users) ->{
 userListAdapter.setItems(users);

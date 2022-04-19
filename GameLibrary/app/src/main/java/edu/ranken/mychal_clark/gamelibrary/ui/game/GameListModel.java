@@ -50,7 +50,7 @@ public class GameListModel extends ViewModel {
     private final MutableLiveData<Integer> snackbarMessage;
     private final MutableLiveData<List<Library>> library;
     private final MutableLiveData<List<WishList>> wishlist;
-
+    private final MutableLiveData<GameSummary> selectedGame;
 
     public GameListModel() {
         db = FirebaseFirestore.getInstance();
@@ -60,6 +60,7 @@ public class GameListModel extends ViewModel {
         snackbarMessage = new MutableLiveData<>(null);
         library = new MutableLiveData<>(null);
         wishlist = new MutableLiveData<>(null);
+        selectedGame = new MutableLiveData<>(null);
 
 
 
@@ -160,6 +161,13 @@ public class GameListModel extends ViewModel {
 
     public LiveData<List<WishList>> getWishList() {
         return wishlist;
+    }
+
+    public LiveData<GameSummary> getSelectedGame(){return selectedGame;}
+
+    public void setSelectedGame(GameSummary game){
+
+        this.selectedGame.postValue(game);
     }
 
 

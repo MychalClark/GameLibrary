@@ -1,7 +1,6 @@
 package edu.ranken.mychal_clark.gamelibrary.ui.game;
 
 import android.annotation.SuppressLint;
-import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,13 +19,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import edu.ranken.mychal_clark.gamelibrary.ui.utils.ConsoleChooserDialog;
-import edu.ranken.mychal_clark.gamelibrary.GameDetailsActivity;
 import edu.ranken.mychal_clark.gamelibrary.R;
 import edu.ranken.mychal_clark.gamelibrary.data.GameList;
 import edu.ranken.mychal_clark.gamelibrary.data.GameSummary;
 import edu.ranken.mychal_clark.gamelibrary.data.Library;
 import edu.ranken.mychal_clark.gamelibrary.data.WishList;
+import edu.ranken.mychal_clark.gamelibrary.ui.utils.ConsoleChooserDialog;
 
 public class GameListAdapter extends RecyclerView.Adapter<GameViewHolder> {
 
@@ -201,11 +199,11 @@ public class GameListAdapter extends RecyclerView.Adapter<GameViewHolder> {
             Log.i(LOG_TAG, "clicked on this game:" + game.id);
 
             // This to change screen to detail page.
+            model.setSelectedGame(game);
 
-
-            Intent intent = new Intent(context, GameDetailsActivity.class);
-            intent.putExtra(GameDetailsActivity.EXTRA_GAME_ID, game.id);
-            context.startActivity(intent);
+//            Intent intent = new Intent(context, GameDetailsActivity.class);
+//            intent.putExtra(GameDetailsActivity.EXTRA_GAME_ID, game.id);
+//            context.startActivity(intent);
 
         });
 

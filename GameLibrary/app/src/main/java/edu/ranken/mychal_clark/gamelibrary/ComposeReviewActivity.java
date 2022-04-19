@@ -30,22 +30,6 @@ public class ComposeReviewActivity extends AppCompatActivity {
     private ComposeReviewViewModel model;
     private Button reviewBtn;
 
-
-
-
-    // FIXME: place after onCreate() method
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        int itemId = item.getItemId();
-        if (itemId == android.R.id.home) {
-            // force up navigation to have the same behavior as temporal navigation
-            onBackPressed();
-            return true;
-        } else {
-            return super.onOptionsItemSelected(item);
-        }
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,6 +64,17 @@ hideKeyboard(this,reviewText);
         });
 
 
+    }
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int itemId = item.getItemId();
+        if (itemId == android.R.id.home) {
+            // force up navigation to have the same behavior as temporal navigation
+            onBackPressed();
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
+        }
     }
     public void hideKeyboard(Context context, View view) {
         InputMethodManager imm =

@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <integer name="gameListColumns">3</integer>
     <integer name="ebayListColumns">3</integer>
+    <integer name="userListColumns">3</integer>
+
+    <!--Home-->
+    <dimen name="homeListWidth">300dp</dimen>
+    <integer name="gameListColumns">1</integer>
 </resources>

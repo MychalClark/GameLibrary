@@ -68,9 +68,16 @@ public class GameListFragment extends Fragment {
         recyclerView.setLayoutManager(new GridLayoutManager(activity, columns));
 
         //recycler and adapter attach
-        model = new ViewModelProvider(this).get(GameListModel.class);
+        model = new ViewModelProvider(activity).get(GameListModel.class);
         gamesAdapter = new GameListAdapter(activity, model);
         recyclerView.setAdapter(gamesAdapter);
+
+        if(savedInstanceState !=null){
+            int consoleSelectedIndex = savedInstanceState.getInt("consoleSelectedIndex");
+            int listSelectedIndex = savedInstanceState.getInt("listSelectedIndex");
+            consoleSpinner.setSelection(consoleSelectedIndex);
+            listSpinner.setSelection(listSelectedIndex);
+        }
 
 //bind Model
 

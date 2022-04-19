@@ -1,12 +1,12 @@
 package edu.ranken.mychal_clark.gamelibrary.ui.review;
 
+import android.app.Activity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -16,22 +16,22 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
-import edu.ranken.mychal_clark.gamelibrary.ui.utils.ConfirmDialog;
 import edu.ranken.mychal_clark.gamelibrary.R;
 import edu.ranken.mychal_clark.gamelibrary.data.Review;
+import edu.ranken.mychal_clark.gamelibrary.ui.utils.ConfirmDialog;
 
 public class ReviewListAdapter extends RecyclerView.Adapter<ReviewViewHolder>{
 
     private static final String LOG_TAG = "GameListAdapter";
 
-    private final AppCompatActivity context;
+    private final Activity context;
     private final LayoutInflater layoutInflater;
     private List<Review> items;
     private final ComposeReviewViewModel model;
     private final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
 
-    public ReviewListAdapter(AppCompatActivity context, List<Review> items) {
+    public ReviewListAdapter(Activity context, List<Review> items) {
         this.context = context;
         this.layoutInflater = LayoutInflater.from(context);
         this.items = items;

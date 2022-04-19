@@ -26,6 +26,7 @@
     <!--home -->
     <!-- login-->
     <!-- user List-->
+    <integer name="userListColumns">1</integer>
 
     <!--My profile -->
     <dimen name="profileIconSize">20dp</dimen>
@@ -47,6 +48,7 @@
     <!--user Profile -->
     <dimen name="userProfileIconSize">20dp</dimen>
     <dimen name="profileLabelTextSize">16sp</dimen>
+    <dimen name="homeListWidth">0dp</dimen>
 
 
 </resources>
