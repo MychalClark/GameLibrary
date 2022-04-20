@@ -1,6 +1,5 @@
 package edu.ranken.mychal_clark.gamelibrary.userProfile;
 
-import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,7 +14,6 @@ import com.squareup.picasso.Picasso;
 import java.util.List;
 
 import edu.ranken.mychal_clark.gamelibrary.R;
-import edu.ranken.mychal_clark.gamelibrary.UserProfileActivity;
 import edu.ranken.mychal_clark.gamelibrary.data.User;
 
 public class UserListAdapter extends RecyclerView.Adapter<UserViewHolder> {
@@ -67,9 +65,12 @@ public class UserListAdapter extends RecyclerView.Adapter<UserViewHolder> {
             User user = items.get(vh.getAdapterPosition());
             Log.i(LOG_TAG, "clicked on this user:" + user.id);
 
-            Intent intent = new Intent(context, UserProfileActivity.class);
-            intent.putExtra(UserProfileActivity.EXTRA_USER_ID, user.id);
-            context.startActivity(intent);
+            // This to change screen to detail page.
+            model.setSelectedUser(user);
+
+//            Intent intent = new Intent(context, UserProfileActivity.class);
+//            intent.putExtra(UserProfileActivity.EXTRA_USER_ID, user.id);
+//            context.startActivity(intent);
 
         });
 

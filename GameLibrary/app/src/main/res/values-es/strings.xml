@@ -93,4 +93,15 @@
     <string name="email">Correo electrónico</string>
     <string name="emailVerified">Correo verificado</string>
     <string name="change">Cambio</string>
+    <string name="noDescription">Sin descripción</string>
+    <string name="gameNoName">Nombre del juego no encontrado.</string>
+    <string name="noControllerSupportFound">\"Compatibilidad con el controlador: Desconocido\"</string>
+    <string name="controllerSupport">\"Compatibilidad con el controlador:\"</string>
+    <string name="noMultiplayerSupportFound">Soporte multijugador: Desconocido</string>
+    <string name="multiplayerSupport">\"Soporte multijugador:\"</string>
+    <string name="tagLabel">\"Etiquetas: \"</string>
+    <string name="unknownGenre">Género: Desconocido</string>
+    <string name="genreLabel">\"Género: \"</string>
+    <string name="noDisplayName">Sin nombre para mostrar.</string>
+    <string name="noUserId">sin identificación de usuario.</string>
 </resources>

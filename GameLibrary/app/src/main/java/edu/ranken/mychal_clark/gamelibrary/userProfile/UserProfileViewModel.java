@@ -18,9 +18,9 @@ import edu.ranken.mychal_clark.gamelibrary.data.Library;
 import edu.ranken.mychal_clark.gamelibrary.data.User;
 import edu.ranken.mychal_clark.gamelibrary.data.WishList;
 
-public class userProfileViewModel extends ViewModel {
+public class UserProfileViewModel extends ViewModel {
 
-    private static final String LOG_TAG = userProfileViewModel.class.getSimpleName();
+    private static final String LOG_TAG = UserProfileViewModel.class.getSimpleName();
 
     private final FirebaseFirestore db;
     //
@@ -34,16 +34,18 @@ public class userProfileViewModel extends ViewModel {
     private final MutableLiveData<Integer> snackbarMessage;
     private final MutableLiveData<List<Library>> librarys;
     private final MutableLiveData<List<WishList>> wishlists;
+    private final MutableLiveData<Integer> errorMessage;
 
 
 
-    public userProfileViewModel(){
+    public UserProfileViewModel(){
         db = FirebaseFirestore.getInstance();
         //add live data
         user = new MutableLiveData<>(null);
         snackbarMessage = new MutableLiveData<>(null);
         librarys = new MutableLiveData<>(null);
         wishlists = new MutableLiveData<>(null);
+        errorMessage = new MutableLiveData<>(R.string.noUserSelected);
 
 
 }
@@ -59,6 +61,7 @@ public class userProfileViewModel extends ViewModel {
     public LiveData<List<WishList>> getWishlist(){return wishlists;}
     public LiveData<User> getUser(){return user;}
     public LiveData<Integer> getSnackbarMessage(){return snackbarMessage;}
+    public LiveData<Integer> getErrorMessage(){return errorMessage;}
 
     //clears the snackbar
     public void clearSnackbar() {
@@ -74,7 +77,7 @@ public class userProfileViewModel extends ViewModel {
 
         if(userId == null){
             this.user.postValue(null);
-            this.snackbarMessage.postValue(R.string.noUserSelected);
+            this.errorMessage.postValue(R.string.noUserSelected);
         }
         else {
            userRegistration =
@@ -85,13 +88,17 @@ public class userProfileViewModel extends ViewModel {
                         // show error...
                         Log.e(LOG_TAG, "Error getting User.", error);
                         snackbarMessage.postValue(R.string.errorGettingUsers);
+                        errorMessage.postValue(R.string.errorGettingUsers);
                     } else if (document != null && document.exists()) {
+
                         User user = document.toObject(User.class);
                         this.user.postValue(user);
-                        this.snackbarMessage.postValue(R.string.gameUpdated);
+                        this.snackbarMessage.postValue(R.string.userUpdated);
+                        errorMessage.postValue(null);
                     } else {
                         this.user.postValue(null);
-                        this.snackbarMessage.postValue(R.string.errorGettingGame);
+                        this.snackbarMessage.postValue(R.string.errorGettingUsers);
+                        this.errorMessage.postValue(R.string.errorGettingUsers);
                     }
                 });
             libraryRegistration =

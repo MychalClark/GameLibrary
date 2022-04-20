@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -43,7 +44,7 @@ public class GameListFragment extends Fragment {
 
     private ArrayAdapter<SpinnerOption<String>> consolesAdapter;
     private ArrayAdapter<SpinnerOption<GameList>> listAdapter;
-
+    private TextView errorMessage;
 
     public GameListFragment() {
         super(R.layout.game_list);
@@ -58,6 +59,7 @@ public class GameListFragment extends Fragment {
         consoleSpinner = view.findViewById(R.id.consoleSpinner);
         listSpinner = view.findViewById(R.id.listSpinner);
         recyclerView = view.findViewById(R.id.gameList);
+        errorMessage = view.findViewById(R.id.gameListError);
 
 //get Activity
         FragmentActivity activity = getActivity();
@@ -99,6 +101,17 @@ public class GameListFragment extends Fragment {
         });
         model.getLibrary().observe(lifecycleOwner, (library) -> {
             gamesAdapter.setLibrary(library);
+        });
+
+        model.getErrorMessage().observe(getViewLifecycleOwner(), (messageId)->{
+
+            if (messageId != null) {
+                errorMessage.setText(messageId);
+                errorMessage.setVisibility(View.VISIBLE);
+            } else {
+                errorMessage.setText(null);
+                errorMessage.setVisibility(View.GONE);
+            }
         });
 
         model.getSnackbarMessage().observe(getViewLifecycleOwner(), (messageId) -> {

@@ -22,6 +22,8 @@ import edu.ranken.mychal_clark.gamelibrary.ui.game.GameListModel;
 import edu.ranken.mychal_clark.gamelibrary.ui.home.HomePageAdapter;
 import edu.ranken.mychal_clark.gamelibrary.ui.utils.ConfirmDialog;
 import edu.ranken.mychal_clark.gamelibrary.userProfile.UserListViewModel;
+import edu.ranken.mychal_clark.gamelibrary.userProfile.UserProfileFragment;
+import edu.ranken.mychal_clark.gamelibrary.userProfile.UserProfileViewModel;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -34,8 +36,11 @@ public class HomeActivity extends AppCompatActivity {
     //states
     private HomePageAdapter adapter;
     private GameListModel gameListModel;
-    private UserListViewModel userListModel;
+    private UserListViewModel userListViewModel;
     private GameDetailsViewModel gameDetailsViewModel;
+    private UserProfileViewModel userProfileViewModel;
+    private String gameId;
+    private String userId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,15 +63,42 @@ public class HomeActivity extends AppCompatActivity {
             public void onPageSelected(int position) {
                 super.onPageSelected(position);
                 bottomNav.getMenu().getItem(position).setChecked(true);
+                if (position == 0) {
+                    if (detailsContainer != null) {
+                        getSupportFragmentManager()
+                            .beginTransaction()
+                            .replace(R.id.homeDetailsContainer, GameDetailsFragment.class, null)
+                            .commit();
+                    }
+                } else if (position == 1) {
+                    if (detailsContainer != null) {
+                        getSupportFragmentManager()
+                            .beginTransaction()
+                            .replace(R.id.homeDetailsContainer, UserProfileFragment.class, null)
+                            .commit();
+                    }
+                }
             }
         });
         bottomNav.setOnItemSelectedListener((MenuItem item) -> {
             int itemId = item.getItemId();
             if (itemId == R.id.actionGameList) {
                 pager.setCurrentItem(0);
+                if(detailsContainer != null) {
+                    getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.homeDetailsContainer, GameDetailsFragment.class, null)
+                        .commit();
+                }
                 return true;
             } else if (itemId == R.id.actionUserList) {
                 pager.setCurrentItem(1);
+                if(detailsContainer !=null) {
+                    getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.homeDetailsContainer, UserProfileFragment.class, null)
+                        .commit();
+                }
                 return true;
             } else {
                 return false;
@@ -75,11 +107,20 @@ public class HomeActivity extends AppCompatActivity {
 
         //get models
         gameListModel = new ViewModelProvider(this).get(GameListModel.class);
-        userListModel = new ViewModelProvider(this).get(UserListViewModel.class);
+        userListViewModel = new ViewModelProvider(this).get(UserListViewModel.class);
         gameDetailsViewModel = new ViewModelProvider(this).get(GameDetailsViewModel.class);
+        userProfileViewModel = new ViewModelProvider(this).get(UserProfileViewModel.class);
 
+        //restore saved state
+        if (savedInstanceState != null) {
+            pager.setCurrentItem(savedInstanceState.getInt("page"));
+            gameId = savedInstanceState.getString("gameId");
+            userId = savedInstanceState.getString("userId");
+        }
         //observe Models
         gameListModel.getSelectedGame().observe(this, (game) -> {
+            gameId = game != null ? game.id : null;
+            
             if (detailsContainer == null) {
                 if (game != null) {
                     gameListModel.setSelectedGame(null);
@@ -91,23 +132,31 @@ public class HomeActivity extends AppCompatActivity {
             }else{
                 if(game != null){
                     gameDetailsViewModel.fetchGame(game.id);
-                    getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.homeDetailsContainer, GameDetailsFragment.class, null)
-                        .commit();
                 }else{
                     gameDetailsViewModel.fetchGame(null);
-//                    getSupportFragmentManager()
-//                        .beginTransaction()
-//                        .replace(R.id.homeDetailsContainer, null)
-//                        .commit();
                 }
             }
         });
 
+        userListViewModel.getSelectedUser().observe(this, (user) -> {
+            userId = user != null ? user.id : null;
+            if (detailsContainer == null) {
+                if (user != null) {
+                    userListViewModel.setSelectedUser(null);
 
+                    Intent intent = new Intent(this, UserProfileActivity.class);
+                    intent.putExtra(UserProfileActivity.EXTRA_USER_ID, user.id);
+                    this.startActivity(intent);
+                }
+            }else{
+                if(user != null){
+                    userProfileViewModel.fetchUser(user.id);
+                }else{
+                    userProfileViewModel.fetchUser(null);
+                }
+            }
+        });
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -131,6 +180,16 @@ public class HomeActivity extends AppCompatActivity {
         } else {
             return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        Log.i(LOG_TAG, "onSaveInstanceState()");
+        super.onSaveInstanceState(outState);
+
+        outState.putInt("page", pager.getCurrentItem());
+        outState.putString("gameId", gameId);
+        outState.putString("userId", userId);
     }
 
     @Override

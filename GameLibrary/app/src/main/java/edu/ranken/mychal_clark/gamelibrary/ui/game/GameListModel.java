@@ -51,6 +51,7 @@ public class GameListModel extends ViewModel {
     private final MutableLiveData<List<Library>> library;
     private final MutableLiveData<List<WishList>> wishlist;
     private final MutableLiveData<GameSummary> selectedGame;
+    private final MutableLiveData<Integer> errorMessage;
 
     public GameListModel() {
         db = FirebaseFirestore.getInstance();
@@ -61,7 +62,7 @@ public class GameListModel extends ViewModel {
         library = new MutableLiveData<>(null);
         wishlist = new MutableLiveData<>(null);
         selectedGame = new MutableLiveData<>(null);
-
+errorMessage = new MutableLiveData<>(null);
 
 
         //get current user
@@ -165,6 +166,9 @@ public class GameListModel extends ViewModel {
 
     public LiveData<GameSummary> getSelectedGame(){return selectedGame;}
 
+    public LiveData<Integer> getErrorMessage(){return errorMessage;}
+
+
     public void setSelectedGame(GameSummary game){
 
         this.selectedGame.postValue(game);
@@ -224,6 +228,7 @@ public class GameListModel extends ViewModel {
                     // show error...
                     Log.e(LOG_TAG, "Error getting games.", error);
                     snackbarMessage.postValue(R.string.errorGettingGame);
+                    errorMessage.postValue(R.string.errorGettingGame);
 
                 } else if (querySnapshot != null) {
 

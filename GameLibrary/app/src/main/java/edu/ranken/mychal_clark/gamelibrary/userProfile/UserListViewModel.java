@@ -24,8 +24,9 @@ public class UserListViewModel extends ViewModel {
 
     //Live Data
     private final MutableLiveData<List<User>> users;
-    private final MutableLiveData<String> errorMessage;
+    private final MutableLiveData<Integer> errorMessage;
     private final MutableLiveData<Integer> snackbarMessage;
+    private final MutableLiveData<User> selectedUser;
 
     public UserListViewModel() {
         db = FirebaseFirestore.getInstance();
@@ -35,6 +36,7 @@ public class UserListViewModel extends ViewModel {
         users = new MutableLiveData<>(null);
         errorMessage = new MutableLiveData<>(null);
         snackbarMessage = new MutableLiveData<>(null);
+        selectedUser = new MutableLiveData<>(null);
 
 
         userRegistration =
@@ -44,11 +46,14 @@ public class UserListViewModel extends ViewModel {
                         // show error...
                         Log.e(LOG_TAG, "Error getting Users.", error);
                         snackbarMessage.postValue(R.string.errorGettingUsers);
+                        errorMessage.postValue(R.string.errorGettingUsers);
+
                     } else {
                         List<User> newUsers =
                             querySnapshot != null ? querySnapshot.toObjects(User.class) : null;
                         users.postValue(newUsers);
                         snackbarMessage.postValue(R.string.userUpdated);
+                        errorMessage.postValue(null);
                     }
                 });
     }
@@ -73,5 +78,11 @@ public class UserListViewModel extends ViewModel {
         return snackbarMessage;
     }
 
+    public LiveData<User> getSelectedUser(){return selectedUser;}
 
+    public LiveData<Integer> getErrorMessage(){return errorMessage;}
+
+    public void setSelectedUser(User user) {
+        this.selectedUser.postValue(user);
+    }
 }

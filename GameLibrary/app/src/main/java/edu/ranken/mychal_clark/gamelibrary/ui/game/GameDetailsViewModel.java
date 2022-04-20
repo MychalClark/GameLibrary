@@ -42,10 +42,11 @@ public class GameDetailsViewModel extends ViewModel {
     private String filter;
 
     private ListenerRegistration gameRegistration;
+    private ListenerRegistration reviewRegistration;
 
     // live data
     private final MutableLiveData<Game> game;
-    private final MutableLiveData<String> gameError;
+    private final MutableLiveData<Integer> gameError;
     private final MutableLiveData<Integer> snackbarMessage;
     private final MutableLiveData<List<Review>> reviews;
     private final MutableLiveData<EbayBrowseAPI.SearchResponse> searchResponse;
@@ -58,7 +59,7 @@ public class GameDetailsViewModel extends ViewModel {
 
         //Live Data
         game = new MutableLiveData<>(null);
-        gameError = new MutableLiveData<>(null);
+        gameError = new MutableLiveData<>(R.string.noGameSelected);
         snackbarMessage = new MutableLiveData<>(null);
         reviews = new MutableLiveData<>(null);
         searchResponse = new MutableLiveData<>(null);
@@ -87,6 +88,9 @@ public class GameDetailsViewModel extends ViewModel {
         if (gameRegistration != null) {
             gameRegistration.remove();
         }
+        if (reviewRegistration != null) {
+            reviewRegistration.remove();
+        }
         super.onCleared();
     }
 
@@ -103,7 +107,7 @@ public class GameDetailsViewModel extends ViewModel {
     }
 
     // FIXME: must be observed and displayed to user
-    public LiveData<String> getGameError() {
+    public LiveData<Integer> getGameError() {
         return gameError;
     }
 
@@ -126,31 +130,15 @@ public class GameDetailsViewModel extends ViewModel {
         if (gameRegistration != null) {
             gameRegistration.remove();
         }
+        if (reviewRegistration != null) {
+            reviewRegistration.remove();
+        }
 
         // get reviews
-        if (gameId != null) {
-            db.collection("reviews")
-                .whereEqualTo("gameId", gameId)
-                .addSnapshotListener((QuerySnapshot querySnapshot, FirebaseFirestoreException error) -> {
-                    if (error != null) {
-                        // show error...
-                        Log.e(LOG_TAG, "Error getting reviews.", error);
-                        snackbarMessage.postValue(R.string.errorGettingReviews);
-                    } else {
-                        List<Review> newReviews =
-                            querySnapshot != null ? querySnapshot.toObjects(Review.class) : null;
-
-                        reviews.postValue(newReviews);
-
-                        snackbarMessage.postValue(R.string.reviewsUpdate);
-                        // show games...
-                    }
-                });
-        }
 
         if (gameId == null) {
             this.game.postValue(null);
-            this.gameError.postValue("No Game selected.");
+            this.gameError.postValue(R.string.noGameSelected);
             this.snackbarMessage.postValue(R.string.noGameSelected);
         } else {
 
@@ -161,7 +149,7 @@ public class GameDetailsViewModel extends ViewModel {
                     .addSnapshotListener((document, error) -> {
                         if (error != null) {
                             Log.e(LOG_TAG, "Error getting game.", error);
-                            this.gameError.postValue("Error getting game.");
+                            this.gameError.postValue(R.string.errorGettingGame);
                             this.snackbarMessage.postValue(R.string.errorGettingGame);
                         } else if (document != null && document.exists()) {
                             Game game = document.toObject(Game.class);
@@ -189,10 +177,29 @@ public class GameDetailsViewModel extends ViewModel {
                             search("");
                         } else {
                             this.game.postValue(null);
-                            this.gameError.postValue("Game does not exist.");
+                            this.gameError.postValue(R.string.noExsistingGame);
                             this.snackbarMessage.postValue(R.string.noExsistingGame);
                         }
+
                     });
+
+            reviewRegistration = db.collection("reviews")
+                .whereEqualTo("gameId", gameId)
+                .addSnapshotListener((QuerySnapshot querySnapshot, FirebaseFirestoreException error) -> {
+                    if (error != null) {
+                        // show error...
+                        Log.e(LOG_TAG, "Error getting reviews.", error);
+                        snackbarMessage.postValue(R.string.errorGettingReviews);
+                    } else {
+                        List<Review> newReviews =
+                            querySnapshot != null ? querySnapshot.toObjects(Review.class) : null;
+
+                        reviews.postValue(newReviews);
+
+                        snackbarMessage.postValue(R.string.reviewsUpdate);
+                        // show games...
+                    }
+                });
         }
 
 

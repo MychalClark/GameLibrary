@@ -2,6 +2,7 @@ package edu.ranken.mychal_clark.gamelibrary.userProfile;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -26,6 +27,7 @@ public class UserListFragment extends Fragment {
     //states
     private UserListViewModel model;
     private UserListAdapter userListAdapter;
+    private TextView errorMessage;
 
     public UserListFragment() {
         super(R.layout.user_list);
@@ -37,7 +39,7 @@ public class UserListFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         //findViews
         recyclerView = view.findViewById(R.id.userListRecycler);
-
+errorMessage = view.findViewById(R.id.userListError);
         //get Activity
         FragmentActivity activity = getActivity();
         LifecycleOwner lifecycleOwner = getViewLifecycleOwner();
@@ -47,7 +49,7 @@ public class UserListFragment extends Fragment {
         recyclerView.setLayoutManager(new GridLayoutManager(activity, columns));
 
         //recycler and adapter attach
-        model = new ViewModelProvider(this).get(UserListViewModel.class);
+        model = new ViewModelProvider(activity).get(UserListViewModel.class);
         userListAdapter = new UserListAdapter(activity, model);
         recyclerView.setAdapter(userListAdapter);
 
@@ -59,6 +61,17 @@ userListAdapter.setItems(users);
             if (messageId != null) {
                 Snackbar.make(recyclerView, messageId, Snackbar.LENGTH_SHORT).show();
                 model.clearSnackbar();
+            }
+        });
+        model.getErrorMessage().observe(lifecycleOwner, (error)->{
+
+            if(error != null){
+                errorMessage.setText(error);
+                errorMessage.setVisibility(View.VISIBLE);
+            }else{
+                errorMessage.setText(null);
+                errorMessage.setVisibility(View.GONE);
+
             }
         });
 

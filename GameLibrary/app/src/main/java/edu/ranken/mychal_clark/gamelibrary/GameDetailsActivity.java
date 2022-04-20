@@ -1,5 +1,6 @@
 package edu.ranken.mychal_clark.gamelibrary;
 
+import android.app.TaskStackBuilder;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -25,7 +26,6 @@ public class GameDetailsActivity extends AppCompatActivity {
 
     //Create View
     private FragmentContainerView fragmentContainer;
-    private GameDetailsFragment fragment;
     private GameDetailsViewModel model;
 
 
@@ -35,16 +35,13 @@ public class GameDetailsActivity extends AppCompatActivity {
         setContentView(R.layout.fragment_container);
 
         fragmentContainer = findViewById(R.id.fragmentContainer);
-        fragment = new GameDetailsFragment();
         model = new ViewModelProvider(this).get(GameDetailsViewModel.class);
 
-        getSupportFragmentManager()
-            .beginTransaction()
-            .replace(R.id.fragmentContainer,fragment)
-            .commit();
-
-
         if(savedInstanceState == null) {
+            getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragmentContainer, GameDetailsFragment.class, null)
+                .commit();
             // get intent
             Intent intentTwo = getIntent();
             String intentAction = intentTwo.getAction();
@@ -52,6 +49,7 @@ public class GameDetailsActivity extends AppCompatActivity {
 
             if (intentAction == null) {
                 gameId = intentTwo.getStringExtra(EXTRA_GAME_ID);
+                model.fetchGame(gameId);
             } else if (Objects.equals(intentAction, Intent.ACTION_VIEW) && intentData != null) {
                 handleWebLink(intentTwo);
             }
@@ -94,6 +92,12 @@ public class GameDetailsActivity extends AppCompatActivity {
         } else {
             gameId = null;
         }
+        // create synthetic back stack
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+        stackBuilder.addNextIntent(new Intent(this, LoginActivity.class));
+        stackBuilder.addNextIntent(new Intent(this, HomeActivity.class));
+        stackBuilder.addNextIntent(new Intent(this, GameDetailsActivity.class).putExtra(EXTRA_GAME_ID, gameId));
+        stackBuilder.startActivities();
 
         model.fetchGame(gameId);
 

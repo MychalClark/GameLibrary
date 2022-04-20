@@ -3,9 +3,10 @@
 
 
     <integer name="ebayListColumns">2</integer>
-    <integer name="userListColumns">2</integer>
+
 
     <!-- home -->
     <dimen name="homeListWidth">300dp</dimen>
     <integer name="gameListColumns">1</integer>
+    <integer name="userListColumns">1</integer>
 </resources>

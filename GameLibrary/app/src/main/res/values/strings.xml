@@ -101,5 +101,16 @@
     <string name="email">Email</string>
     <string name="emailVerified">Email Verified</string>
     <string name="change">Change</string>
+    <string name="noDescription">No Description</string>
+    <string name="gameNoName">Game Name Not Found.</string>
+    <string name="noControllerSupportFound">\"Controller Support: Unknown \"</string>
+    <string name="controllerSupport">\"Controller Support: \"</string>
+    <string name="noMultiplayerSupportFound">Multiplayer Support: Unknown</string>
+    <string name="multiplayerSupport">\"Multiplayer Support: \"</string>
+    <string name="tagLabel">\"Tags: \"</string>
+    <string name="unknownGenre">Genre: Unknown</string>
+    <string name="genreLabel">\"Genre: \"</string>
+    <string name="noDisplayName">No display Name.</string>
+    <string name="noUserId">no user Id.</string>
 
 </resources>

@@ -39,6 +39,14 @@
             android:layout_margin="8dp"
             android:orientation="vertical">
 
+            <TextView
+                android:id="@+id/gameDetailError"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="#F10E0E"
+                android:textStyle="bold"
+                tools:text="Error Here" />
+
             <ImageView
                 android:id="@+id/gameDetailGameImage"
                 android:layout_width="match_parent"

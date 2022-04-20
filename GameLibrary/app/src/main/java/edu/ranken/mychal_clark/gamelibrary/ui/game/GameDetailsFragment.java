@@ -63,6 +63,7 @@ public class GameDetailsFragment extends Fragment {
     private Button ebayBtn;
     private TextView gameAverage;
     private Game selectedGame;
+    private TextView errorMessage;
 
     @Override
     public void onViewCreated(@NonNull View contentView, @Nullable Bundle savedInstanceState) {
@@ -82,6 +83,7 @@ public class GameDetailsFragment extends Fragment {
             recyclerView.setLayoutManager(new LinearLayoutManager(activity));
             recyclerView.setAdapter(reviewsAdapter);
 
+            errorMessage = contentView.findViewById(R.id.gameDetailError);
             gameTitle = contentView.findViewById(R.id.gameDetailTitle);
             gameDescription = contentView.findViewById(R.id.gameDetailDescription);
             gameTags = contentView.findViewById(R.id.gameDetailTags);
@@ -104,13 +106,6 @@ public class GameDetailsFragment extends Fragment {
 
             composeReviewButton = contentView.findViewById(R.id.composeReviewButton);
             shareGameButton = contentView.findViewById(R.id.shareGameButton);
-
-            // get intent
-           Intent intent = activity.getIntent();
-            gameId = intent.getStringExtra(EXTRA_GAME_ID);
-
-
-        Log.i(LOG_TAG, "extra " + gameId);
 
             // get picasso
             picasso = Picasso.get();
@@ -154,18 +149,36 @@ public class GameDetailsFragment extends Fragment {
 
             model.getGame().observe(lifecycleOwner, (game) -> {
 
-                selectedGame =  game;
-
                 if (game == null) {
-                    if(gameId != null) {
-                        model.fetchGame(gameId);
-                    }
+
+
+                    gameId = null;
+
+                    gameTitle.setVisibility(View.GONE);
+                    gameMainImage.setVisibility(View.GONE);
+                    gameDescription.setVisibility(View.GONE);
+                    gameAverage.setVisibility(View.GONE);
+                    gameGenreText.setVisibility(View.GONE);
+                    gameMultiplayerText.setVisibility(View.GONE);
+                    gameTags.setVisibility(View.GONE);
+                    gameControllerText.setVisibility(View.GONE);
+                    composeReviewButton.setVisibility(View.GONE);
+                    shareGameButton.setVisibility(View.GONE);
+                    ebayBtn.setVisibility(View.GONE);
+                    gameScreenshots[0].setVisibility(View.GONE);
+                    gameScreenshots[1].setVisibility(View.GONE);
+                    gameScreenshots[2].setVisibility(View.GONE);
                 } else {
                     gameId = game.id;
                     Log.i(LOG_TAG, "have game" + gameId);
 
+                    composeReviewButton.setVisibility(View.VISIBLE);
+                    shareGameButton.setVisibility(View.VISIBLE);
+                    ebayBtn.setVisibility(View.VISIBLE);
+
                     //picassoo
                     if (game.gameImage != null) {
+
                         gameMainImage.setImageResource(R.drawable.no_image);
                         picasso
                             .load(game.gameImage)
@@ -175,34 +188,44 @@ public class GameDetailsFragment extends Fragment {
                             .resize(200, 300)
                             .centerCrop()
                             .into(gameMainImage);
+                        gameMainImage.setVisibility(View.VISIBLE);
                     } else {
                         gameMainImage.setImageResource(R.drawable.no_image);
+                        gameMainImage.setVisibility(View.VISIBLE);
                     }
 
                     //game description stuff.
 
                     if (game.name == null) {
-                        gameTitle.setText("No Game");
+                        gameTitle.setVisibility(View.VISIBLE);
+                        gameTitle.setText(R.string.gameNoName);
                     } else {
+                        gameTitle.setVisibility(View.VISIBLE);
                         gameTitle.setText(game.name);
                     }
 
                     if (game.description == null) {
-                        gameDescription.setText("No Description");
+                        gameDescription.setVisibility(View.VISIBLE);
+                        gameDescription.setText(R.string.noDescription);
                     } else {
+                        gameDescription.setVisibility(View.VISIBLE);
                         gameDescription.setText(game.description);
                     }
 
                     if (game.controllerSupport == null) {
-                        gameControllerText.setText("Controller Support: Unknown ");
+                        gameControllerText.setVisibility(View.VISIBLE);
+                        gameControllerText.setText(R.string.noControllerSupportFound);
                     } else {
-                        gameControllerText.setText("Controller Support: " + game.controllerSupport);
+                        gameControllerText.setVisibility(View.VISIBLE);
+                        gameControllerText.setText(getString(R.string.controllerSupport) + game.controllerSupport);
                     }
 
                     if (game.multiplayerSupport == null) {
-                        gameMultiplayerText.setText("Multiplayer Support: Unknown");
+                        gameMultiplayerText.setVisibility(View.VISIBLE);
+                        gameMultiplayerText.setText(R.string.noMultiplayerSupportFound);
                     } else {
-                        gameMultiplayerText.setText("Multiplayer Support: " + game.multiplayerSupport);
+                        gameMultiplayerText.setVisibility(View.VISIBLE);
+                        gameMultiplayerText.setText(getString(R.string.multiplayerSupport) + game.multiplayerSupport);
                     }
 
                     if (game.tags != null) {
@@ -210,7 +233,12 @@ public class GameDetailsFragment extends Fragment {
                         for (int i = 0; i < game.tags.size(); i++) {
                             sb.append(game.tags.get(i));
                         }
-                        gameTags.setText("Tags: " + sb);
+                        gameTags.setVisibility(View.VISIBLE);
+                        gameTags.setText(getString(R.string.tagLabel) + sb);
+                    }
+                    else{
+                        gameTags.setVisibility(View.GONE);
+
                     }
 
                     if (game.genre != null) {
@@ -219,9 +247,11 @@ public class GameDetailsFragment extends Fragment {
 
                             sb.append(game.tags.get(i));
                         }
-                        gameGenreText.setText("Genre: " + sb);
+                        gameGenreText.setVisibility(View.VISIBLE);
+                        gameGenreText.setText(getString(R.string.genreLabel) + sb);
                     } else {
-                        gameGenreText.setText("Genre: Unknown");
+                        gameGenreText.setVisibility(View.VISIBLE);
+                        gameGenreText.setText(R.string.unknownGenre);
                     }
 
 
@@ -277,13 +307,17 @@ public class GameDetailsFragment extends Fragment {
 
                     if (game.images == null || game.images.size() <= 0) {
                         gameScreenshots[0].setImageResource(R.drawable.no_image);
+                        gameScreenshots[0].setVisibility(View.GONE);
                         gameScreenshots[1].setImageResource(R.drawable.no_image);
+                        gameScreenshots[1].setVisibility(View.GONE);
                         gameScreenshots[2].setImageResource(R.drawable.no_image);
+                        gameScreenshots[2].setVisibility(View.GONE);
                     } else {
                         for (int i = 0; i < game.images.size(); i++) {
                             gameScreenshots[i].setImageResource(R.drawable.no_image);
                             if (game.images.get(i).isEmpty()) {
                             } else {
+                                gameScreenshots[i].setVisibility(View.VISIBLE);
                                 picasso
                                     .load(game.images.get(i))
                                     .noPlaceholder()
@@ -300,6 +334,16 @@ public class GameDetailsFragment extends Fragment {
                 }
 
 
+            });
+
+            model.getGameError().observe(lifecycleOwner, (messageId)->{
+                if (messageId != null) {
+                    errorMessage.setText(messageId);
+                    errorMessage.setVisibility(View.VISIBLE);
+                } else {
+                    errorMessage.setText(null);
+                    errorMessage.setVisibility(View.GONE);
+                }
             });
 
             // register listeners
