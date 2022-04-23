@@ -14,6 +14,22 @@
       },
       "oauth_client": [
         {
+          "client_id": "391929358290-3060e0t6cluvtgqdbgqhsf3rk9volotp.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "edu.ranken.mychal_clark.checkmyreceipt",
+            "certificate_hash": "b3445835432b57bb4289378ec1c096bab1b77e67"
+          }
+        },
+        {
+          "client_id": "391929358290-m3lc3h3dtocv5eug41jl862fms1he3tq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "edu.ranken.mychal_clark.checkmyreceipt",
+            "certificate_hash": "eec35777f1230adc8dd6c4a088a6ac18c71eaa64"
+          }
+        },
+        {
           "client_id": "391929358290-0m5omqhp9idfa9gn2ma12qv9jqr9gp2a.apps.googleusercontent.com",
           "client_type": 3
         }

@@ -39,5 +39,5 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/loginLabel"
-        app:srcCompat="@drawable/mychLogo" />
+        app:srcCompat="@drawable/mychslogo" />
 </androidx.constraintlayout.widget.ConstraintLayout>
