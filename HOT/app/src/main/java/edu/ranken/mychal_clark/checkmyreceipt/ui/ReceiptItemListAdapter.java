@@ -37,7 +37,7 @@ public class ReceiptItemListAdapter extends RecyclerView.Adapter<ReceiptItemView
         if (model == null) {
             Log.i(LOG_TAG, "goodbye");
         }
-        ;
+
     }
 
 

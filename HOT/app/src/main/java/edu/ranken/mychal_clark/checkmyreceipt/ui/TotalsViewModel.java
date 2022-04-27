@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.ListenerRegistration;
 
@@ -19,7 +20,8 @@ public class TotalsViewModel extends ViewModel {
 
     //Misc
     private static final String LOG_TAG = "TotalsViewModel";
-    private String userId = "Mych";
+    private String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+    private String receiptId;
     // FIXME: receiptId
 
     //FireBase
@@ -40,7 +42,7 @@ public class TotalsViewModel extends ViewModel {
         errorSalesTax = new MutableLiveData<>(null);
 
 
-        receiptRegistration = db.collection("receipts").document(userId).addSnapshotListener((document, error) -> {
+        receiptRegistration = db.collection("receipts").document(receiptId).addSnapshotListener((document, error) -> {
             if (error != null) {
                 Log.e(LOG_TAG, "Error getting receipt.", error);
                 errorReceipt.postValue("Error Getting receipt");

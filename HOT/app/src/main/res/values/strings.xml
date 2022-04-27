@@ -3,4 +3,5 @@
     <string name="log_out">Log out</string>
     <string name="actionSignOut">actionSignOut</string>
     <string name="myReceipts">My Receipts</string>
+    <string name="failAddReceipt">Failed to add receipt</string>
 </resources>

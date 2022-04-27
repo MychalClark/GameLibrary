@@ -2,12 +2,14 @@ package edu.ranken.mychal_clark.checkmyreceipt.ui;
 
 import android.util.Log;
 
+import androidx.annotation.StringRes;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.ListenerRegistration;
@@ -21,8 +23,9 @@ public class AddItemViewModel extends ViewModel {
 
     //Misc
     private static final String LOG_TAG = "AddItemViewModel";
-    private String userId = "Mych";
-    // FIXME: receiptId
+    private String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+    private String receiptId;
+    // FIXME: receiptId //fixed//
 
     //FireBase
     private final FirebaseFirestore db;
@@ -30,26 +33,26 @@ public class AddItemViewModel extends ViewModel {
     //Listeners
 
     //Live Data Creation
-    private final MutableLiveData<String> ErrorMessage; // FIXME: instance variables should be camelCase
+    private final MutableLiveData<String> errorMessage; // FIXME: instance variables should be camelCase //fixed//
     private final MutableLiveData<Boolean> receiptSaved;
 
     public AddItemViewModel(){
         db = FirebaseFirestore.getInstance();
 
         //Tie Live Data Here
-        ErrorMessage = new MutableLiveData<>(null);
+        errorMessage = new MutableLiveData<>(null);
         receiptSaved = new MutableLiveData<>(null);
 
     }
 
     //Return Live Data Here
-    public LiveData<String> getError(){return ErrorMessage;}
+    public LiveData<String> getError(){return errorMessage;}
     public LiveData<Boolean> getReceiptSaved(){return receiptSaved;}
 
     //Functions
     public void addItem(ReceiptItem item){
         item.userId = userId;
-        item.receiptId = userId;
+        item.receiptId = receiptId;
         db.collection("receiptItems").add(item).addOnSuccessListener(doc -> {
             receiptSaved.postValue(true);
             Log.i(LOG_TAG, "new item added");
@@ -58,6 +61,10 @@ public class AddItemViewModel extends ViewModel {
                Log.i(LOG_TAG, "Failed Adding new item");
                // FIXME: show error message
             });
+
+    }
+
+    public void setSellsTaxError(@StringRes Integer messageId){
 
     }
 }

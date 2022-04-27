@@ -1,10 +1,5 @@
 package edu.ranken.mychal_clark.checkmyreceipt;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,16 +7,21 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import com.google.protobuf.StringValue;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.text.NumberFormat;
 
-import edu.ranken.mychal_clark.checkmyreceipt.data.Receipt;
 import edu.ranken.mychal_clark.checkmyreceipt.ui.ItemListViewModel;
 import edu.ranken.mychal_clark.checkmyreceipt.ui.ReceiptItemListAdapter;
 import edu.ranken.mychal_clark.checkmyreceipt.ui.TotalsViewModel;
 
 public class ItemListActivity extends AppCompatActivity {
+
+    public static final String EXTRA_RECEIPT_ID = "receiptId";
+    public static final String LOG_TAG = ItemListActivity.class.getSimpleName();
 
     //crete Views
     private ImageButton fabAdd;
@@ -32,6 +32,7 @@ public class ItemListActivity extends AppCompatActivity {
     private ReceiptItemListAdapter adapter;
     private TextView subtotal;
     private TotalsViewModel totalModel;
+    private String receiptId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,8 +47,14 @@ public class ItemListActivity extends AppCompatActivity {
         fabDelete = findViewById(R.id.fabDelete);
         subtotal = findViewById(R.id.subTotalText);
 
+        // get intent
+        Intent intentReceipt = getIntent();
+        receiptId = intentReceipt.getStringExtra(EXTRA_RECEIPT_ID);
+
+        Log.i(LOG_TAG, receiptId);
+
 // bind model
-       model = new ViewModelProvider(this).get(ItemListViewModel.class);
+        model = new ViewModelProvider(this).get(ItemListViewModel.class);
         totalModel = new ViewModelProvider(this).get(TotalsViewModel.class);
 
         //Create Adapter
@@ -57,27 +64,26 @@ public class ItemListActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
 
+        model.fetchReceipt(receiptId);
 
-
-
-
-        model.getReceipt().observe(this,(receipt) -> {
-            if (receipt != null){
-                model.getReceiptId(receipt.receiptId);
+        model.getReceipt().observe(this, (receipt) -> {
+            if (receipt != null) {
 
                 // FIXME: show the subtotal, don't update the receipt
                 //        this causes an infinite loop of updates
-                model.updateSubtotal(adapter.itemTotal());
+
             }
         });
 
         // FIXME: indentation and code style
-        model.getReceiptItems().observe(this,(receiptItems) -> {adapter.setItems(receiptItems);
-           subtotal.setText(NumberFormat.getCurrencyInstance().format(adapter.itemTotal()));
+        model.getReceiptItems().observe(this, (receiptItems) -> {
+            adapter.setItems(receiptItems);
+            subtotal.setText(NumberFormat.getCurrencyInstance().format(adapter.itemTotal()));
+            model.updateSubtotal(adapter.itemTotal());
+            // FIXME: update receipt subtotal here instead
 
-           // FIXME: update receipt subtotal here instead
-
-           ;});
+            ;
+        });
 
         // FIXME: observe and show error messages
 
@@ -93,6 +99,7 @@ public class ItemListActivity extends AppCompatActivity {
         });
 
         fabDelete.setOnClickListener((view) -> {
+
             model.deleteAllItems();
 
             // FIXME: items have not been updated yet

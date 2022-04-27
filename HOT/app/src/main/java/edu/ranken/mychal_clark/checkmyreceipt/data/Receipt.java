@@ -18,6 +18,9 @@ public class Receipt {
     public Double tip30;
     @ServerTimestamp
     public Date updatedOn;
+    @ServerTimestamp
+    public Date addedOn;
+    public String name;
 
 
     public Receipt() {
@@ -26,7 +29,8 @@ public class Receipt {
     public Receipt(
         String receiptId, String userId, Double taxPercent,
         Double taxAmount, Double subtotal, Double total,
-        Double tip10, Double tip20, Double tip30, Date updatedOn) {
+        Double tip10, Double tip20, Double tip30,
+        Date updatedOn, Date addedOn, String name) {
 
         this.receiptId = receiptId;
         this.userId = userId;
@@ -38,6 +42,8 @@ public class Receipt {
         this.tip20 = tip20;
         this.tip30 = tip30;
         this.updatedOn = updatedOn;
+        this.name = name;
+        this.addedOn = addedOn;
 
     }
 }

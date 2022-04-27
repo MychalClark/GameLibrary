@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -22,8 +23,9 @@ public class ItemListViewModel extends ViewModel {
 
     //Misc
     private static final String LOG_TAG = "ItemListViewModel";
-    private String userId = "Mych";
-    // FIXME: receiptId
+    private String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+    private String receiptId;
+    // FIXME: receiptId //fixed//
 
     //FireBase
     private final FirebaseFirestore db;
@@ -36,8 +38,8 @@ public class ItemListViewModel extends ViewModel {
     //Live Data Creation
     private final MutableLiveData<Receipt> receipt;
     private final MutableLiveData<List<ReceiptItem>> receiptItems;
-    private final MutableLiveData<String> MessageReceipt;       // FIXME: instance variables should be camelCase
-    private final MutableLiveData<String> MessageReceiptItems;  // FIXME: instance variables should be camelCase
+    private final MutableLiveData<String> messageReceipt;       // FIXME: instance variables should be camelCase //fixed//
+    private final MutableLiveData<String> messageReceiptItems;  // FIXME: instance variables should be camelCase //fixed//
 
 
     public ItemListViewModel() {
@@ -46,23 +48,8 @@ public class ItemListViewModel extends ViewModel {
         //Tie Live Data Here
         receipt = new MutableLiveData<>(null);
         receiptItems = new MutableLiveData<>(null);
-        MessageReceipt = new MutableLiveData<>(null);
-        MessageReceiptItems = new MutableLiveData<>(null);
-
-
-        //Registrations Here
-        receiptRegistration = db.collection("receipts").document(userId).addSnapshotListener((document, error) -> {
-            if (error != null) {
-                Log.e(LOG_TAG, "Error getting receipt.", error);
-                MessageReceipt.postValue("Error Getting receipt");
-            } else {
-                Receipt receipt = document.toObject(Receipt.class);
-                this.receipt.postValue(receipt);
-                this.MessageReceipt.postValue("Receipt Found");
-                Log.i(LOG_TAG, "receipt found");
-
-            }
-        });
+        messageReceipt = new MutableLiveData<>(null);
+        messageReceiptItems = new MutableLiveData<>(null);
 
     }
 
@@ -90,48 +77,77 @@ public class ItemListViewModel extends ViewModel {
     }
 
     public LiveData<String> getMessageReceipt() {
-        return MessageReceipt;
+        return messageReceipt;
     }
 
     public LiveData<String> getMessageReceiptItems() {
-        return MessageReceiptItems;
+        return messageReceiptItems;
     }
 
 
     //Functions
     public void clearMessages() {
-        MessageReceipt.postValue(null);
-        MessageReceiptItems.postValue(null);
+        messageReceipt.postValue(null);
+        messageReceiptItems.postValue(null);
     }
 
     public void deleteItem(String receiptItemId) {
-        // FIXME: error handling
-        db.collection("receiptItems").document(receiptItemId).delete();
-        Log.i(LOG_TAG, "Item Deleted");
-    }
-
-    public void deleteAllItems() {
-        Receipt receipt = this.getReceipt().getValue();
-
-        // FIXME: crashes if receipt is null
-        db.collection("receiptItems").whereEqualTo("receiptId", receipt.receiptId).get().addOnCompleteListener(task -> {
-            // FIXME: error handling
-            for (DocumentSnapshot document : task.getResult().getDocuments()) {
-                db.collection("receiptItems").document(document.getId()).delete();
-
-            }
+        // FIXME: error handling //fixed//
+        db.collection("receiptItems")
+            .document(receiptItemId)
+            .delete()
+            .addOnSuccessListener((result)->{
+            Log.i(LOG_TAG, "Item Deleted");
+            clearMessages();
+        }).addOnFailureListener((error)->{
+            Log.i(LOG_TAG, "Item failed to Deleted");
+            messageReceiptItems.postValue("items failed to delete");
         });
     }
 
-    // FIXME: rename to fetchReceiptItems
-    public void getReceiptId(String receiptId) {
+    public void deleteAllItems() {
+
+        // FIXME: crashes if receipt is null//fixed//
+        db.collection("receiptItems")
+            .whereEqualTo("receiptId",receiptId)
+            .get()
+            .addOnSuccessListener(task -> {
+            // FIXME: error handling //fixed//
+            for (DocumentSnapshot document : task.getDocuments()) {
+                db.collection("receiptItems").document(document.getId()).delete();
+            }
+                clearMessages();
+        }).addOnFailureListener((error)->{
+            Log.i(LOG_TAG,"No receipt items found");
+            messageReceiptItems.postValue("No receipt items found");
+        });
+    }
+
+    // FIXME: rename to fetchReceiptItems //fixed//
+    public void fetchReceipt(String receiptId) {
+
+        receiptRegistration = db.collection("receipts").document(receiptId).addSnapshotListener((document, error) -> {
+            if (error != null) {
+                Log.e(LOG_TAG, "Error getting receipt.", error);
+                messageReceipt.postValue("Error Getting receipt");
+            } else {
+                Receipt receipt = document.toObject(Receipt.class);
+                this.receipt.postValue(receipt);
+                this.receiptId = receiptId;
+                Log.i(LOG_TAG, "receipt found");
+                clearMessages();
+
+            }
+        });
+
         receiptItemRegistration = db.collection("receiptItems").whereEqualTo("receiptId", receiptId).addSnapshotListener((QuerySnapshot querySnapshot, FirebaseFirestoreException error) -> {
             if (error != null) {
                 Log.e(LOG_TAG, "Error getting receipts items.", error);
-                MessageReceiptItems.postValue("Error getting receipts items.");
+                messageReceiptItems.postValue("Error getting receipts items.");
             } else {
                 List<ReceiptItem> newReceiptItems = querySnapshot.toObjects(ReceiptItem.class);
                 receiptItems.postValue(newReceiptItems);
+                clearMessages();
 
             }
         });
@@ -147,4 +163,5 @@ public class ItemListViewModel extends ViewModel {
         //db.collection("receipts").document(userId).update("updatedOn", new Date());
 
     }
+
 }
