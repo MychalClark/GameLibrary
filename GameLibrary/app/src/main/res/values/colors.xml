@@ -1,10 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="purple_200">#FFBB86FC</color>
-    <color name="purple_500">#FF6200EE</color>
-    <color name="purple_700">#FF3700B3</color>
-    <color name="teal_200">#FF03DAC5</color>
-    <color name="teal_700">#FF018786</color>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+<!--    <color name="purple_200">#FFBB86FC</color>-->
+<!--    <color name="purple_500">#FF6200EE</color>-->
+<!--    <color name="purple_700">#FF3700B3</color>-->
+<!--    <color name="teal_200">#FF03DAC5</color>-->
+<!--    <color name="teal_700">#FF018786</color>-->
+<!--    <color name="black">#FF000000</color>-->
+<!--    <color name="white">#FFFFFFFF</color>-->
+
+<!-- primary colors-->
+    <color name="pink_900">#BD3E26</color>
+    <color name="pink_800">#D7492E</color>
+    <color name="pink_700">#E54F32</color>
+    <color name="pink_600">#F45637</color>
+    <color name="pink_500">#FF5C3B</color>
+    <color name="pink_400">#FE7445</color>
+    <color name="pink_300">#FE8D73</color>
+    <color name="pink_200">#FDAD9B</color>
+    <color name="pink_100">#FDCDC2</color>
+
+    <!--complementary colors-->
+    <color name="blue_900">#00717F</color>
+    <color name="blue_800">#0094AE</color>
+    <color name="blue_700">#00A8C7</color>
+    <color name="blue_600">#00BEE4</color>
+    <color name="blue_500">#00CEF8</color>
+    <color name="blue_400">#00D7FC</color>
+    <color name="blue_300">#3BDEFF</color>
+    <color name="blue_200">#7EE8FF</color>
+    <color name="blue_100">#B3F1FF</color>
+
+    <!-- reds -->
+    <color name="red_300">#E57373</color>
+    <color name="red_500">#F44336</color>
+    <color name="red_700">#D32F2F</color>
+
+    <!-- black and white -->
+    <color name="black">#000000</color>
+    <color name="white">#FFFFFF</color>
+
+
 </resources>

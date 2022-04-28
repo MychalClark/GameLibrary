@@ -24,7 +24,7 @@ public class LoginViewModel extends ViewModel {
 
     //live data
     private final MutableLiveData<Integer> snackbarMessage;
-    private final MutableLiveData<String> errorMessage;  // FIXME: implement and translate
+    private final MutableLiveData<Integer> errorMessage;  // FIXME: implement and translate // fixed
 
 
     public LoginViewModel() {
@@ -47,6 +47,7 @@ public class LoginViewModel extends ViewModel {
         if (user == null) {
             Log.i(LOG_TAG, "No user logged in");
             snackbarMessage.postValue(R.string.noUserLogged);
+            errorMessage.postValue(R.string.noUserLogged);
         } else {
             String userId = user.getUid();
             Log.i(LOG_TAG, "Updating user document " + userId);
@@ -72,6 +73,7 @@ public class LoginViewModel extends ViewModel {
                     } else {
                         Log.e(LOG_TAG, "user not updated in database.", task.getException());
                         snackbarMessage.postValue(R.string.updateDatabaseError);
+                        errorMessage.postValue(R.string.updateDatabaseError);
                     }
                 });
         }

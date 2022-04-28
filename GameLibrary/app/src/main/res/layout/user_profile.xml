@@ -132,7 +132,21 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
+        android:layout_marginTop="29dp"
         android:text="@string/preferredConsoles"
+        android:textAlignment="center"
+        android:textSize="@dimen/profileLabelTextSize"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/userProfileLoginText" />
+
+    <TextView
+        android:id="@+id/userProfileLoginLabel"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:text="@string/lastLogged"
         android:textAlignment="center"
         android:textSize="@dimen/profileLabelTextSize"
         android:textStyle="bold"
@@ -150,6 +164,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/userProfileIdLabel"
         tools:text="2309sdf09375023DKFJ750923570" />
+
+    <TextView
+        android:id="@+id/userProfileLoginText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:textAlignment="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/userProfileLoginLabel"
+        tools:text="Apr 12, 2022" />
 
     <TextView
         android:id="@+id/userLibraryRecyclerLabel"

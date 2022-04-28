@@ -175,6 +175,7 @@ public class GameDetailsFragment extends Fragment {
                     gameScreenshots[2].setVisibility(View.GONE);
                 } else {
                     gameId = game.id;
+                    selectedGame = game;
                     Log.i(LOG_TAG, "have game" + gameId);
 
                     composeReviewButton.setVisibility(View.VISIBLE);
@@ -250,7 +251,7 @@ public class GameDetailsFragment extends Fragment {
                         StringBuilder sb = new StringBuilder();
                         for (int i = 0; i < game.genre.size(); i++) {
 
-                            sb.append(game.tags.get(i));
+                            sb.append(game.genre.get(i));
                         }
                         gameGenreText.setVisibility(View.VISIBLE);
                         gameGenreText.setText(getString(R.string.genreLabel) + sb);
@@ -371,10 +372,10 @@ public class GameDetailsFragment extends Fragment {
                 Log.i(LOG_TAG, "Share game clicked.");
 
                 if (selectedGame == null) {
-//                Snackbar.make(view, R.string.errorMovieNotFound, Snackbar.LENGTH_SHORT).show();
+              Log.i(LOG_TAG, "frfrfrff");
 
                 } else if (selectedGame.name == null) {
-//                Snackbar.make(view, R.string.movieHasNoName, Snackbar.LENGTH_SHORT).show();
+             Log.i(LOG_TAG, "frifrifri");
 
                 } else {
                     String gameName;

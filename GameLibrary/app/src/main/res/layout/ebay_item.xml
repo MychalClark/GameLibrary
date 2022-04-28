@@ -4,7 +4,9 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    style="@style/CardViewStyle">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -30,6 +32,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:layout_marginStart="8dp"
+            android:fontFamily="@font/belgrano"
             android:text="@string/itemPriceLabel"
             app:layout_constraintEnd_toEndOf="@+id/ebayItemShippingLabel"
             app:layout_constraintStart_toEndOf="@+id/ebayItemImage"
@@ -53,7 +56,7 @@
             android:layout_marginStart="16dp"
             android:text="@string/itemSellerLabel"
             app:layout_constraintStart_toEndOf="@+id/ebayItemImage"
-            app:layout_constraintTop_toBottomOf="@+id/ebayItemShippingLabel" />
+            app:layout_constraintTop_toBottomOf="@+id/ebayItemShipping" />
 
         <TextView
             android:id="@+id/ebayItemTitle"
@@ -103,8 +106,8 @@
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/ebayItemImage"
-            app:layout_constraintTop_toBottomOf="@+id/ebayItemSellerLabel"
+            app:layout_constraintStart_toEndOf="@+id/ebayItemSellerLabel"
+            app:layout_constraintTop_toBottomOf="@+id/ebayItemShipping"
             tools:text="Incorperated Ink Ink vile 4920" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

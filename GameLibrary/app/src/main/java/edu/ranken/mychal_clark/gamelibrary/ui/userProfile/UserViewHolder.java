@@ -12,6 +12,7 @@ public class UserViewHolder extends RecyclerView.ViewHolder {
     public TextView displayName;
     public ImageView profilePicture;
     public CardView profileCard;
+    public TextView loginDate;
 
 
     public UserViewHolder(View itemView) {

@@ -52,7 +52,7 @@
         android:layout_marginTop="8dp"
         android:text="@string/review_fail"
         android:textColor="#D11616"
-        android:visibility="invisible"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@+id/reviewBtn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/reviewBtn"

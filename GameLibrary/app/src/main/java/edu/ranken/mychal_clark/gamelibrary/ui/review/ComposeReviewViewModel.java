@@ -28,7 +28,7 @@ public class ComposeReviewViewModel extends ViewModel {
 
     // live data
     private final MutableLiveData<String> gameName;
-    private final MutableLiveData<String> errorMessage;  // FIXME: translate
+    private final MutableLiveData<Integer> errorMessage;  // FIXME: translate
     private final MutableLiveData<Integer> snackbarMessage;
     private final MutableLiveData<Boolean> finished;
     private final MutableLiveData<String> currentUserId;
@@ -61,12 +61,8 @@ public class ComposeReviewViewModel extends ViewModel {
         return gameName;
     }
 
-    public LiveData<String> getErrorMessage() {
+    public LiveData<Integer> getErrorMessage() {
         return errorMessage;
-    }
-
-    public LiveData<Integer> getSnackbarMessage() {
-        return snackbarMessage;
     }
 
     public LiveData<Boolean> getFinished() {
@@ -86,7 +82,7 @@ public class ComposeReviewViewModel extends ViewModel {
 
         if (gameId == null) {
             this.gameName.postValue(null);
-            this.errorMessage.postValue("Error in writing Review");
+            this.errorMessage.postValue(R.string.writeReviewError);
             this.snackbarMessage.postValue(R.string.writeReviewError);
         } else {
             gameRegistration =
@@ -95,7 +91,7 @@ public class ComposeReviewViewModel extends ViewModel {
                     .addSnapshotListener((document, error) -> {
                         if (error != null) {
                             Log.e(LOG_TAG, "Error getting game.", error);
-                            this.errorMessage.postValue("Error getting game.");
+                            this.errorMessage.postValue(R.string.errorGettingGame);
                             this.snackbarMessage.postValue(R.string.errorGettingGame);
                         } else if (document != null && document.exists()) {
                             Game game = document.toObject(Game.class);
@@ -104,7 +100,7 @@ public class ComposeReviewViewModel extends ViewModel {
                             this.snackbarMessage.postValue(R.string.noGameFound);
                         } else {
                             this.gameName.postValue(null);
-                            this.errorMessage.postValue("Game does not exist.");
+                            this.errorMessage.postValue(R.string.noExsistingGame);
                             this.snackbarMessage.postValue(R.string.noExsistingGame);
                         }
                     });
@@ -121,21 +117,26 @@ public class ComposeReviewViewModel extends ViewModel {
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
             // FIXME: tell the user when they are not logged in
             if (user != null) {
-                userId = user.getUid();
+                if(!reviewText.equals("")) {
+                    userId = user.getUid();
 
-                // FIXME: include the profile photo, if available
-                Log.i(LOG_TAG, "Creating Review");
-                Map<String, Object> newReview = new HashMap<>();
-                newReview.put("displayName", user.getDisplayName());
-                newReview.put("userId", userId);
-                newReview.put("date", new Date());
-                newReview.put("reviewText", reviewText);
-                newReview.put("gameId", gameId);
+                    // FIXME: include the profile photo, if available
+                    Log.i(LOG_TAG, "Creating Review");
+                    Map<String, Object> newReview = new HashMap<>();
+                    newReview.put("displayName", user.getDisplayName());
+                    newReview.put("userId", userId);
+                    newReview.put("date", new Date());
+                    newReview.put("reviewText", reviewText);
+                    newReview.put("gameId", gameId);
 
-                // FIXME: activity is finished, before the review is actually published.
-                // FIXME: handle errors with publishing the review
-                db.collection("reviews").document(userId + ";" + gameId).set(newReview);
-                finished.postValue(true);
+                    // FIXME: activity is finished, before the review is actually published.
+                    // FIXME: handle errors with publishing the review
+                    db.collection("reviews").document(userId + ";" + gameId).set(newReview);
+                    finished.postValue(true);
+                }
+                else{
+                    errorMessage.postValue(R.string.addText);
+                }
             }
         }
 

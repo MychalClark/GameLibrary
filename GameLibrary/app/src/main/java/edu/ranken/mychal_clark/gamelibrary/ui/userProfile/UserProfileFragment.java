@@ -20,6 +20,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.snackbar.Snackbar;
 import com.squareup.picasso.Picasso;
 
+import java.text.DateFormat;
+
 import edu.ranken.mychal_clark.gamelibrary.R;
 import edu.ranken.mychal_clark.gamelibrary.UserProfileActivity;
 import edu.ranken.mychal_clark.gamelibrary.data.User;
@@ -53,6 +55,7 @@ public class UserProfileFragment extends Fragment {
     private TextView displayNameLabel;
     private TextView userIdLabel;
     private TextView errorMessage;
+    private TextView userLoginText;
 
     public UserProfileFragment() {
         super(R.layout.user_profile_scroll);
@@ -80,6 +83,7 @@ public class UserProfileFragment extends Fragment {
         userIdLabel = contentView.findViewById(R.id.userProfileIdLabel);
         displayNameLabel = contentView.findViewById(R.id.userProfileDisplayNameLabel);
         errorMessage = contentView.findViewById(R.id.userProfileErrorMessage);
+        userLoginText = contentView.findViewById(R.id.userProfileLoginText);
 
         //create adapter
         profileLibraryGameAdapter = new UserProfileLibraryGameAdapter(activity, null);
@@ -133,6 +137,13 @@ public class UserProfileFragment extends Fragment {
                     userIdText.setText(R.string.noUserId);
                 }else{
                     userIdText.setText(user.id);
+                }
+
+                if(user.lastLoggedIn == null){
+                    userLoginText.setText(R.string.unknown);
+                }
+                else{
+                    userLoginText.setText(DateFormat.getDateInstance().format(user.lastLoggedIn));
                 }
 
                 if (user.profilePictureUrl == null) {

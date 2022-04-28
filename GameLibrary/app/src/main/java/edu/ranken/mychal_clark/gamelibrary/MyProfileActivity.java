@@ -1,6 +1,7 @@
 package edu.ranken.mychal_clark.gamelibrary;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.hardware.Camera;
 import android.net.Uri;
@@ -24,6 +25,8 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.squareup.picasso.Picasso;
@@ -80,6 +83,7 @@ public class MyProfileActivity extends AppCompatActivity {
     private Button cameraBtn;
     private Button galleryBtn;
     private Button changeConsoleBtn;
+    private FloatingActionButton shareAccountButton;
 
 
     // launchers
@@ -150,6 +154,7 @@ public class MyProfileActivity extends AppCompatActivity {
         windowsIcon = findViewById(R.id.profileGameConsole3);
         nintendoIcon = findViewById(R.id.profileGameConsole4);
         changeConsoleBtn = findViewById(R.id.profileChangeConsolesBtn);
+        shareAccountButton = findViewById(R.id.shareAccountBtn);
 
 
         // get picasso
@@ -209,6 +214,35 @@ public class MyProfileActivity extends AppCompatActivity {
             }
         });
         //register Listeners
+        shareAccountButton.setOnClickListener((view) -> {
+            Log.i(LOG_TAG, "Share Account clicked.");
+
+            if (user == null) {
+                Snackbar.make(view, R.string.noUserSelected, Snackbar.LENGTH_SHORT).show();
+
+            } else if (user.getDisplayName() == null) {
+                Snackbar.make(view, R.string.userFound, Snackbar.LENGTH_SHORT).show();
+            } else {
+                String gameName;
+                if (user.getDisplayName() == null) {
+                    gameName = user.getUid();
+                } else {
+                    gameName = user.getUid() + " (" + user.getDisplayName()+ ")";
+                }
+
+                String message =
+                    getString(R.string.shareUserMessage) +
+                        gameName +
+                        "\nhttps://my-profile.com/user/" + user.getUid();
+
+                Intent sendIntent = new Intent(Intent.ACTION_SEND);
+                sendIntent.putExtra(Intent.EXTRA_TEXT, message);
+
+                sendIntent.setType("text/plain");
+
+                startActivity(Intent.createChooser(sendIntent, getString(R.string.shareUser)));
+            }
+        });
 
         cameraBtn.setOnClickListener((view) -> {
             Log.i(LOG_TAG, "camera");
@@ -306,8 +340,6 @@ public class MyProfileActivity extends AppCompatActivity {
             this.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY);
         cameraBtn.setVisibility(hasCamera ? View.VISIBLE : View.GONE);
 
-
-
     }
 
     //voids
@@ -349,5 +381,6 @@ public class MyProfileActivity extends AppCompatActivity {
             return super.onOptionsItemSelected(item);
         }
     }
+
 
 }

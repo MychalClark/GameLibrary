@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Picasso;
 
+import java.text.DateFormat;
 import java.util.List;
 
 import edu.ranken.mychal_clark.gamelibrary.R;
@@ -59,6 +60,7 @@ public class UserListAdapter extends RecyclerView.Adapter<UserViewHolder> {
         vh.displayName = itemView.findViewById(R.id.userListNameText);
         vh.profileCard = itemView.findViewById(R.id.profileCardList);
         vh.profilePicture = itemView.findViewById(R.id.userListProfilePicture);
+        vh.loginDate = itemView.findViewById(R.id.userListLoginDateText);
 
         vh.itemView.setOnClickListener((view)->{
 
@@ -95,6 +97,12 @@ public class UserListAdapter extends RecyclerView.Adapter<UserViewHolder> {
                 .resize(200, 300)
                 .centerCrop()
                 .into(vh.profilePicture);
+        }
+
+        if(user.lastLoggedIn != null){
+            vh.loginDate.setText(DateFormat.getDateInstance().format(user.lastLoggedIn));
+        }else{
+            vh.loginDate.setText(R.string.unknown);
         }
 
     }

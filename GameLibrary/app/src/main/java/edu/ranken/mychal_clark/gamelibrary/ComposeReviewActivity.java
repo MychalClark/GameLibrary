@@ -29,6 +29,7 @@ public class ComposeReviewActivity extends AppCompatActivity {
     private String gameId;
     private ComposeReviewViewModel model;
     private Button reviewBtn;
+    private TextView errorMessage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +39,7 @@ public class ComposeReviewActivity extends AppCompatActivity {
         reviewText = findViewById(R.id.reviewInput);
         gameTitle = findViewById(R.id.reviewGameTitle);
         reviewBtn = findViewById(R.id.reviewBtn);
+        errorMessage = findViewById(R.id.reviewError);
 
 
         Intent intent = getIntent();
@@ -63,6 +65,13 @@ hideKeyboard(this,reviewText);
             }
         });
 
+        model.getErrorMessage().observe(this, (error)->{
+            if(error != null){
+                errorMessage.setText(error);
+                errorMessage.setVisibility(View.VISIBLE);
+            }
+            else{errorMessage.setVisibility(View.GONE);}
+        });
 
     }
     @Override

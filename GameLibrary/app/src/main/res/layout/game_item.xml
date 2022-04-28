@@ -5,65 +5,72 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="8dp">
+    android:layout_margin="8dp"
+    style="@style/CardViewStyle">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:soundEffectsEnabled="false"
+        android:splitMotionEvents="false">
 
         <ImageView
             android:id="@+id/gameConsole3"
+            style="@style/IconViewStyle"
             android:layout_width="@dimen/gameItemIconSize"
             android:layout_height="@dimen/gameItemIconSize"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
+            android:contentDescription="@string/detail_console_3"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/gameConsole2"
             app:layout_constraintTop_toBottomOf="@+id/gameImage"
             app:layout_constraintVertical_bias="0.0"
-            tools:srcCompat="@drawable/ic_xbox"
-            android:contentDescription="@string/detail_console_3" />
+            tools:srcCompat="@drawable/ic_xbox" />
 
         <ImageView
             android:id="@+id/gameConsole4"
+            style="@style/IconViewStyle"
             android:layout_width="@dimen/gameItemIconSize"
             android:layout_height="@dimen/gameItemIconSize"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
+            android:contentDescription="@string/detail_console_4"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/gameConsole3"
             app:layout_constraintTop_toBottomOf="@+id/gameImage"
             app:layout_constraintVertical_bias="0.0"
-            tools:srcCompat="@drawable/ic_nintendo"
-            android:contentDescription="@string/detail_console_4"/>
+            tools:srcCompat="@drawable/ic_nintendo" />
 
         <ImageView
             android:id="@+id/gameConsole1"
+            style="@style/IconViewStyle"
             android:layout_width="@dimen/gameItemIconSize"
             android:layout_height="@dimen/gameItemIconSize"
             android:layout_marginLeft="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
+            android:contentDescription="@string/detail_console_1"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="@+id/gameImage"
             app:layout_constraintTop_toBottomOf="@+id/gameImage"
-            tools:srcCompat="@drawable/ic_windows"
-            android:contentDescription="@string/detail_console_1"/>
+            tools:srcCompat="@drawable/ic_windows" />
 
         <ImageView
             android:id="@+id/gameConsole2"
+            style="@style/IconViewStyle"
             android:layout_width="@dimen/gameItemIconSize"
             android:layout_height="@dimen/gameItemIconSize"
             android:layout_marginLeft="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
+            android:contentDescription="@string/detail_console_2"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/gameConsole1"
             app:layout_constraintTop_toBottomOf="@+id/gameImage"
-            tools:srcCompat="@drawable/ic_ps"
-            android:contentDescription="@string/detail_console_2"/>
+            tools:srcCompat="@drawable/ic_ps" />
 
         <TextView
             android:id="@+id/gameReleaseYearText"
@@ -82,14 +89,15 @@
             android:layout_width="@dimen/gameItemNameWidth"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
+            android:ellipsize="end"
+            android:maxLines="2"
             android:textAlignment="viewStart"
-            android:textSize="14sp"
+            android:textSize="18sp"
+            android:textStyle="bold"
             app:layout_constraintEnd_toStartOf="@+id/buttonBook"
             app:layout_constraintStart_toEndOf="@+id/gameImage"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="God of War"
-            android:maxLines="2"
-            android:ellipsize="end"/>
+            tools:text="God of War" />
 
         <TextView
             android:id="@+id/gameDescriptionText"
@@ -109,10 +117,10 @@
             android:id="@+id/gameImage"
             android:layout_width="@dimen/gameItemImageWidth"
             android:layout_height="@dimen/gameItemImageHeight"
+            android:contentDescription="@string/item_image"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:srcCompat="@drawable/game30xx"
-            android:contentDescription="@string/item_image"/>
+            tools:srcCompat="@drawable/game30xx" />
 
 
         <ImageButton
@@ -120,22 +128,22 @@
             android:layout_width="@dimen/gameItemButtonSize"
             android:layout_height="@dimen/gameItemButtonSize"
             android:adjustViewBounds="true"
+            android:contentDescription="@string/button_book"
             android:scaleType="centerInside"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_book_outline"
-            android:contentDescription="@string/button_book"/>
+            app:srcCompat="@drawable/ic_book_outline" />
 
         <ImageButton
             android:id="@+id/buttonWishlist"
             android:layout_width="@dimen/gameItemButtonSize"
             android:layout_height="@dimen/gameItemButtonSize"
             android:adjustViewBounds="true"
+            android:contentDescription="@string/wishlist_button"
             android:scaleType="centerInside"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/buttonBook"
-            app:srcCompat="@drawable/ic_wishlist_outline"
-            android:contentDescription="@string/wishlist_button"/>
+            app:srcCompat="@drawable/ic_wishlist_outline" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

@@ -43,10 +43,9 @@ public class MyProfileViewModel extends ViewModel {
 
     //live data
     private final MutableLiveData<Integer> snackbarMessage;
-    private final MutableLiveData<String> errorMessage;
     private final MutableLiveData<List<Library>> librarys;
     private final MutableLiveData<List<WishList>> wishlists;
-    private MutableLiveData<String> uploadErrorMessage;   // FIXME: translate
+    private MutableLiveData<Integer> uploadErrorMessage;   // FIXME: translate
     private MutableLiveData<Uri> downloadUrl;
     private final  MutableLiveData<User> currentUser;
 
@@ -56,7 +55,6 @@ public class MyProfileViewModel extends ViewModel {
         auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();
         //add live data
-        errorMessage = new MutableLiveData<>(null);
         snackbarMessage = new MutableLiveData<>(null);
         librarys = new MutableLiveData<>(null);
         wishlists = new MutableLiveData<>(null);
@@ -110,7 +108,7 @@ public class MyProfileViewModel extends ViewModel {
     public LiveData<List<Library>> getLibrary(){return librarys;}
     public LiveData<List<WishList>> getWishlist(){return wishlists;}
     public LiveData<User> getCurrentUser(){return currentUser;}
-    public LiveData<String> getUploadErrorMessage() {
+    public LiveData<Integer> getUploadErrorMessage() {
         return uploadErrorMessage;
     }
     public LiveData<Integer> getSnackbarMessage(){return snackbarMessage;}
@@ -145,7 +143,7 @@ public class MyProfileViewModel extends ViewModel {
             .addOnCompleteListener((downloadTask) -> {
                 if (!downloadTask.isSuccessful()) {
                     Log.e(LOG_TAG, "failed to get download url for: " + storageRef.getPath(), downloadTask.getException());
-                    uploadErrorMessage.postValue("Failed to get download URL.");
+                    uploadErrorMessage.postValue(R.string.failedToGetUpload);
                 } else {
                     Uri downloadUrl = downloadTask.getResult();
                     Log.i(LOG_TAG, "download url: " + downloadUrl);

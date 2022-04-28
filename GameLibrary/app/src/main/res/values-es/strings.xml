@@ -104,4 +104,8 @@
     <string name="genreLabel">\"Género: \"</string>
     <string name="noDisplayName">Sin nombre para mostrar.</string>
     <string name="noUserId">sin identificación de usuario.</string>
+    <string name="unknown">desconocida</string>
+    <string name="lastLogged">Último inicio de sesión:</string>
+    <string name="addText">Por favor agregue texto.</string>
+    <string name="failedToGetUpload">No se pudo obtener la URL de descarga.</string>
 </resources>

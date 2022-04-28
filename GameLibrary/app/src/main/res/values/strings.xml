@@ -112,5 +112,9 @@
     <string name="genreLabel">\"Genre: \"</string>
     <string name="noDisplayName">No display Name.</string>
     <string name="noUserId">no user Id.</string>
+    <string name="unknown">unknown</string>
+    <string name="lastLogged">Last Logged In:</string>
+    <string name="addText">Please Add Text.</string>
+    <string name="failedToGetUpload">Failed to get download URL.</string>
 
 </resources>
