@@ -21,9 +21,9 @@ import edu.ranken.mychal_clark.gamelibrary.ui.game.GameDetailsViewModel;
 import edu.ranken.mychal_clark.gamelibrary.ui.game.GameListModel;
 import edu.ranken.mychal_clark.gamelibrary.ui.home.HomePageAdapter;
 import edu.ranken.mychal_clark.gamelibrary.ui.utils.ConfirmDialog;
-import edu.ranken.mychal_clark.gamelibrary.userProfile.UserListViewModel;
-import edu.ranken.mychal_clark.gamelibrary.userProfile.UserProfileFragment;
-import edu.ranken.mychal_clark.gamelibrary.userProfile.UserProfileViewModel;
+import edu.ranken.mychal_clark.gamelibrary.ui.userProfile.UserListViewModel;
+import edu.ranken.mychal_clark.gamelibrary.ui.userProfile.UserProfileFragment;
+import edu.ranken.mychal_clark.gamelibrary.ui.userProfile.UserProfileViewModel;
 
 public class HomeActivity extends AppCompatActivity {
 

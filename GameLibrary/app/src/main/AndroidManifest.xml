@@ -27,7 +27,8 @@
         android:theme="@style/Theme.GameLibrary">
         <activity
             android:name=".EbayBrowseActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:parentActivityName=".GameDetailsActivity"/>
 
         <provider
             android:name="androidx.core.content.FileProvider"

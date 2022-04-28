@@ -46,7 +46,7 @@ public class MyProfileViewModel extends ViewModel {
     private final MutableLiveData<String> errorMessage;
     private final MutableLiveData<List<Library>> librarys;
     private final MutableLiveData<List<WishList>> wishlists;
-    private MutableLiveData<String> uploadErrorMessage;
+    private MutableLiveData<String> uploadErrorMessage;   // FIXME: translate
     private MutableLiveData<Uri> downloadUrl;
     private final  MutableLiveData<User> currentUser;
 

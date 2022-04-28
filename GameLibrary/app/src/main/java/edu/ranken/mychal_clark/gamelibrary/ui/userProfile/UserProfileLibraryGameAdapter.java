@@ -1,4 +1,4 @@
-package edu.ranken.mychal_clark.gamelibrary.userProfile;
+package edu.ranken.mychal_clark.gamelibrary.ui.userProfile;
 
 import android.app.Activity;
 import android.view.LayoutInflater;
@@ -13,27 +13,27 @@ import com.squareup.picasso.Picasso;
 import java.util.List;
 
 import edu.ranken.mychal_clark.gamelibrary.R;
-import edu.ranken.mychal_clark.gamelibrary.data.WishList;
+import edu.ranken.mychal_clark.gamelibrary.data.Library;
 import edu.ranken.mychal_clark.gamelibrary.ui.myProfile.ProfileGameViewHolder;
 
-public class UserProfileWishlistGameAdapter extends RecyclerView.Adapter<ProfileGameViewHolder>{
+public class UserProfileLibraryGameAdapter extends RecyclerView.Adapter<ProfileGameViewHolder>{
 
-    private static final String LOG_TAG = "ProfileWishlistAdapter";
+    private static final String LOG_TAG = "ProfileGameAdapter";
 
     private final Activity context;
     private final LayoutInflater layoutInflater;
-    private List<WishList> items;
+    private List<Library> items;
     private Picasso picasso;
 
 
-    public UserProfileWishlistGameAdapter(Activity context, List<WishList> items) {
+    public UserProfileLibraryGameAdapter(Activity context, List<Library> items) {
         this.context = context;
         this.layoutInflater = LayoutInflater.from(context);
         this.items = items;
         this.picasso = picasso.get();
     }
 
-        public void setItems(List<WishList> items) {
+        public void setItems(List<Library> items) {
         this.items = items;
         notifyDataSetChanged();
     }
@@ -64,7 +64,7 @@ public class UserProfileWishlistGameAdapter extends RecyclerView.Adapter<Profile
     @Override
     public void onBindViewHolder(@NonNull ProfileGameViewHolder vh, int position) {
 
-        WishList item = items.get(position);
+        Library item = items.get(position);
 
         vh.profileGameText.setText(item.name);
 

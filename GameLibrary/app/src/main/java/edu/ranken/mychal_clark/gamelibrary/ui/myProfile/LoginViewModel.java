@@ -24,7 +24,7 @@ public class LoginViewModel extends ViewModel {
 
     //live data
     private final MutableLiveData<Integer> snackbarMessage;
-    private final MutableLiveData<String> errorMessage;
+    private final MutableLiveData<String> errorMessage;  // FIXME: implement and translate
 
 
     public LoginViewModel() {

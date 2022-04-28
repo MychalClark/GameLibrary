@@ -157,7 +157,7 @@ public class EbayBrowseViewModel extends ViewModel {
 
             if(authToken != null && gameQuery != null) {
                 browseAPI.searchAsync(
-                    authToken, gameQuery+" "+ console, 4, 1249, sort, filter,
+                    authToken, gameQuery+" "+ console, 100, 1249, sort, filter,
                     new Callback<EbayBrowseAPI.SearchResponse>() {
                         @Override
                         public void onResponse(Call<EbayBrowseAPI.SearchResponse> call, Response<EbayBrowseAPI.SearchResponse> response) {

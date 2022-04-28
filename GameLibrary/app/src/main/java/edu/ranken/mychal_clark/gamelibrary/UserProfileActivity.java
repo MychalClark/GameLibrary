@@ -13,8 +13,8 @@ import androidx.lifecycle.ViewModelProvider;
 
 import java.util.Objects;
 
-import edu.ranken.mychal_clark.gamelibrary.userProfile.UserProfileFragment;
-import edu.ranken.mychal_clark.gamelibrary.userProfile.UserProfileViewModel;
+import edu.ranken.mychal_clark.gamelibrary.ui.userProfile.UserProfileFragment;
+import edu.ranken.mychal_clark.gamelibrary.ui.userProfile.UserProfileViewModel;
 
 public class UserProfileActivity extends AppCompatActivity {
 

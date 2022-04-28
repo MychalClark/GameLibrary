@@ -60,17 +60,18 @@ public class LoginActivity extends AppCompatActivity {
             signInLauncher.launch(signInIntent);
 
         });
+
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            onLoginSuccess();
+        } else {
+            //loginBtn.performClick();
+        }
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user != null) {
-            onLoginSuccess();
-        } else {
-            loginBtn.performClick();
-        }
     }
 
     private void onSignInResult(FirebaseAuthUIAuthenticationResult result) {

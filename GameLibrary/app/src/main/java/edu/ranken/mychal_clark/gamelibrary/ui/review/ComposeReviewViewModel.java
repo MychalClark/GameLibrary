@@ -28,7 +28,7 @@ public class ComposeReviewViewModel extends ViewModel {
 
     // live data
     private final MutableLiveData<String> gameName;
-    private final MutableLiveData<String> errorMessage;
+    private final MutableLiveData<String> errorMessage;  // FIXME: translate
     private final MutableLiveData<Integer> snackbarMessage;
     private final MutableLiveData<Boolean> finished;
     private final MutableLiveData<String> currentUserId;

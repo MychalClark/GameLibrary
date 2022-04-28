@@ -139,9 +139,14 @@ public class GameDetailsFragment extends Fragment {
                         double avg = (maxPrice + maxShipping) / searchResponse.itemSummaries.size();
 
                         gameAverage.setText("Average Price: " + NumberFormat.getCurrencyInstance().format(avg));
+                        gameAverage.setVisibility(View.VISIBLE);
                     } else {
                         gameAverage.setText("Average Price: Unknown");
+                        gameAverage.setVisibility(View.VISIBLE);
                     }
+                }else{
+                    gameAverage.setText(null);
+                    gameAverage.setVisibility(View.GONE);
                 }
 
 
@@ -157,7 +162,7 @@ public class GameDetailsFragment extends Fragment {
                     gameTitle.setVisibility(View.GONE);
                     gameMainImage.setVisibility(View.GONE);
                     gameDescription.setVisibility(View.GONE);
-                    gameAverage.setVisibility(View.GONE);
+                    //gameAverage.setVisibility(View.GONE);
                     gameGenreText.setVisibility(View.GONE);
                     gameMultiplayerText.setVisibility(View.GONE);
                     gameTags.setVisibility(View.GONE);
