@@ -3,10 +3,14 @@ package edu.ranken.mychal_clark.checkmyreceipt;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -33,11 +37,14 @@ public class ItemListActivity extends AppCompatActivity {
     private TextView subtotal;
     private TotalsViewModel totalModel;
     private String receiptId;
+    private TextView receiptError;
+    private TextView itemError;
+    private double total;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.receipt_item_list);
 
 
         //Link views
@@ -46,6 +53,8 @@ public class ItemListActivity extends AppCompatActivity {
         calcBtn = findViewById(R.id.calcBtn);
         fabDelete = findViewById(R.id.fabDelete);
         subtotal = findViewById(R.id.subTotalText);
+        itemError = findViewById(R.id.itemListItemError);
+        receiptError = findViewById(R.id.itemListReceiptError);
 
         // get intent
         Intent intentReceipt = getIntent();
@@ -65,58 +74,103 @@ public class ItemListActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
 
         model.fetchReceipt(receiptId);
+        totalModel.fetchReceipt(receiptId);
 
+        model.getMessageReceipt().observe(this,(error)->{
+            if (error != null) {
+                receiptError.setText(error);
+                receiptError.setVisibility(View.VISIBLE);
+            } else {
+                receiptError.setVisibility(View.GONE);
+            }
+        });
+        model.getMessageReceiptItems().observe(this,(error)->{
+            if (error != null) {
+                itemError.setText(error);
+                itemError.setVisibility(View.VISIBLE);
+            } else {
+                itemError.setVisibility(View.GONE);
+            }
+        });
         model.getReceipt().observe(this, (receipt) -> {
             if (receipt != null) {
 
-                // FIXME: show the subtotal, don't update the receipt
-                //        this causes an infinite loop of updates
+                // FIXME: show the subtotal, don't update the receipt//fixed//
+                //        this causes an infinite loop of updates//fixed//
 
             }
         });
 
-        // FIXME: indentation and code style
+        // FIXME: indentation and code style//fixed//
         model.getReceiptItems().observe(this, (receiptItems) -> {
             adapter.setItems(receiptItems);
-            subtotal.setText(NumberFormat.getCurrencyInstance().format(adapter.itemTotal()));
-            model.updateSubtotal(adapter.itemTotal());
-            // FIXME: update receipt subtotal here instead
+            total = 0.00;
+            if(receiptItems != null) {
+                for (int i = 0; i < receiptItems.size(); i++) {
+                    total += receiptItems.get(i).itemTotal;
+                }
+                subtotal.setText(NumberFormat.getCurrencyInstance().format(total));
+                model.updateSubtotal(total);
+            }
+            // FIXME: update receipt subtotal here instead//fixed//
 
             ;
         });
 
-        // FIXME: observe and show error messages
+        // FIXME: observe and show error messages//fixed//
 
 
         //Set Listeners
         fabAdd.setOnClickListener((view) -> {
+            model.updateSubtotal(total);
+
             Intent intent = new Intent(this, AddItemActivity.class);
+            intent.putExtra(ItemListActivity.EXTRA_RECEIPT_ID, receiptId);
             startActivity(intent);
 
-            // FIXME: items have not been updated yet
-            //        this recalculates the subtotal before the item is added
-            model.updateSubtotal(adapter.itemTotal());
+            // FIXME: items have not been updated yet//fixed//
+            //        this recalculates the subtotal before the item is added//fixed//
+
         });
 
         fabDelete.setOnClickListener((view) -> {
 
             model.deleteAllItems();
+            model.updateSubtotal(total);
 
-            // FIXME: items have not been updated yet
+            // FIXME: items have not been updated yet//fixed//
             //        this recalculates the subtotal before the items are deleted
-            model.updateSubtotal(adapter.itemTotal());
+
         });
 
 
         calcBtn.setOnClickListener((view) -> {
-            // FIXME: this crashes when receipt or taxPercent are null
+            // FIXME: this crashes when receipt or taxPercent are null//fixed//
+            if(model.getReceipt().getValue() != null){
             totalModel.setSalesTax(model.getReceipt().getValue().taxPercent);
 
             Intent intent = new Intent(this, TotalsActivity.class);
-            startActivity(intent);
+            intent.putExtra(TotalsActivity.EXTRA_RECEIPT_ID, receiptId);
+            startActivity(intent);}
         });
 
 
+    }
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int itemId = item.getItemId();
+        if (itemId == android.R.id.home) {
+            // force up navigation to have the same behavior as back navigation
+            onBackPressed();
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
+        }
+    }
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString("receiptId", receiptId);
     }
 
 

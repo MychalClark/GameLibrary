@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Check my receipt</string>
+    <string name="log_out">Cerrar sesión</string>
+    <string name="actionSignOut">acciónCerrar sesión</string>
+    <string name="myReceipts">Mis recibos</string>
+    <string name="failAddReceipt">No se pudo agregar el recibo</string>
+    <string name="failReceiptUpdate">no se pudo actualizar el recibo</string>
+    <string name="errorReceipts">error al obtener los recibos.</string>
+    <string name="noReceipts">No se han creado recibos.</string>
+    <string name="myReceiptItems">Mi recibo - Artículos</string>
+    <string name="myReceiptAdd">Mi recibo - Agregar</string>
+    <string name="myReceiptTotals">Mi recibo - Totales</string>
+    <string name="noReceiptsFound">No se encontraron recibos.</string>
+    <string name="failedNewItem">No se pudo agregar un nuevo elemento.</string>
+    <string name="enterTaxPrice">Por favor ingrese un precio</string>
+    <string name="fixInputs">Corrija las entradas.</string>
+    <string name="failedToDeleteItems">los elementos no se pudieron eliminar</string>
+    <string name="noReceiptItemsFound">No se encontraron artículos de recibo</string>
+    <string name="errorReceipt">Error al obtener el recibo</string>
+    <string name="noReceiptFound">No se encontraron recibos.</string>
+    <string name="nothingNull">nulo</string>
+    <string name="noName">sin nombre</string>
+    <string name="noDate">sin cita</string>
+    <string name="noPrice">sin precio</string>
+    <string name="subTotalNull">El subtotal es nulo</string>
+    <string name="receiptNotUpdated">Recibo no actualizado en base de datos.</string>
+    <string name="errorGettingReceiptItems">Error al obtener artículos de recibos.</string>
+    <string name="taxBetweenError">El impuesto a las ventas debe estar entre 0 y 100</string>
+    <string name="CheckMyReceipt">Consultar mi recibo</string>
+    <string name="login">Acceso</string>
+    <string name="discount">Descuento:</string>
+    <string name="please_fill_out_all_inputs">Por favor complete todas las entradas.</string>
+    <string name="discountPercent">Descuento (%)</string>
+    <string name="quantity">Cantidad</string>
+    <string name="priceSymbol">Precio ($)</string>
+    <string name="computeTotals">Calcular totales</string>
+    <string name="local_sales_tax">Impuesto sobre las ventas locales</string>
+    <string name="subtotal">Total parcial:</string>
+    <string name="tax">Impuesto:</string>
+    <string name="total">Total:</string>
+    <string name="tip10">10% de propina</string>
+    <string name="tip20">20% de propina</string>
+    <string name="tip30">30% de propina</string>
+</resources>

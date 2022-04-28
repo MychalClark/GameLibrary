@@ -1,21 +1,21 @@
 package edu.ranken.mychal_clark.checkmyreceipt;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 
-import edu.ranken.mychal_clark.checkmyreceipt.ui.ItemListViewModel;
+import edu.ranken.mychal_clark.checkmyreceipt.ui.ReceiptListAdapter;
 import edu.ranken.mychal_clark.checkmyreceipt.ui.ReceiptListViewModel;
 
 public class ReceiptListActivity extends AppCompatActivity {
@@ -24,43 +24,58 @@ public class ReceiptListActivity extends AppCompatActivity {
     private CreateReceiptDialog createReceiptDialog;
     private ReceiptListViewModel model;
     private TextView errorMessage;
+    private ReceiptListAdapter adapter;
+    private RecyclerView recyclerView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.receipt_list);
 
+
+        recyclerView = findViewById(R.id.receiptRecycler);
         addReceiptBtn = findViewById(R.id.listAddBtn);
         errorMessage = findViewById(R.id.receiptListError);
         model = new ReceiptListViewModel();
 
+        //Create Adapter
+        adapter = new ReceiptListAdapter(this, model);
 
-        model.getErrorMessage().observe(this,(messageId)->{
+        //Set Recycler View
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(adapter);
 
-            if(messageId != null){
+        model.getReceipts().observe(this, (receipts) -> {
+            adapter.setItems(receipts);
+        });
+
+        model.getErrorMessage().observe(this, (messageId) -> {
+
+            if (messageId != null) {
                 errorMessage.setText(messageId);
                 errorMessage.setVisibility(View.VISIBLE);
 
-            }else{
+            } else {
                 errorMessage.setText(null);
                 errorMessage.setVisibility(View.GONE);
             }
 
         });
         addReceiptBtn.setOnClickListener((view) -> {
-             createReceiptDialog = new CreateReceiptDialog(
+            createReceiptDialog = new CreateReceiptDialog(
                 ReceiptListActivity.this,
                 "Create Receipt",
                 null,
-                 (which) ->{
-                    model.createReceipt(which, (String id)->{
-            Intent intent = new Intent(this, ItemListActivity.class);
-            intent.putExtra(ItemListActivity.EXTRA_RECEIPT_ID, id);
-            this.startActivity(intent);
+                (which) -> {
+                    model.createReceipt(which, (String id) -> {
+                        Intent intent = new Intent(this, ItemListActivity.class);
+                        intent.putExtra(ItemListActivity.EXTRA_RECEIPT_ID, id);
+                        this.startActivity(intent);
                     });
-                 },
-                 (which) -> {
-                     //nothing happens
-                 });
+                },
+                (which) -> {
+                    //nothing happens
+                });
             createReceiptDialog.show();
         });
 
@@ -73,6 +88,7 @@ public class ReceiptListActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.menu_item_list, menu);
         return true;
     }
+
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int itemId = item.getItemId();

@@ -29,15 +29,6 @@ public class ReceiptItemListAdapter extends RecyclerView.Adapter<ReceiptItemView
         this.model = model;
         this.items = items;
         this.layoutInflater = LayoutInflater.from(context);
-
-        if (model != null) {
-            Log.i(LOG_TAG, "hello");
-        }
-        ;
-        if (model == null) {
-            Log.i(LOG_TAG, "goodbye");
-        }
-
     }
 
 
@@ -55,25 +46,6 @@ public class ReceiptItemListAdapter extends RecyclerView.Adapter<ReceiptItemView
         }
     }
 
-    // FIXME: (FIXED) total cannot be null, so use "double"
-    public double itemTotal() {
-        // FIXME: (FIXED) total cannot be null, so use "double"
-        double total = 0.00;
-        if (items != null) {
-            Log.i(LOG_TAG, "yup");
-            for (int i = 0; i < items.size(); i++) {
-                // FIXME: handle null fields
-                Double price = items.get(i).price;
-                Integer quantity = items.get(i).quantity;
-                Double discount = items.get(i).discountPercent;
-                total += (price * quantity) * (1 - discount / 100);
-            }
-
-        }
-        return total;
-    }
-
-
     @NonNull
     @Override
     public ReceiptItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -87,7 +59,7 @@ public class ReceiptItemListAdapter extends RecyclerView.Adapter<ReceiptItemView
         vh.itemTotalPriceText = itemView.findViewById(R.id.itemTotalPriceText);
 
 
-        // FIXME: (FIXED) indentation
+        // FIXME: indentation //fixed//
         vh.itemDeleteBtn.setOnClickListener((view) -> {
             ReceiptItem item = items.get(vh.getAdapterPosition());
             if (model != null) {
@@ -102,34 +74,39 @@ public class ReceiptItemListAdapter extends RecyclerView.Adapter<ReceiptItemView
     public void onBindViewHolder(@NonNull ReceiptItemViewHolder vh, int position) {
 
         ReceiptItem item = items.get(position);
-        NumberFormat nm = NumberFormat.getNumberInstance();
 
         if (item.quantity != null) {
-            // FIXME: use NumberFormat.getIntegerInstance()
-            vh.itemQuantityText.setText(Integer.toString(item.quantity));
+            // FIXME: use NumberFormat.getIntegerInstance() //fixed//
+            vh.itemQuantityText.setText(NumberFormat.getIntegerInstance().format(item.quantity));
         } else {
-            vh.itemQuantityText.setText("null");
+            vh.itemQuantityText.setText(R.string.nothingNull);
+            item.quantity = 0;
         }
 
         if (item.discountPercent != null) {
-            // FIXME: use NumberFormat.getPercentInstance()
-            vh.itemDiscountText.setText("%" + nm.format(item.discountPercent));
+            // FIXME: use NumberFormat.getPercentInstance() //fixed//
+            vh.itemDiscountText.setText(NumberFormat.getPercentInstance().format(item.discountPercent / 100));
         } else {
-            vh.itemQuantityText.setText("null");
+            vh.itemQuantityText.setText(R.string.nothingNull);
+            item.discountPercent = 0.00;
         }
 
         if (item.price != null) {
             vh.itemPriceText.setText(NumberFormat.getCurrencyInstance().format(item.price));
         } else {
-            vh.itemPriceText.setText("null");
+            vh.itemPriceText.setText(R.string.nothingNull);
+            item.price = 0.00;
         }
 
-        // FIXME: handle nulls
-        Double total = (item.price * item.quantity) * (1 - item.discountPercent / 100);
-        vh.itemTotalPriceText.setText(NumberFormat.getCurrencyInstance().format(total));
+        if (item.itemTotal != null) {
+            vh.itemTotalPriceText.setText(NumberFormat.getCurrencyInstance().format(item.itemTotal));
+        } else {
+            vh.itemTotalPriceText.setText(R.string.nothingNull);
+            item.itemTotal = 0.00;
+        }
 
-        // FIXME: do not save this total to an instance variable!!!
-        this.total = total;
+
+        // FIXME: do not save this total to an instance variable!!! //Fixed :O //
 
 
     }

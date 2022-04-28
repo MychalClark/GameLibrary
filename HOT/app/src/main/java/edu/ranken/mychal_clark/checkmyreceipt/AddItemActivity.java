@@ -1,6 +1,7 @@
 package edu.ranken.mychal_clark.checkmyreceipt;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -23,6 +24,7 @@ import edu.ranken.mychal_clark.checkmyreceipt.ui.AddItemViewModel;
 public class AddItemActivity extends AppCompatActivity {
 
     private static final String LOG_TAG = "AddItemActivity";
+    private static final String EXTRA_RECEIPT_ID = "receiptId";
 
     private EditText priceText;
     private EditText quantityText;
@@ -30,12 +32,13 @@ public class AddItemActivity extends AppCompatActivity {
     private TextView errorMessage;
     private ImageButton fabSave;
     private AddItemViewModel model;
+    private String receiptId;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_item);
+        setContentView(R.layout.receipt_item_add);
 
         priceText = findViewById(R.id.addPriceInput);
         discountText = findViewById(R.id.addDiscountInput);
@@ -44,19 +47,29 @@ public class AddItemActivity extends AppCompatActivity {
         fabSave = findViewById(R.id.fabSave);
         model = new ViewModelProvider(this).get(AddItemViewModel.class);
 
+        // get intent
+        Intent intentReceipt = getIntent();
+        receiptId = intentReceipt.getStringExtra(EXTRA_RECEIPT_ID);
+
         fabSave.setOnClickListener((view) -> {
             createItem();
         });
 
-
+model.fetchReceipt(receiptId);
         model.getReceiptSaved().observe(this,(finish)->{
             if(Objects.equals(finish,Boolean.TRUE)){
 
                 finish();
             }
         });
-        model.getError().observe(this,(error)-> {
-            errorMessage.setText(error);
+        model.getErrorMessage().observe(this,(error)-> {
+            if(error != null){
+                errorMessage.setText(error);
+                errorMessage.setVisibility(View.VISIBLE);
+            }else{
+                errorMessage.setVisibility(View.GONE);
+            }
+
         });
     }
 
@@ -69,11 +82,10 @@ public class AddItemActivity extends AppCompatActivity {
         Double price;
         Integer quantity;
 
-        // FIXME: handle exceptions
+        // FIXME: handle exceptions // fixed?//
 
         if (priceText.getText().toString().isEmpty()) {
-            errorMessage.setText("Please enter a price");
-            errorMessage.setVisibility(View.VISIBLE);
+            model.setSellsTaxError(R.string.enterTaxPrice);
             Log.e(LOG_TAG, "Please Enter a price.");
 
         } else {
@@ -90,20 +102,22 @@ public class AddItemActivity extends AppCompatActivity {
                 quantity = 1;
             }
 
-            // FIXME: indicate what fields are invalid
+            // FIXME: indicate what fields are invalid // I understand but forgot to fix//
 
             if (quantity != null && discount != null && price != null && price > 0 && quantity > 0 && quantity < 1001 && discount >= 0 && discount <= 100) {
                 ReceiptItem newItem = new ReceiptItem();
                 newItem.price = price;
                 newItem.discountPercent = discount;
                 newItem.quantity = quantity;
-                newItem.addedOn = new Date();  // FIXME: use server timestamp instead of client timestamp
+                newItem.addedOn = new Date(); // FIXME: use server timestamp instead of client timestamp //Tried. Failed.//
                 model.addItem(newItem);
 
             } else {
+                model.setSellsTaxError(R.string.fixInputs);
                 errorMessage.setVisibility(View.VISIBLE);
                 Log.e(LOG_TAG, "Please Fix inputs.");
             }
+
         }
 
 

@@ -1,12 +1,12 @@
 package edu.ranken.mychal_clark.checkmyreceipt;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.view.KeyEvent;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,7 +18,8 @@ import edu.ranken.mychal_clark.checkmyreceipt.ui.TotalsViewModel;
 
 public class TotalsActivity extends AppCompatActivity {
 
-    private static final String LOG_TAG = "Totals Activity";
+    private static final String LOG_TAG = TotalsActivity.class.getSimpleName();
+    public static final String EXTRA_RECEIPT_ID = "receiptId";
 
     private EditText salesTax;
     private TextView tax;
@@ -28,11 +29,14 @@ public class TotalsActivity extends AppCompatActivity {
     private TextView total;
     private TextView subTotal;
     private TotalsViewModel model;
+    private TextView receiptError;
+    private TextView salesTaxError;
+    private String receiptId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_totals);
+        setContentView(R.layout.receipt_totals);
 
         salesTax = findViewById(R.id.salesTaxInput);
         tax = findViewById(R.id.taxValue);
@@ -42,54 +46,71 @@ public class TotalsActivity extends AppCompatActivity {
         total = findViewById(R.id.totalValue);
         subTotal = findViewById(R.id.subtotalValue);
         model = new ViewModelProvider(this).get(TotalsViewModel.class);
+        salesTaxError = findViewById(R.id.totalTaxErrorText);
+        receiptError = findViewById(R.id.totalReceiptErrorText);
 
+        // get intent
+        Intent intentReceipt = getIntent();
+        receiptId = intentReceipt.getStringExtra(EXTRA_RECEIPT_ID);
+
+
+        model.fetchReceipt(receiptId);
+        model.getErrorSalesTax().observe(this, (error) -> {
+            if (error != null) {
+                salesTaxError.setText(error);
+                salesTaxError.setVisibility(View.VISIBLE);
+            } else {
+                salesTaxError.setVisibility(View.GONE);
+            }
+        });
+        model.getErrorReceipt().observe(this, (error) -> {
+            if (error != null) {
+                receiptError.setText(error);
+                receiptError.setVisibility(View.VISIBLE);
+            } else {
+                receiptError.setVisibility(View.GONE);
+            }
+        });
         model.getReceipt().observe(this, (receipt) -> {
             if (receipt != null) {
                 // FIXME: update salesTax field
                 // FIXME: handle nulls
-                // FIXME: reuse NumberFormat object
-                tax.setText(NumberFormat.getCurrencyInstance().format(receipt.taxAmount));
-                tip10.setText(NumberFormat.getCurrencyInstance().format(receipt.tip10));
-                tip20.setText(NumberFormat.getCurrencyInstance().format(receipt.tip20));
-                tip30.setText(NumberFormat.getCurrencyInstance().format(receipt.tip30));
-                total.setText(NumberFormat.getCurrencyInstance().format(receipt.total));
-                subTotal.setText(NumberFormat.getCurrencyInstance().format(receipt.subtotal));
+                // FIXME: reuse NumberFormat object//fixed//
+                NumberFormat nf = NumberFormat.getCurrencyInstance();
+                tax.setText(nf.format(receipt.taxAmount));
+                tip10.setText(nf.format(receipt.tip10));
+                tip20.setText(nf.format(receipt.tip20));
+                tip30.setText(nf.format(receipt.tip30));
+                total.setText(nf.format(receipt.total));
+                subTotal.setText(nf.format(receipt.subtotal));
             }
         });
 
         salesTax.setOnEditorActionListener((textView, actionId, keyEvent) -> {
-
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                // FIXME: handle exceptions
+                // FIXME: handle exceptions // i think fixed?//
                 Double saleTaxNum;
                 if (salesTax.getText().toString().isEmpty()) {
                     saleTaxNum = 0.00;
                     model.setSalesTax(saleTaxNum);
-                }
-                else if(Double.parseDouble(salesTax.getText().toString()) < 0 || Double.parseDouble(salesTax.getText().toString()) > 100 ){
-                    // FIXME: set error message
-                    model.getErrorSalesTax();
-                }
-                else {
+                    model.clearMessages();
+                } else if (Double.parseDouble(salesTax.getText().toString()) < 0 || Double.parseDouble(salesTax.getText().toString()) > 100) {
+                    // FIXME: set error message//fixed
+                    model.postSaleTaxError(R.string.taxBetweenError);
+                } else {
                     saleTaxNum = (Double.parseDouble(salesTax.getText().toString()));
                     model.setSalesTax(saleTaxNum);
+                    model.clearMessages();
                 }
 
-                // FIXME: return true, to signal event handled
-                return false;
+                // FIXME: return true, to signal event handled //fixed//
+                return true;
             }
 
-            // FIXME: return false, to signal event not handled
-            return true;
+            // FIXME: return false, to signal event not handled //fixed//
+            return false;
         });
-
-        // FIXME: remove dead code
-//        salesTax.setOnEditorActionListener((textView, i, keyEvent) -> {
-//            if(i == EditorInfo.IME_ACTION_DONE){
-//                Toast.makeText(getApplicationContext(),"Done pressed",Toast.LENGTH_SHORT).show();
-//            }
-//            return false;
-//        });
+        // FIXME: remove dead code//fixed//
     }
 
 
@@ -105,6 +126,12 @@ public class TotalsActivity extends AppCompatActivity {
         } else {
             return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString("receiptId", receiptId);
     }
 
 

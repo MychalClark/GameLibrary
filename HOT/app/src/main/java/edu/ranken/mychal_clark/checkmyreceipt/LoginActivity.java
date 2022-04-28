@@ -100,5 +100,16 @@ public class LoginActivity extends AppCompatActivity {
             Log.e(LOG_TAG, "sign-in failed", error);
         }
     }
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int itemId = item.getItemId();
+        if (itemId == android.R.id.home) {
+            // force up navigation to have the same behavior as back navigation
+            onBackPressed();
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
+        }
+    }
 
 }

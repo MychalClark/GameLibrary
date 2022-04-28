@@ -15,7 +15,12 @@
         <activity
             android:name=".ReceiptListActivity"
             android:exported="false"
-            android:label="@string/myReceipts"/>
+            android:label="@string/myReceipts"
+            android:parentActivityName=".LoginActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="edu.ranken.mychal_clark.checkmyreceipt.LoginActivity" />
+        </activity>
         <activity
             android:name=".LoginActivity"
             android:exported="true"
@@ -27,17 +32,18 @@
         </intent-filter> </activity>
         <activity
             android:name=".ItemListActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            android:exported="true"
+            android:parentActivityName=".ReceiptListActivity"
+            android:label="@string/myReceiptItems">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="edu.ranken.mychal_clark.checkmyreceipt.ReceiptListActivity" />
         </activity>
         <activity
             android:name=".TotalsActivity"
             android:exported="true"
-            android:parentActivityName=".ItemListActivity">
+            android:parentActivityName=".ItemListActivity"
+            android:label="@string/myReceiptTotals">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="edu.ranken.mychal_clark.checkmyreceipt.ItemListActivity" />
@@ -45,7 +51,8 @@
         <activity
             android:name=".AddItemActivity"
             android:exported="true"
-            android:parentActivityName=".ItemListActivity">
+            android:parentActivityName=".ItemListActivity"
+            android:label="@string/myReceiptAdd">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="edu.ranken.mychal_clark.checkmyreceipt.ItemListActivity" />

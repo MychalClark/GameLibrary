@@ -16,13 +16,15 @@ public class ReceiptItem {
     public Double discountPercent;
     @ServerTimestamp
     public Date addedOn;
+    public Double itemTotal;
 
     public ReceiptItem() {
     }
 
     public ReceiptItem
         (String receiptItemId, String receiptId, String userId,
-         Double price, Integer quantity, Double discountPercent, Date addedOn) {
+         Double price, Integer quantity, Double discountPercent, Date addedOn,
+         Double itemTotal) {
 
         this.receiptId = receiptId;
         this. receiptItemId = receiptItemId;
@@ -31,6 +33,7 @@ public class ReceiptItem {
         this.quantity = quantity;
         this.discountPercent = discountPercent;
         this.addedOn = addedOn;
+        this.itemTotal = itemTotal;
 
     }
 }
