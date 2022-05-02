@@ -67,6 +67,7 @@ model.fetchReceipt(receiptId);
                 errorMessage.setText(error);
                 errorMessage.setVisibility(View.VISIBLE);
             }else{
+                // FIXME: set text
                 errorMessage.setVisibility(View.GONE);
             }
 
@@ -82,13 +83,14 @@ model.fetchReceipt(receiptId);
         Double price;
         Integer quantity;
 
-        // FIXME: handle exceptions // fixed?//
-
         if (priceText.getText().toString().isEmpty()) {
             model.setSellsTaxError(R.string.enterTaxPrice);
             Log.e(LOG_TAG, "Please Enter a price.");
 
         } else {
+            // FIXME: handle NumberFormatException
+            //        entering "." crashes the app
+
             price = Double.parseDouble(priceText.getText().toString());
 
             if (!discountText.getText().toString().isEmpty()) {
@@ -102,19 +104,20 @@ model.fetchReceipt(receiptId);
                 quantity = 1;
             }
 
-            // FIXME: indicate what fields are invalid // I understand but forgot to fix//
-
+            // FIXME: indicate what fields are invalid
+            // FIXME: range on quantity is 1-1000, not 0-1001
             if (quantity != null && discount != null && price != null && price > 0 && quantity > 0 && quantity < 1001 && discount >= 0 && discount <= 100) {
                 ReceiptItem newItem = new ReceiptItem();
                 newItem.price = price;
                 newItem.discountPercent = discount;
                 newItem.quantity = quantity;
-                newItem.addedOn = new Date(); // FIXME: use server timestamp instead of client timestamp //Tried. Failed.//
+                newItem.addedOn = new Date(); // FIXME: use server timestamp (null) instead of client timestamp
                 model.addItem(newItem);
 
             } else {
                 model.setSellsTaxError(R.string.fixInputs);
-                errorMessage.setVisibility(View.VISIBLE);
+                // FIXME: this is a kludge, let the observer update visibility
+                // errorMessage.setVisibility(View.VISIBLE);
                 Log.e(LOG_TAG, "Please Fix inputs.");
             }
 

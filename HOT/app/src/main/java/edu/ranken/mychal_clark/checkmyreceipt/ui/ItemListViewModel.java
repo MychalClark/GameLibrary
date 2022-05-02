@@ -27,9 +27,11 @@ public class ItemListViewModel extends ViewModel {
 
     //Misc
     private static final String LOG_TAG = "ItemListViewModel";
+
+    // FIXME: move initialization to constructor
+    // FIXME: crashes app when current user is null
     private String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
     private String receiptId;
-    // FIXME: receiptId //fixed//
 
     //FireBase
     private final FirebaseFirestore db;
@@ -42,8 +44,8 @@ public class ItemListViewModel extends ViewModel {
     //Live Data Creation
     private final MutableLiveData<Receipt> receipt;
     private final MutableLiveData<List<ReceiptItem>> receiptItems;
-    private final MutableLiveData<Integer> messageReceipt;       // FIXME: instance variables should be camelCase //fixed//
-    private final MutableLiveData<Integer> messageReceiptItems;  // FIXME: instance variables should be camelCase //fixed//
+    private final MutableLiveData<Integer> messageReceipt;
+    private final MutableLiveData<Integer> messageReceiptItems;
 
 
     public ItemListViewModel() {
@@ -56,8 +58,6 @@ public class ItemListViewModel extends ViewModel {
         messageReceiptItems = new MutableLiveData<>(null);
 
     }
-
-    // FIXME: override onCleared so that registrations get removed //fixed//
 
     //OnCleared Here
     @Override
@@ -90,40 +90,44 @@ public class ItemListViewModel extends ViewModel {
 
 
     //Functions
+    // FIXME: method causes confusion, and should be removed
+    @Deprecated
     public void clearMessages() {
         messageReceipt.postValue(null);
         messageReceiptItems.postValue(null);
     }
 
     public void deleteItem(String receiptItemId) {
-        // FIXME: error handling //fixed//
         db.collection("receiptItems")
             .document(receiptItemId)
             .delete()
             .addOnSuccessListener((result)->{
             Log.i(LOG_TAG, "Item Deleted");
+            // FIXME: receipt not updated
+            // FIXME: can't safely clear messages here
             clearMessages();
         }).addOnFailureListener((error)->{
-            Log.i(LOG_TAG, "Item failed to Deleted");
+            Log.i(LOG_TAG, "Item failed to Deleted");  // FIXME: log error
             messageReceiptItems.postValue(R.string.failedToDeleteItems);
         });
     }
 
     public void deleteAllItems() {
 
-        // FIXME: crashes if receipt is null//fixed//
         db.collection("receiptItems")
             .whereEqualTo("receiptId",receiptId)
             .get()
             .addOnSuccessListener(task -> {
-            // FIXME: error handling //fixed//
             for (DocumentSnapshot document : task.getDocuments()) {
+                // FIXME: results not handled
                 db.collection("receiptItems").document(document.getId()).delete();
             }
+            // FIXME: receipt not updated
+            // FIXME: can't safely clear messages here
                 clearMessages();
         }).addOnFailureListener((error)->{
-            Log.i(LOG_TAG,"No receipt items found");
-            messageReceiptItems.postValue(R.string.noReceiptItemsFound);
+            Log.i(LOG_TAG,"No receipt items found");  // FIXME: update message and log error
+            messageReceiptItems.postValue(R.string.noReceiptItemsFound); // FIXME: update message
         });
     }
 
@@ -146,19 +150,19 @@ public class ItemListViewModel extends ViewModel {
                     this.receipt.postValue(receipt);
                     this.receiptId = receiptId;
                     Log.i(LOG_TAG, "receipt found");
-                    clearMessages();
+                    clearMessages();  // FIXME: can't safely clear messages here
 
                 }
             });
 
             receiptItemRegistration = db.collection("receiptItems").whereEqualTo("receiptId", receiptId).addSnapshotListener((QuerySnapshot querySnapshot, FirebaseFirestoreException error) -> {
                 if (error != null) {
-                    Log.e(LOG_TAG, "No receipts Found.", error);
-                    messageReceiptItems.postValue(R.string.noReceiptFound);
+                    Log.e(LOG_TAG, "No receipts Found.", error);  // FIXME: update message
+                    messageReceiptItems.postValue(R.string.noReceiptFound);  // FIXME: update message
                 } else {
                     List<ReceiptItem> newReceiptItems = querySnapshot.toObjects(ReceiptItem.class);
                     receiptItems.postValue(newReceiptItems);
-                    clearMessages();
+                    clearMessages();  // FIXME: can't safely clear messages here
 
                 }
             });
@@ -167,10 +171,7 @@ public class ItemListViewModel extends ViewModel {
     }
 
     public void updateSubtotal(Double subtotal) {
-        // FIXME: set() and merge, so that receipt can be created//fixed//
-        // FIXME: error handling // fixed//
-        // FIXME: userId vs receiptId //receiptId won.//
-
+        // FIXME: update other fields
         Map<String, Object> newTotal = new HashMap<>();
         newTotal.put("subtotal", subtotal);
 
@@ -182,6 +183,7 @@ public class ItemListViewModel extends ViewModel {
             })
             .addOnFailureListener((error)->{
                 Log.e(LOG_TAG, "receipt could not be updated.");
+                // FIXME: show error message
             });
 
     }

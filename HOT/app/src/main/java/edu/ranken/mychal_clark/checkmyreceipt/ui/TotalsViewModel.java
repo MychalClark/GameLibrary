@@ -31,10 +31,10 @@ public class TotalsViewModel extends ViewModel {
     private ListenerRegistration receiptRegistration;
     private ListenerRegistration receiptItemRegistration;
 
-    //
+    // FIXME: move initialization to constructor
+    // FIXME: crashes app when current user is null
     private String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
     private String receiptId;
-    // FIXME: receiptId //fixed//
 
     //FireBase
     private final FirebaseFirestore db;
@@ -54,7 +54,6 @@ public class TotalsViewModel extends ViewModel {
 
     }
 
-    // FIXME: override onCleared so that registrations get removed//fixed//
     @Override
     protected void onCleared() {
         if (receiptItemRegistration != null) {
@@ -85,20 +84,16 @@ public class TotalsViewModel extends ViewModel {
         return errorSalesTax;
     }
 
-    // FIXME: inconsistent indentation //fixed//
-
     //Functions
     public void setSalesTax(double taxPercent) {
-        // FIXME: crashes if receipt or subtotal is null//fixed//
-        // FIXME: total = subtotal + tax//fixed//
         if (receipt != null) {
             if (receipt.getValue().subtotal == null) {
                 errorReceipt.postValue(R.string.subTotalNull);
                 Log.e(LOG_TAG, "Subtotal is null");
             } else {
                 Double subtotal = receipt.getValue().subtotal;
-                Double tax = receipt.getValue().subtotal * (taxPercent / 100);
-                Double total = receipt.getValue().subtotal + tax;
+                Double tax = receipt.getValue().subtotal * (taxPercent / 100);  // FIXME: subtotal
+                Double total = receipt.getValue().subtotal + tax; // FIXME: subtotal
                 Double tip10 = subtotal * .10;
                 Double tip20 = subtotal * .20;
                 Double tip30 = subtotal * .30;
@@ -111,12 +106,13 @@ public class TotalsViewModel extends ViewModel {
                 newTotal.put("tip20", tip20);
                 newTotal.put("tip30", tip30);
                 newTotal.put("userId", userId);
-                newTotal.put("updatedOn", new Date()); // FIXME: use server timestamp // mission failed//
+                newTotal.put("updatedOn", new Date()); // FIXME: use server timestamp
                 newTotal.put("taxPercent", taxPercent);
+
                 db.collection("receipts")
                     .document(receiptId).set(newTotal, SetOptions.merge())
                     .addOnSuccessListener((result) -> {
-                        errorReceipt.postValue(null);
+                        errorReceipt.postValue(null);  // FIXME: can't safely clear messages here
                         Log.i(LOG_TAG, "Receipt updated in database...");
                     }).addOnFailureListener((error) -> {
                     errorReceipt.postValue(R.string.receiptNotUpdated);
@@ -127,13 +123,10 @@ public class TotalsViewModel extends ViewModel {
             errorReceipt.postValue(R.string.noReceiptFound);
             Log.e(LOG_TAG, "No receipt Found");
         }
-
-        // FIXME: handle errors//fixed kinda//
-        // FIXME: merge//fixed//
-
-        // FIXME: set error message//fixed//
     }
 
+    // FIXME: method causes confusion, and should be removed
+    @Deprecated
     public void clearMessages() {
         errorSalesTax.postValue(null);
         errorReceipt.postValue(null);
@@ -153,13 +146,13 @@ public class TotalsViewModel extends ViewModel {
         receiptRegistration = db.collection("receipts").document(receiptId).addSnapshotListener((document, error) -> {
             if (error != null) {
                 Log.e(LOG_TAG, "Error getting receipt.", error);
-                errorReceipt.postValue(R.string.errorReceipt);
+                errorReceipt.postValue(R.string.errorReceipt);  // FIXME: conflicts with receiptItems observer
             } else {
                 Receipt receipt = document.toObject(Receipt.class);
                 this.receipt.postValue(receipt);
                 this.receiptId = receiptId;
                 Log.i(LOG_TAG, "receipt found");
-                clearMessages();
+                clearMessages();  // FIXME: can't safely clear messages here
 
             }
         });
@@ -167,12 +160,12 @@ public class TotalsViewModel extends ViewModel {
         receiptItemRegistration = db.collection("receiptItems").whereEqualTo("receiptId", receiptId).addSnapshotListener((QuerySnapshot querySnapshot, FirebaseFirestoreException error) -> {
             if (error != null) {
                 Log.e(LOG_TAG, "Error getting receipts items.", error);
-                errorReceipt.postValue(R.string.errorGettingReceiptItems);
+                errorReceipt.postValue(R.string.errorGettingReceiptItems);  // FIXME: conflicts with receipt observer
             } else {
                 List<ReceiptItem> newReceiptItems = querySnapshot.toObjects(ReceiptItem.class);
                 receiptItems.postValue(newReceiptItems);
                 Log.i(LOG_TAG, "receipt items found");
-                clearMessages();
+                clearMessages();  // FIXME: can't safely clear messages here
 
             }
         });
@@ -180,6 +173,8 @@ public class TotalsViewModel extends ViewModel {
 
     }
 
+    // FIXME: rename to setSalesTaxError()
+    // FIXME: @StringRes
     public void postSaleTaxError(Integer errorMessage) {
         errorSalesTax.postValue(errorMessage);
     }

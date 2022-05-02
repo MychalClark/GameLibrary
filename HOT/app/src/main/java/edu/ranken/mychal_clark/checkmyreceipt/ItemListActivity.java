@@ -35,7 +35,7 @@ public class ItemListActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private ReceiptItemListAdapter adapter;
     private TextView subtotal;
-    private TotalsViewModel totalModel;
+    //private TotalsViewModel totalModel;  // FIXME: do not use view model here
     private String receiptId;
     private TextView receiptError;
     private TextView itemError;
@@ -64,7 +64,7 @@ public class ItemListActivity extends AppCompatActivity {
 
 // bind model
         model = new ViewModelProvider(this).get(ItemListViewModel.class);
-        totalModel = new ViewModelProvider(this).get(TotalsViewModel.class);
+        //totalModel = new ViewModelProvider(this).get(TotalsViewModel.class);
 
         //Create Adapter
         adapter = new ReceiptItemListAdapter(this, null, model);
@@ -74,13 +74,14 @@ public class ItemListActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
 
         model.fetchReceipt(receiptId);
-        totalModel.fetchReceipt(receiptId);
+        //totalModel.fetchReceipt(receiptId);
 
         model.getMessageReceipt().observe(this,(error)->{
             if (error != null) {
                 receiptError.setText(error);
                 receiptError.setVisibility(View.VISIBLE);
             } else {
+                // FIXME: set text
                 receiptError.setVisibility(View.GONE);
             }
         });
@@ -89,65 +90,60 @@ public class ItemListActivity extends AppCompatActivity {
                 itemError.setText(error);
                 itemError.setVisibility(View.VISIBLE);
             } else {
+                // FIXME: set text
                 itemError.setVisibility(View.GONE);
             }
         });
+
+        // FIXME: dead code
         model.getReceipt().observe(this, (receipt) -> {
             if (receipt != null) {
-
-                // FIXME: show the subtotal, don't update the receipt//fixed//
-                //        this causes an infinite loop of updates//fixed//
-
             }
         });
 
-        // FIXME: indentation and code style//fixed//
         model.getReceiptItems().observe(this, (receiptItems) -> {
             adapter.setItems(receiptItems);
+
             total = 0.00;
             if(receiptItems != null) {
+                // FIXME: use enhanced for loop
                 for (int i = 0; i < receiptItems.size(); i++) {
                     total += receiptItems.get(i).itemTotal;
                 }
                 subtotal.setText(NumberFormat.getCurrencyInstance().format(total));
                 model.updateSubtotal(total);
+            } else {
+                // FIXME: unhandled case
             }
-            // FIXME: update receipt subtotal here instead//fixed//
 
             ;
         });
 
-        // FIXME: observe and show error messages//fixed//
-
 
         //Set Listeners
         fabAdd.setOnClickListener((view) -> {
-            model.updateSubtotal(total);
+            // FIXME: this is a kludge, and does not address underlying bugs
+            //        code has no effect at best, and causes unpredictable behavior in general
+            // model.updateSubtotal(total);
 
             Intent intent = new Intent(this, AddItemActivity.class);
             intent.putExtra(ItemListActivity.EXTRA_RECEIPT_ID, receiptId);
             startActivity(intent);
-
-            // FIXME: items have not been updated yet//fixed//
-            //        this recalculates the subtotal before the item is added//fixed//
-
         });
 
         fabDelete.setOnClickListener((view) -> {
 
             model.deleteAllItems();
-            model.updateSubtotal(total);
 
-            // FIXME: items have not been updated yet//fixed//
-            //        this recalculates the subtotal before the items are deleted
-
+            // FIXME: this recalculates the subtotal before the items are deleted
+            // model.updateSubtotal(total);
         });
 
 
         calcBtn.setOnClickListener((view) -> {
-            // FIXME: this crashes when receipt or taxPercent are null//fixed//
             if(model.getReceipt().getValue() != null){
-            totalModel.setSalesTax(model.getReceipt().getValue().taxPercent);
+                // FIXME: this is a kludge, and does not address underlying bugs
+                // totalModel.setSalesTax(model.getReceipt().getValue().taxPercent);
 
             Intent intent = new Intent(this, TotalsActivity.class);
             intent.putExtra(TotalsActivity.EXTRA_RECEIPT_ID, receiptId);

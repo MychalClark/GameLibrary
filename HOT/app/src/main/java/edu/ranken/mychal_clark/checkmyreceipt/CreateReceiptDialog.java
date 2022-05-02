@@ -22,7 +22,7 @@ public class CreateReceiptDialog {
         @NonNull CharSequence dialogTitle,
         @Nullable String storeName,
         @NonNull OnClickListener onOk,
-        @Nullable OnClickListener onCancel){
+        @Nullable OnClickListener onCancel) {  // FIXME: create a different interface for the cancel event
 
         //get inflater
         LayoutInflater inflater = LayoutInflater.from(context);
@@ -41,6 +41,7 @@ public class CreateReceiptDialog {
             onOk.onClick(this.storeName);
         });
         builder.setNegativeButton(android.R.string.cancel, (dialog, which) -> {
+            // FIXME: this.storeName is always null here
             if (onCancel != null) { onCancel.onClick(this.storeName); }
         });
         dialog = builder.create();

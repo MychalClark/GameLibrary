@@ -48,6 +48,7 @@ public class ReceiptListViewModel extends ViewModel {
        errorMessage = new MutableLiveData<>(null);
        receipts = new MutableLiveData<>(null);
 
+       // FIXME: crashes app if user is null
       receiptRegistration = db.collection("receipts").whereEqualTo("userId", user.getUid()).addSnapshotListener((@NonNull QuerySnapshot querySnapshot, FirebaseFirestoreException error) -> {
 
            if (error != null) {
@@ -58,10 +59,11 @@ public class ReceiptListViewModel extends ViewModel {
                List<Receipt> newReceipt = querySnapshot != null ? querySnapshot.toObjects(Receipt.class) : null;
 
                if(querySnapshot == null){
+                   // FIXME: update receipts
                    errorMessage.postValue(R.string.noReceipts);
                }else {
                    receipts.postValue(newReceipt);
-                   errorMessage.postValue(null);
+                   errorMessage.postValue(null);  // FIXME: we can't safely clear error here
                }
 
            }
@@ -93,14 +95,13 @@ public class ReceiptListViewModel extends ViewModel {
         newReceipt.taxAmount = 0.00;
         newReceipt.taxPercent = 0.00;
         newReceipt.total = 0.00;
-        newReceipt.userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-
+        newReceipt.userId = FirebaseAuth.getInstance().getCurrentUser().getUid();  // FIXME: crashes app if user is null
 
        db.collection("receipts")
            .add(newReceipt)
            .addOnSuccessListener((result)->{
                Log.i(LOG_TAG,"Receipt added to database");
-               errorMessage.postValue(null);
+               errorMessage.postValue(null);  // FIXME: we can't safely clear error here
                callback.onCreateReceipt(result.getId());
        }).addOnFailureListener((error)->{
            Log.i(LOG_TAG,"Failed to add Receipt to database");
@@ -111,12 +112,14 @@ public class ReceiptListViewModel extends ViewModel {
 
     public void editReceiptName(String receiptName, Receipt receipt, CreateReceiptCallback callback) {
 
+        // FIXME: use server timestamp
+        // FIXME: indentation
         db.collection("receipts")
             .document(receipt.receiptId)
             .update("name", receiptName, "updatedOn", new Date())
             .addOnSuccessListener((result)->{
                 Log.i(LOG_TAG,"Receipt updated");
-                errorMessage.postValue(null);
+                errorMessage.postValue(null);  // FIXME: we can't safely clear error here
                 callback.onCreateReceipt(receipt.receiptId);
             }).addOnFailureListener((error)->{
             Log.i(LOG_TAG,"Failed to update Receipt");

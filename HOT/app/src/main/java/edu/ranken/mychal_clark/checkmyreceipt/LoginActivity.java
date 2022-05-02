@@ -75,16 +75,17 @@ public class LoginActivity extends AppCompatActivity {
     public void onStart() {
         super.onStart();
 
-        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();;
-        if(currentUser != null){
-            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-            Log.i(LOG_TAG, "sign-in successful: " + user.getUid());
-
-            Intent intent = new Intent(this, ReceiptListActivity.class);
-            startActivity(intent);
-        }else {
-            loginBtn.performClick();
-        }
+        // FIXME: move to onCreate()
+//        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();;
+//        if(currentUser != null){
+//            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+//            Log.i(LOG_TAG, "sign-in successful: " + user.getUid());
+//
+//            Intent intent = new Intent(this, ReceiptListActivity.class);
+//            startActivity(intent);
+//        }else {
+//            loginBtn.performClick();
+//        }
     }
 
     private void onSignInResult(FirebaseAuthUIAuthenticationResult result) {

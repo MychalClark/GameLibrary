@@ -60,6 +60,7 @@ public class TotalsActivity extends AppCompatActivity {
                 salesTaxError.setText(error);
                 salesTaxError.setVisibility(View.VISIBLE);
             } else {
+                // FIXME: set text
                 salesTaxError.setVisibility(View.GONE);
             }
         });
@@ -68,14 +69,13 @@ public class TotalsActivity extends AppCompatActivity {
                 receiptError.setText(error);
                 receiptError.setVisibility(View.VISIBLE);
             } else {
+                // FIXME: set text
                 receiptError.setVisibility(View.GONE);
             }
         });
         model.getReceipt().observe(this, (receipt) -> {
             if (receipt != null) {
-                // FIXME: update salesTax field
-                // FIXME: handle nulls
-                // FIXME: reuse NumberFormat object//fixed//
+                // FIXME: show taxPercent in EditText
                 NumberFormat nf = NumberFormat.getCurrencyInstance();
                 tax.setText(nf.format(receipt.taxAmount));
                 tip10.setText(nf.format(receipt.tip10));
@@ -83,34 +83,36 @@ public class TotalsActivity extends AppCompatActivity {
                 tip30.setText(nf.format(receipt.tip30));
                 total.setText(nf.format(receipt.total));
                 subTotal.setText(nf.format(receipt.subtotal));
+            } else {
+                // FIXME: unhandled case
             }
         });
 
         salesTax.setOnEditorActionListener((textView, actionId, keyEvent) -> {
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                // FIXME: handle exceptions // i think fixed?//
+                // FIXME: handle NumberFormatException
+                //        entering "." crashes the app
+
                 Double saleTaxNum;
                 if (salesTax.getText().toString().isEmpty()) {
                     saleTaxNum = 0.00;
                     model.setSalesTax(saleTaxNum);
-                    model.clearMessages();
+                    model.clearMessages();  // FIXME: don't do this here, this overrides setSalesTax
+
+                // FIXME: range should be 0-20 per requirements
                 } else if (Double.parseDouble(salesTax.getText().toString()) < 0 || Double.parseDouble(salesTax.getText().toString()) > 100) {
-                    // FIXME: set error message//fixed
                     model.postSaleTaxError(R.string.taxBetweenError);
                 } else {
                     saleTaxNum = (Double.parseDouble(salesTax.getText().toString()));
                     model.setSalesTax(saleTaxNum);
-                    model.clearMessages();
+                    model.clearMessages();  // FIXME: don't do this here, this overrides setSalesTax
                 }
 
-                // FIXME: return true, to signal event handled //fixed//
                 return true;
             }
 
-            // FIXME: return false, to signal event not handled //fixed//
             return false;
         });
-        // FIXME: remove dead code//fixed//
     }
 
 
@@ -132,6 +134,7 @@ public class TotalsActivity extends AppCompatActivity {
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putString("receiptId", receiptId);
+        // FIXME: save entered taxPercent
     }
 
 

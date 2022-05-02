@@ -104,7 +104,7 @@
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data android:scheme="http" />
                 <data android:scheme="https" />
-                <data android:host="my-user-list.com" />
+                <data android:host="my-game-list.com" />
                 <data android:pathPrefix="/user" />
             </intent-filter>
             <intent-filter>

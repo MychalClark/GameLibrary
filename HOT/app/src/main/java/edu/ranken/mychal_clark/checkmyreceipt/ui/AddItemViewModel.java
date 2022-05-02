@@ -28,9 +28,11 @@ public class AddItemViewModel extends ViewModel {
 
     //Misc
     private static final String LOG_TAG = "AddItemViewModel";
+
+    // FIXME: move initialization to constructor
+    // FIXME: crashes app when current user is null
     private String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
     private String receiptId;
-    // FIXME: receiptId //fixed//
 
 
     //FireBase
@@ -43,7 +45,7 @@ public class AddItemViewModel extends ViewModel {
     //Live Data Creation
     private final MutableLiveData<Receipt> receipt;
     private final MutableLiveData<List<ReceiptItem>> receiptItems;
-    private final MutableLiveData<Integer> errorMessage; // FIXME: instance variables should be camelCase //fixed//
+    private final MutableLiveData<Integer> errorMessage;
     private final MutableLiveData<Boolean> receiptSaved;
 
     public AddItemViewModel(){
@@ -53,7 +55,7 @@ public class AddItemViewModel extends ViewModel {
         receipt = new MutableLiveData<>(null);
         receiptItems = new MutableLiveData<>(null);
         errorMessage = new MutableLiveData<>(null);
-        receiptSaved = new MutableLiveData<>(null);
+        receiptSaved = new MutableLiveData<>(null);  // FIXME: initialize as false
 
     }
 
@@ -86,7 +88,7 @@ public class AddItemViewModel extends ViewModel {
                 this.receipt.postValue(receipt);
                 this.receiptId = receiptId;
                 Log.i(LOG_TAG, "receipt found");
-                errorMessage.postValue(null);
+                errorMessage.postValue(null);  // FIXME: can't safely clear messages here
 
             }
         });
@@ -98,7 +100,7 @@ public class AddItemViewModel extends ViewModel {
             } else {
                 List<ReceiptItem> newReceiptItems = querySnapshot.toObjects(ReceiptItem.class);
                 receiptItems.postValue(newReceiptItems);
-                errorMessage.postValue(null);
+                errorMessage.postValue(null);  // FIXME: can't safely clear messages here
 
             }
         });
@@ -119,16 +121,18 @@ public class AddItemViewModel extends ViewModel {
         db.collection("receiptItems").add(item).addOnSuccessListener(doc -> {
             receiptSaved.postValue(true);
             Log.i(LOG_TAG, "new item added");
+            // FIXME: receipt not updated
+            // FIXME: can't safely clear messages here
             errorMessage.postValue(null);
         })
             .addOnFailureListener((OnFailureListener) e -> {
-               Log.i(LOG_TAG, "Failed Adding new item");
+               Log.i(LOG_TAG, "Failed Adding new item");  // FIXME: log error
                errorMessage.postValue(R.string.failedNewItem);
-               // FIXME: show error message//fixed
             });
 
     }
 
+    // FIXME: rename to setErrorMessage
     public void setSellsTaxError(@StringRes Integer messageId){
 
        errorMessage.postValue(messageId);

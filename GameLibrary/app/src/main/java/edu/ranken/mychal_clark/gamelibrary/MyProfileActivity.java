@@ -233,7 +233,7 @@ public class MyProfileActivity extends AppCompatActivity {
                 String message =
                     getString(R.string.shareUserMessage) +
                         gameName +
-                        "\nhttps://my-profile.com/user/" + user.getUid();
+                        "\nhttps://my-game-list.com/user/" + user.getUid();
 
                 Intent sendIntent = new Intent(Intent.ACTION_SEND);
                 sendIntent.putExtra(Intent.EXTRA_TEXT, message);

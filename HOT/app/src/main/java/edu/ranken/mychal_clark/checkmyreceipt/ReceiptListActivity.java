@@ -97,6 +97,7 @@ public class ReceiptListActivity extends AppCompatActivity {
             onBackPressed();
             return true;
         } else if (itemId == R.id.actionSignOut) {
+            // FIXME: finish the activity when the user is signed out
             FirebaseAuth.getInstance().signOut();
             finish();
             return true;
